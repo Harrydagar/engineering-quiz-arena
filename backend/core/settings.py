@@ -37,6 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'accounts',
+    'quizzes',
+    'leaderboard',
+    'analytics',
 ]
 
 MIDDLEWARE = [
@@ -74,8 +79,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'engineering_quiz_arena',
+        'USER': 'postgres',
+        'PASSWORD': 'PostgreSQL999.In',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
