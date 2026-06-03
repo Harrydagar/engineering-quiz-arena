@@ -46,11 +46,16 @@ class StartQuizView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
+        total_questions = Question.objects.filter(
+        topic__subject=subject
+        ).count()
+
         attempt = QuizAttempt.objects.create(
-            user=request.user,
-            subject=subject,
-            status='IN_PROGRESS'
-        )
+        user=request.user,
+        subject=subject,
+        status='IN_PROGRESS',
+        total_questions=total_questions
+        ) 
 
         serializer = QuizAttemptSerializer(attempt)
 
@@ -167,32 +172,50 @@ class FinishQuizView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        answers = UserAnswer.objects.filter(
-            quiz_attempt=attempt
-        )
-
-        correct_answers = answers.filter(
-            is_correct=True
+        score = attempt.answers.filter(
+        is_correct=True
         ).count()
 
-        total_questions = Question.objects.filter(
-            topic__subject=attempt.subject
-        ).count()
+        total_questions = attempt.total_questions
 
         percentage = (
-            (correct_answers / total_questions) * 100
-            if total_questions > 0 else 0
-        )
+        (score / total_questions) * 100
+        if total_questions > 0
+        else 0
+       )
 
-        attempt.score = correct_answers
-        attempt.total_questions = total_questions
+        attempt.score = score
+        attempt.percentage = round(percentage, 2)
         attempt.status = "COMPLETED"
         attempt.completed_at = timezone.now()
+
         attempt.save()
+        
+        
 
         return Response({
-            "score": correct_answers,
+            "score": score,
             "total_questions": total_questions,
             "percentage": round(percentage, 2),
-            "status": attempt.status
-        })    
+            "status" : attempt.status
+      })
+
+class LeaderboardView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        attempts = QuizAttempt.objects.filter(
+            status='COMPLETED'
+        ).order_by('-percentage', '-score')
+
+        data = []
+
+        for rank, attempt in enumerate(attempts, start=1):
+            data.append({
+                "rank": rank,
+                "username": attempt.user.username,
+                "score": attempt.score,
+                "percentage": attempt.percentage
+            })
+
+        return Response(data)    

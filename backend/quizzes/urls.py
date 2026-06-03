@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import SubjectListView, TopicListView, QuestionListView, StartQuizView, FetchQuestionsView, SubmitAnswerView, FinishQuizView
+from .views import LeaderboardView, SubjectListView, TopicListView, QuestionListView, StartQuizView, FetchQuestionsView, SubmitAnswerView, FinishQuizView
 
 urlpatterns = [
     path('subjects/', SubjectListView.as_view(), name='subjects'),
@@ -21,5 +21,12 @@ urlpatterns = [
     FinishQuizView.as_view(),
     name='finish-quiz'
     ),
+
+    path(
+        'leaderboard/',
+        LeaderboardView.as_view(),
+        name='leaderboard'
+    ),
+
 
 ]

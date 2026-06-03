@@ -35,7 +35,16 @@ class QuestionSerializer(serializers.ModelSerializer):
 class QuizAttemptSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuizAttempt
-        fields = ['id', 'status', 'started_at']
+        fields = [
+            'id',
+            'subject',
+            'score',
+            'total_questions',
+            'percentage',
+            'status',
+            'started_at',
+            'completed_at',
+        ]
 
 class UserAnswerSerializer(serializers.Serializer):
     attempt_id = serializers.IntegerField()

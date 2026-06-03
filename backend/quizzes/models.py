@@ -83,6 +83,7 @@ class QuizAttempt(models.Model):
 
     score = models.IntegerField(default=0)
     total_questions = models.IntegerField(default=0)
+    percentage = models.FloatField(default=0)
 
     started_at = models.DateTimeField(auto_now_add=True)
     completed_at = models.DateTimeField(null=True, blank=True)
