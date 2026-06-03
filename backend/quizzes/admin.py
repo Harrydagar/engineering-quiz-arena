@@ -5,7 +5,7 @@ from .models import (
     Question,
     Option,
     QuizAttempt,
-    UserAnswer
+    UserAnswer,
 )
 
 admin.site.register(Subject)

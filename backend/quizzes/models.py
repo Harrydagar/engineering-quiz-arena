@@ -35,11 +35,14 @@ class Question(models.Model):
         on_delete=models.CASCADE,
         related_name='questions'
     )
+
     question_text = models.TextField()
+
     difficulty = models.CharField(
         max_length=10,
         choices=DIFFICULTY_CHOICES
     )
+
     explanation = models.TextField(blank=True)
 
     def __str__(self):
@@ -52,6 +55,7 @@ class Option(models.Model):
         on_delete=models.CASCADE,
         related_name='options'
     )
+
     option_text = models.CharField(max_length=255)
     is_correct = models.BooleanField(default=False)
 
@@ -60,6 +64,11 @@ class Option(models.Model):
 
 
 class QuizAttempt(models.Model):
+    STATUS_CHOICES = [
+        ('IN_PROGRESS', 'In Progress'),
+        ('COMPLETED', 'Completed'),
+    ]
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -68,12 +77,8 @@ class QuizAttempt(models.Model):
 
     subject = models.ForeignKey(
         Subject,
-        on_delete=models.CASCADE
-    )
-
-    topic = models.ForeignKey(
-        Topic,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='quiz_attempts'
     )
 
     score = models.IntegerField(default=0)
@@ -82,8 +87,14 @@ class QuizAttempt(models.Model):
     started_at = models.DateTimeField(auto_now_add=True)
     completed_at = models.DateTimeField(null=True, blank=True)
 
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='IN_PROGRESS'
+    )
+
     def __str__(self):
-        return f"{self.user.username} - {self.topic.name}"
+        return f"{self.user.username} - {self.subject.name}"
 
 
 class UserAnswer(models.Model):
@@ -104,6 +115,8 @@ class UserAnswer(models.Model):
     )
 
     is_correct = models.BooleanField(default=False)
+
+    answered_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.quiz_attempt.user.username} - Q{self.question.id}"

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Subject, Topic, Question, Option
+from .models import Subject, Topic, Question, Option, QuizAttempt
 
 
 class SubjectSerializer(serializers.ModelSerializer):
@@ -31,3 +31,17 @@ class QuestionSerializer(serializers.ModelSerializer):
             'difficulty',
             'options'
         ]
+
+class QuizAttemptSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuizAttempt
+        fields = ['id', 'status', 'started_at']
+
+class UserAnswerSerializer(serializers.Serializer):
+    attempt_id = serializers.IntegerField()
+    question_id = serializers.IntegerField()
+    selected_option_id = serializers.IntegerField()
+
+
+class FinishQuizSerializer(serializers.Serializer):
+    attempt_id = serializers.IntegerField()
