@@ -334,22 +334,220 @@ class UserStatsView(APIView):
             "accuracy": round(accuracy, 2),
             "total_points": total_points
         })
+    
+class SubjectPerformanceView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        subjects = Subject.objects.all()
+
+        data = []
+
+        for subject in subjects:
+            answers = UserAnswer.objects.filter(
+                quiz_attempt__user=request.user,
+                quiz_attempt__subject=subject
+            )
+
+            attempted = answers.count()
+
+            correct = answers.filter(
+                is_correct=True
+            ).count()
+
+            accuracy = (
+                (correct / attempted) * 100
+                if attempted > 0
+                else 0
+            )
+
+            data.append({
+                "subject": subject.name,
+                "attempted": attempted,
+                "correct": correct,
+                "accuracy": round(accuracy, 2)
+            })
+
+        return Response(data)
+
+
 class MyRankView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        leaderboard = QuizAttempt.objects.filter(
-            status='COMPLETED'
-        ).order_by('-score', '-percentage')
 
-        user_rank = None
+        leaderboard = (
+            QuizAttempt.objects
+            .filter(status='COMPLETED')
+            .values(
+                'user__id',
+                'user__username'
+            )
+            .annotate(
+                total_points=Sum('score')
+            )
+            .order_by('-total_points')
+        )
 
-        for rank, attempt in enumerate(leaderboard, start=1):
-            if attempt.user == request.user:
-                user_rank = rank
+        rank = None
+
+        for position, user in enumerate(
+            leaderboard,
+            start=1
+        ):
+            if user['user__id'] == request.user.id:
+                rank = position
                 break
 
         return Response({
             "username": request.user.username,
-            "rank": user_rank
-        })    
+            "rank": rank
+        })
+
+class DashboardView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        completed_attempts = QuizAttempt.objects.filter(
+            user=request.user,
+            status='COMPLETED'
+        )
+
+        total_quizzes = completed_attempts.count()
+
+        total_points = sum(
+            attempt.score for attempt in completed_attempts
+        )
+
+        total_answers = UserAnswer.objects.filter(
+            quiz_attempt__user=request.user
+        ).count()
+
+        correct_answers = UserAnswer.objects.filter(
+            quiz_attempt__user=request.user,
+            is_correct=True
+        ).count()
+
+        wrong_answers = total_answers - correct_answers
+
+        accuracy = (
+            (correct_answers / total_answers) * 100
+            if total_answers > 0
+            else 0
+        )
+
+        overall_stats = {
+            "total_quizzes": total_quizzes,
+            "questions_attempted": total_answers,
+            "correct_answers": correct_answers,
+            "wrong_answers": wrong_answers,
+            "accuracy": round(accuracy, 2),
+            "total_points": total_points
+        }
+
+        subject_stats = []
+
+        for subject in Subject.objects.all():
+
+            answers = UserAnswer.objects.filter(
+                quiz_attempt__user=request.user,
+                quiz_attempt__subject=subject
+            )
+
+            attempted = answers.count()
+
+            correct = answers.filter(
+                is_correct=True
+            ).count()
+
+            subject_accuracy = (
+                (correct / attempted) * 100
+                if attempted > 0
+                else 0
+            )
+
+            subject_stats.append({
+                "subject": subject.name,
+                "attempted": attempted,
+                "correct": correct,
+                "accuracy": round(subject_accuracy, 2)
+            })
+
+        recent_attempts = []
+
+        attempts = (
+            QuizAttempt.objects
+            .filter(
+                user=request.user,
+                status='COMPLETED'
+            )
+            .order_by('-completed_at')[:10]
+        )
+
+        for attempt in attempts:
+            recent_attempts.append({
+                "quiz_id": attempt.id,
+                "subject": attempt.subject.name,
+                "score": attempt.score,
+                "total_questions": attempt.total_questions,
+                "percentage": attempt.percentage,
+                "completed_at": attempt.completed_at
+            })
+
+        leaderboard = (
+            QuizAttempt.objects
+            .filter(status='COMPLETED')
+            .values(
+                'user__id',
+                'user__username'
+            )
+            .annotate(
+                total_points=Sum('score')
+            )
+            .order_by('-total_points')
+        )
+
+        rank = None
+
+        for position, user in enumerate(
+            leaderboard,
+            start=1
+        ):
+            if user['user__id'] == request.user.id:
+                rank = position
+                break
+
+        return Response({
+            "rank": rank,
+            "overall_stats": overall_stats,
+            "subject_stats": subject_stats,
+            "recent_attempts": recent_attempts
+        })
+
+class RecentAttemptsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        attempts = (
+            QuizAttempt.objects
+            .filter(
+                user=request.user,
+                status='COMPLETED'
+            )
+            .order_by('-completed_at')[:10]
+        )
+
+        data = []
+
+        for attempt in attempts:
+            data.append({
+                "quiz_id": attempt.id,
+                "subject": attempt.subject.name,
+                "score": attempt.score,
+                "total_questions": attempt.total_questions,
+                "percentage": attempt.percentage,
+                "completed_at": attempt.completed_at
+            })
+
+        return Response(data)     
