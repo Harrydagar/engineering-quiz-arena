@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.utils import timezone
+import random
+from django.db.models import Sum
 from .models import Subject, Topic, Question, QuizAttempt, UserAnswer, Option
 from .serializers import SubjectSerializer, TopicSerializer, QuestionSerializer, QuizAttemptSerializer, UserAnswerSerializer, FinishQuizSerializer
 
@@ -46,16 +48,34 @@ class StartQuizView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        total_questions = Question.objects.filter(
-        topic__subject=subject
+        # Daily limit check
+        today = timezone.now().date()
+
+        attempts_today = QuizAttempt.objects.filter(
+            user=request.user,
+            started_at__date=today,
+            status='COMPLETED'
         ).count()
 
+        if attempts_today >= 10:
+            return Response(
+                {"error": "Daily quiz limit reached (10/day)"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        total_questions = min(
+            10,
+            Question.objects.filter(
+                topic__subject=subject
+            ).count()
+        )
+
         attempt = QuizAttempt.objects.create(
-        user=request.user,
-        subject=subject,
-        status='IN_PROGRESS',
-        total_questions=total_questions
-        ) 
+            user=request.user,
+            subject=subject,
+            status='IN_PROGRESS',
+            total_questions=total_questions
+        )
 
         serializer = QuizAttemptSerializer(attempt)
 
@@ -66,14 +86,16 @@ class StartQuizView(APIView):
             },
             status=status.HTTP_201_CREATED
         )
+    
+
 class FetchQuestionsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, attempt_id):
         try:
             attempt = QuizAttempt.objects.get(
-                id=attempt_id,
-                user=request.user
+               id=attempt_id,
+               user=request.user
             )
         except QuizAttempt.DoesNotExist:
             return Response(
@@ -81,16 +103,22 @@ class FetchQuestionsView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        questions = Question.objects.filter(
-            topic__subject=attempt.subject
+        questions = list(
+            Question.objects.filter(
+                topic__subject=attempt.subject
+            )
         )
+
+        random.shuffle(questions)
+
+        questions = questions[:10]
 
         serializer = QuestionSerializer(
             questions,
             many=True
         )
 
-        return Response(serializer.data)    
+        return Response(serializer.data)   
     
 class SubmitAnswerView(APIView):
     permission_classes = [IsAuthenticated]
@@ -135,12 +163,30 @@ class SubmitAnswerView(APIView):
 
         is_correct = selected_option.is_correct
 
+        existing_answer = UserAnswer.objects.filter(
+            quiz_attempt=attempt,
+            question=question
+        ).exists()
+
+        if existing_answer:
+            return Response(
+                {
+                    "error": "Question already answered"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         UserAnswer.objects.create(
             quiz_attempt=attempt,
             question=question,
             selected_option=selected_option,
             is_correct=is_correct
         )
+
+        return Response({
+            "message": "Answer submitted",
+            "is_correct": is_correct
+        })
 
         return Response({
             "message": "Answer submitted",
@@ -172,16 +218,32 @@ class FinishQuizView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        score = attempt.answers.filter(
-        is_correct=True
-        ).count()
+        score = 0
+
+        correct_answers = attempt.answers.filter(
+            is_correct=True
+        )
+
+        for answer in correct_answers:
+            difficulty = answer.question.difficulty
+
+            if difficulty == "easy":
+                score += 5
+
+            elif difficulty == "medium":
+                score += 10
+
+            elif difficulty == "hard":
+                score += 15
+
+        correct_count = correct_answers.count()
 
         total_questions = attempt.total_questions
 
         percentage = (
-        (score / total_questions) * 100
-        if total_questions > 0
-        else 0
+            (correct_count / total_questions) * 100
+            if total_questions > 0
+            else 0
        )
 
         attempt.score = score
@@ -195,27 +257,99 @@ class FinishQuizView(APIView):
 
         return Response({
             "score": score,
+            "correct_answers": correct_count,
             "total_questions": total_questions,
             "percentage": round(percentage, 2),
-            "status" : attempt.status
-      })
+            "status": attempt.status
+        })
 
 class LeaderboardView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        attempts = QuizAttempt.objects.filter(
-            status='COMPLETED'
-        ).order_by('-percentage', '-score')
+        leaderboard = (
+            QuizAttempt.objects
+            .filter(status='COMPLETED')
+            .values(
+                'user__id',
+                'user__username'
+            )
+            .annotate(
+                total_points=Sum('score')
+            )
+            .order_by('-total_points')
+        )
 
         data = []
 
-        for rank, attempt in enumerate(attempts, start=1):
+        for rank, user in enumerate(
+            leaderboard,
+            start=1
+        ):
             data.append({
                 "rank": rank,
-                "username": attempt.user.username,
-                "score": attempt.score,
-                "percentage": attempt.percentage
+                "username": user['user__username'],
+                "total_points": user['total_points']
             })
 
-        return Response(data)    
+        return Response(data)  
+      
+class UserStatsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        completed_attempts = QuizAttempt.objects.filter(
+            user=request.user,
+            status='COMPLETED'
+        )
+
+        total_quizzes = completed_attempts.count()
+
+        total_points = sum(
+            attempt.score for attempt in completed_attempts
+        )
+
+        total_answers = UserAnswer.objects.filter(
+            quiz_attempt__user=request.user
+        ).count()
+
+        correct_answers = UserAnswer.objects.filter(
+            quiz_attempt__user=request.user,
+            is_correct=True
+        ).count()
+
+        wrong_answers = total_answers - correct_answers
+
+        accuracy = (
+            (correct_answers / total_answers) * 100
+            if total_answers > 0
+            else 0
+        )
+
+        return Response({
+            "total_quizzes": total_quizzes,
+            "questions_attempted": total_answers,
+            "correct_answers": correct_answers,
+            "wrong_answers": wrong_answers,
+            "accuracy": round(accuracy, 2),
+            "total_points": total_points
+        })
+class MyRankView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        leaderboard = QuizAttempt.objects.filter(
+            status='COMPLETED'
+        ).order_by('-score', '-percentage')
+
+        user_rank = None
+
+        for rank, attempt in enumerate(leaderboard, start=1):
+            if attempt.user == request.user:
+                user_rank = rank
+                break
+
+        return Response({
+            "username": request.user.username,
+            "rank": user_rank
+        })    
