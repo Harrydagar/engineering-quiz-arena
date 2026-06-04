@@ -94,8 +94,8 @@ class FetchQuestionsView(APIView):
     def get(self, request, attempt_id):
         try:
             attempt = QuizAttempt.objects.get(
-               id=attempt_id,
-               user=request.user
+                id=attempt_id,
+                user=request.user
             )
         except QuizAttempt.DoesNotExist:
             return Response(
@@ -103,22 +103,109 @@ class FetchQuestionsView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        questions = list(
+        # Previously answered questions
+        answered_question_ids = UserAnswer.objects.filter(
+            quiz_attempt__user=request.user
+        ).values_list(
+            'question_id',
+            flat=True
+        )
+
+        # Easy Questions
+        easy_questions = list(
             Question.objects.filter(
-                topic__subject=attempt.subject
+                topic__subject=attempt.subject,
+                difficulty='easy'
+            ).exclude(
+                id__in=answered_question_ids
             )
         )
 
-        random.shuffle(questions)
+        # Medium Questions
+        medium_questions = list(
+            Question.objects.filter(
+                topic__subject=attempt.subject,
+                difficulty='medium'
+            ).exclude(
+                id__in=answered_question_ids
+            )
+        )
 
-        questions = questions[:10]
+        # Hard Questions
+        hard_questions = list(
+            Question.objects.filter(
+                topic__subject=attempt.subject,
+                difficulty='hard'
+            ).exclude(
+                id__in=answered_question_ids
+            )
+        )
+
+        # Fallback if user has already attempted most questions
+        if (
+            len(easy_questions) < 4 or
+            len(medium_questions) < 4 or
+            len(hard_questions) < 2
+        ):
+            easy_questions = list(
+                Question.objects.filter(
+                    topic__subject=attempt.subject,
+                    difficulty='easy'
+                )
+            )
+
+            medium_questions = list(
+                Question.objects.filter(
+                    topic__subject=attempt.subject,
+                    difficulty='medium'
+                )
+            )
+
+            hard_questions = list(
+                Question.objects.filter(
+                    topic__subject=attempt.subject,
+                    difficulty='hard'
+                )
+            )
+
+        random.shuffle(easy_questions)
+        random.shuffle(medium_questions)
+        random.shuffle(hard_questions)
+
+        # Target: 4 Easy + 4 Medium + 2 Hard
+        questions = (
+            easy_questions[:4] +
+            medium_questions[:4] +
+            hard_questions[:2]
+        )
+
+        # Fill missing slots if question bank is small
+        if len(questions) < min(10, attempt.total_questions):
+
+            remaining_questions = list(
+                Question.objects.filter(
+                    topic__subject=attempt.subject
+                ).exclude(
+                    id__in=[q.id for q in questions]
+                )
+            )
+
+            random.shuffle(remaining_questions)
+
+            questions.extend(
+                remaining_questions[
+                    :min(10, attempt.total_questions) - len(questions)
+                ]
+            )
+
+        random.shuffle(questions)
 
         serializer = QuestionSerializer(
             questions,
             many=True
         )
 
-        return Response(serializer.data)   
+        return Response(serializer.data)
     
 class SubmitAnswerView(APIView):
     permission_classes = [IsAuthenticated]
@@ -551,3 +638,194 @@ class RecentAttemptsView(APIView):
             })
 
         return Response(data)     
+    
+class DifficultyStatsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        data = {}
+
+        for difficulty in ['easy', 'medium', 'hard']:
+
+            answers = UserAnswer.objects.filter(
+                quiz_attempt__user=request.user,
+                question__difficulty=difficulty
+            )
+
+            attempted = answers.count()
+
+            correct = answers.filter(
+                is_correct=True
+            ).count()
+
+            accuracy = (
+                (correct / attempted) * 100
+                if attempted > 0
+                else 0
+            )
+
+            data[difficulty] = {
+                "attempted": attempted,
+                "correct": correct,
+                "accuracy": round(accuracy, 2)
+            }
+
+        return Response(data)
+
+class DifficultyRecommendationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        hard_answers = UserAnswer.objects.filter(
+            quiz_attempt__user=request.user,
+            question__difficulty='hard'
+        )
+
+        hard_attempted = hard_answers.count()
+
+        hard_correct = hard_answers.filter(
+            is_correct=True
+        ).count()
+
+        hard_accuracy = (
+            (hard_correct / hard_attempted) * 100
+            if hard_attempted > 0
+            else 0
+        )
+
+        medium_answers = UserAnswer.objects.filter(
+            quiz_attempt__user=request.user,
+            question__difficulty='medium'
+        )
+
+        medium_attempted = medium_answers.count()
+
+        medium_correct = medium_answers.filter(
+            is_correct=True
+        ).count()
+
+        medium_accuracy = (
+            (medium_correct / medium_attempted) * 100
+            if medium_attempted > 0
+            else 0
+        )
+
+        if hard_accuracy >= 70:
+            recommendation = "hard"
+
+        elif medium_accuracy >= 70:
+            recommendation = "medium"
+
+        else:
+            recommendation = "easy"
+
+        return Response({
+            "recommended_level": recommendation,
+            "hard_accuracy": round(hard_accuracy, 2),
+            "medium_accuracy": round(medium_accuracy, 2)
+        })     
+
+class QuizInsightsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        # Subject analysis
+        subjects = Subject.objects.all()
+
+        subject_scores = []
+
+        for subject in subjects:
+
+            answers = UserAnswer.objects.filter(
+                quiz_attempt__user=request.user,
+                quiz_attempt__subject=subject
+            )
+
+            attempted = answers.count()
+
+            correct = answers.filter(
+                is_correct=True
+            ).count()
+
+            accuracy = (
+                (correct / attempted) * 100
+                if attempted > 0
+                else 0
+            )
+
+            subject_scores.append({
+                "subject": subject.name,
+                "accuracy": accuracy
+            })
+
+        strongest_subject = None
+        weakest_subject = None
+
+        if subject_scores:
+            strongest_subject = max(
+                subject_scores,
+                key=lambda x: x["accuracy"]
+            )["subject"]
+
+            weakest_subject = min(
+                subject_scores,
+                key=lambda x: x["accuracy"]
+            )["subject"]
+
+        # Difficulty analysis
+        difficulty_scores = {}
+
+        for difficulty in ["easy", "medium", "hard"]:
+
+            answers = UserAnswer.objects.filter(
+                quiz_attempt__user=request.user,
+                question__difficulty=difficulty
+            )
+
+            attempted = answers.count()
+
+            correct = answers.filter(
+                is_correct=True
+            ).count()
+
+            accuracy = (
+                (correct / attempted) * 100
+                if attempted > 0
+                else 0
+            )
+
+            difficulty_scores[difficulty] = accuracy
+
+        best_difficulty = max(
+            difficulty_scores,
+            key=difficulty_scores.get
+        )
+
+        # Overall accuracy
+        total_answers = UserAnswer.objects.filter(
+            quiz_attempt__user=request.user
+        ).count()
+
+        correct_answers = UserAnswer.objects.filter(
+            quiz_attempt__user=request.user,
+            is_correct=True
+        ).count()
+
+        overall_accuracy = (
+            (correct_answers / total_answers) * 100
+            if total_answers > 0
+            else 0
+        )
+
+        return Response({
+            "strongest_subject": strongest_subject,
+            "weakest_subject": weakest_subject,
+            "best_difficulty": best_difficulty,
+            "overall_accuracy": round(
+                overall_accuracy,
+                2
+            )
+        })       

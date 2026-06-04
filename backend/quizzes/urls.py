@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import DashboardView, LeaderboardView, RecentAttemptsView, SubjectListView, SubjectPerformanceView, TopicListView, QuestionListView, StartQuizView, FetchQuestionsView, SubmitAnswerView, FinishQuizView, UserStatsView, MyRankView
+from .views import DashboardView, DifficultyRecommendationView, DifficultyStatsView, LeaderboardView, QuizInsightsView, RecentAttemptsView, SubjectListView, SubjectPerformanceView, TopicListView, QuestionListView, StartQuizView, FetchQuestionsView, SubmitAnswerView, FinishQuizView, UserStatsView, MyRankView
 
 urlpatterns = [
     path('subjects/', SubjectListView.as_view(), name='subjects'),
@@ -58,4 +58,21 @@ urlpatterns = [
         name='dashboard'
     ),
     
+    path(
+        'analytics/difficulty/',
+        DifficultyStatsView.as_view(),
+        name='difficulty-stats'
+    ),
+
+    path(
+        'analytics/recommendation/',
+        DifficultyRecommendationView.as_view(),
+        name='difficulty-recommendation'
+    ),
+
+    path(
+        'analytics/insights/',
+        QuizInsightsView.as_view(),
+        name='quiz-insights'
+    ),
 ]
