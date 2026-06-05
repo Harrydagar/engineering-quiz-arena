@@ -1048,3 +1048,30 @@ class MistakeHistoryView(APIView):
             })
 
         return Response(data)
+    
+class QuizHistoryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        attempts = (
+            QuizAttempt.objects
+            .filter(
+                user=request.user,
+                status='COMPLETED'
+            )
+            .order_by('-completed_at')
+        )
+
+        data = []
+
+        for attempt in attempts:
+            data.append({
+                "id": attempt.id,
+                "subject": attempt.subject.name,
+                "score": attempt.score,
+                "accuracy": attempt.percentage,
+                "completed_at": attempt.completed_at
+            })
+
+        return Response(data)    

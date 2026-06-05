@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import DashboardView, DifficultyRecommendationView, DifficultyStatsView, LeaderboardView, QuizInsightsView, RecentAttemptsView, SubjectListView, SubjectPerformanceView, TopicListView, QuestionListView, StartQuizView, FetchQuestionsView, SubmitAnswerView, FinishQuizView, UserStatsView, MyRankView, TodayChallengeView, SubmitDailyChallengeView, UserStreakView, QuizReviewView, MistakeHistoryView
+from .views import DashboardView, DifficultyRecommendationView, DifficultyStatsView, LeaderboardView, QuizInsightsView, RecentAttemptsView, SubjectListView, SubjectPerformanceView, TopicListView, QuestionListView, StartQuizView, FetchQuestionsView, SubmitAnswerView, FinishQuizView, UserStatsView, MyRankView, TodayChallengeView, SubmitDailyChallengeView, UserStreakView, QuizReviewView, QuizHistoryView, MistakeHistoryView
 
 urlpatterns = [
     path('subjects/', SubjectListView.as_view(), name='subjects'),
@@ -105,6 +105,10 @@ urlpatterns = [
         MistakeHistoryView.as_view(),
         name="mistake-history"
     ),
-
+    path(
+        'history/',
+        QuizHistoryView.as_view(),
+        name='quiz-history'
+    ),
 
 ]
