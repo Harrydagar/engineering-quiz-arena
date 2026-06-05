@@ -999,12 +999,18 @@ class QuizReviewView(APIView):
             "selected_option"
         )
 
-        for answer in answers:
-
-            correct_option = Option.objects.get(
-                question=answer.question,
+        correct_options = {
+            option.question_id: option
+            for option in Option.objects.filter(
                 is_correct=True
             )
+        }
+
+        for answer in answers:
+
+            correct_option = correct_options[
+                answer.question.id
+            ]
 
             review_data.append({
                 "question_id": answer.question.id,
@@ -1032,12 +1038,19 @@ class MistakeHistoryView(APIView):
 
         data = []
 
-        for answer in mistakes:
-
-            correct_option = Option.objects.get(
-                question=answer.question,
+        correct_options = {
+           option.question_id: option
+            for option in Option.objects.filter(
                 is_correct=True
             )
+        }
+
+        for answer in mistakes:
+
+            correct_option = correct_options[
+               answer.question.id
+            ]
+            
 
             data.append({
                 "question_id": answer.question.id,
@@ -1075,3 +1088,68 @@ class QuizHistoryView(APIView):
             })
 
         return Response(data)    
+    
+
+class ProgressAnalyticsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        attempts = (
+            QuizAttempt.objects
+            .filter(
+                user=request.user,
+                status='COMPLETED'
+            )
+            .order_by('completed_at')
+        )
+
+        data = []
+
+        for index, attempt in enumerate(
+            attempts,
+            start=1
+        ):
+            data.append({
+                "attempt": index,
+                "accuracy": attempt.percentage,
+                "score": attempt.score
+            })
+
+        return Response(data)    
+class PerformanceSummaryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        attempts = QuizAttempt.objects.filter(
+            user=request.user,
+            status='COMPLETED'
+        )
+
+        total_quizzes = attempts.count()
+
+        average_accuracy = (
+            sum(
+                attempt.percentage
+                for attempt in attempts
+            ) / total_quizzes
+            if total_quizzes > 0
+            else 0
+        )
+
+        highest_score = (
+            max(
+                [attempt.score for attempt in attempts],
+                default=0
+            )
+        )
+
+        return Response({
+            "total_quizzes": total_quizzes,
+            "average_accuracy": round(
+                average_accuracy,
+                2
+            ),
+            "highest_score": highest_score
+        })
