@@ -6,6 +6,8 @@ from .models import (
     Option,
     QuizAttempt,
     UserAnswer,
+    DailyChallenge,
+    UserDailyChallenge
 )
 
 admin.site.register(Subject)
@@ -14,3 +16,5 @@ admin.site.register(Question)
 admin.site.register(Option)
 admin.site.register(QuizAttempt)
 admin.site.register(UserAnswer)
+admin.site.register(DailyChallenge)
+admin.site.register(UserDailyChallenge)

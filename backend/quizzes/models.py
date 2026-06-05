@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 
 class Subject(models.Model):
@@ -121,3 +122,43 @@ class UserAnswer(models.Model):
 
     def __str__(self):
         return f"{self.quiz_attempt.user.username} - Q{self.question.id}"
+    
+class DailyChallenge(models.Model):
+    date = models.DateField(unique=True)
+
+    question = models.ForeignKey(
+        Question,
+        on_delete=models.CASCADE,
+        related_name='daily_challenges'
+    )
+
+    points = models.IntegerField(default=10)
+
+    def __str__(self):
+        return f"Daily Challenge - {self.date}"
+
+
+class UserDailyChallenge(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+
+    challenge = models.ForeignKey(
+        DailyChallenge,
+        on_delete=models.CASCADE
+    )
+
+
+    is_completed = models.BooleanField(default=False)
+
+    completed_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        unique_together = ['user', 'challenge']
+
+    def __str__(self):
+        return f"{self.user.username} - {self.challenge.date}"

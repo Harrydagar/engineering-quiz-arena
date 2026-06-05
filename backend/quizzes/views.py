@@ -6,8 +6,8 @@ from rest_framework import status
 from django.utils import timezone
 import random
 from django.db.models import Sum
-from .models import Subject, Topic, Question, QuizAttempt, UserAnswer, Option
-from .serializers import SubjectSerializer, TopicSerializer, QuestionSerializer, QuizAttemptSerializer, UserAnswerSerializer, FinishQuizSerializer
+from .models import Subject, Topic, Question, QuizAttempt, UserAnswer, Option, DailyChallenge, Option, UserDailyChallenge
+from .serializers import SubjectSerializer, TopicSerializer, QuestionSerializer, QuizAttemptSerializer, UserAnswerSerializer, FinishQuizSerializer, DailyChallengeSerializer, DailyChallengeSubmitSerializer
 
 
 class SubjectListView(generics.ListAPIView):
@@ -828,4 +828,139 @@ class QuizInsightsView(APIView):
                 overall_accuracy,
                 2
             )
-        })       
+        })     
+
+from rest_framework.views import APIView
+
+
+class TodayChallengeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        today = timezone.now().date()
+
+        try:
+            challenge = DailyChallenge.objects.get(
+                date=today
+            )
+        except DailyChallenge.DoesNotExist:
+            return Response(
+                {
+                    "message": "No challenge available today."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = DailyChallengeSerializer(challenge)
+
+        return Response(serializer.data) 
+
+class SubmitDailyChallengeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+
+        serializer = DailyChallengeSubmitSerializer(
+            data=request.data
+        )
+
+        serializer.is_valid(raise_exception=True)
+
+        challenge_id = serializer.validated_data[
+            'challenge_id'
+        ]
+
+        option_id = serializer.validated_data[
+            'selected_option_id'
+        ]
+
+        try:
+            challenge = DailyChallenge.objects.get(
+                id=challenge_id
+            )
+        except DailyChallenge.DoesNotExist:
+            return Response(
+                {
+                    "error": "Challenge not found"
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        already_attempted = UserDailyChallenge.objects.filter(
+            user=request.user,
+            challenge=challenge
+        ).exists()
+
+        if already_attempted:
+            return Response(
+                {
+                    "error": "Challenge already attempted"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            option = Option.objects.get(
+                id=option_id,
+                question=challenge.question
+            )
+        except Option.DoesNotExist:
+            return Response(
+                {
+                    "error": "Invalid option selected"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        is_correct = option.is_correct
+
+        UserDailyChallenge.objects.create(
+            user=request.user,
+            challenge=challenge,
+            is_completed=is_correct,
+            completed_at=timezone.now()
+        )
+
+        if is_correct:
+            profile = request.user.userprofile
+
+            today = timezone.now().date()
+
+            if profile.last_challenge_date:
+                days_difference = (
+                    today - profile.last_challenge_date
+                ).days
+
+                if days_difference == 1:
+                    profile.current_streak += 1
+
+                elif days_difference > 1:
+                    profile.current_streak = 1
+
+            else:   
+                profile.current_streak = 1
+
+            if profile.current_streak > profile.longest_streak:
+                profile.longest_streak = profile.current_streak
+
+            profile.last_challenge_date = today
+
+            profile.save()
+
+        return Response({
+            "correct": is_correct,
+            "points_earned": (
+                challenge.points if is_correct else 0
+            )
+        })     
+
+class UserStreakView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.userprofile
+
+        return Response({
+            "current_streak": profile.current_streak,
+            "longest_streak": profile.longest_streak
+        })    
