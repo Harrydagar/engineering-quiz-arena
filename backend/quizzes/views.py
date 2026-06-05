@@ -5,8 +5,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.utils import timezone
 import random
-from django.db.models import Sum
-from .models import Subject, Topic, Question, QuizAttempt, UserAnswer, Option, DailyChallenge, Option, UserDailyChallenge
+from accounts.models import UserProfile
+from .models import (
+    Subject, Topic, Question,
+    QuizAttempt, UserAnswer,
+    Option, DailyChallenge,
+    UserDailyChallenge
+)
 from .serializers import SubjectSerializer, TopicSerializer, QuestionSerializer, QuizAttemptSerializer, UserAnswerSerializer, FinishQuizSerializer, DailyChallengeSerializer, DailyChallengeSubmitSerializer
 
 
@@ -275,10 +280,6 @@ class SubmitAnswerView(APIView):
             "is_correct": is_correct
         })
 
-        return Response({
-            "message": "Answer submitted",
-            "is_correct": is_correct
-        })    
     
 class FinishQuizView(APIView):
     permission_classes = [IsAuthenticated]
@@ -305,7 +306,17 @@ class FinishQuizView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
+        if attempt.status == "COMPLETED":
+            return Response(
+                {
+                    "error": "Quiz already completed"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         score = 0
+
+        
 
         correct_answers = attempt.answers.filter(
             is_correct=True
@@ -340,6 +351,18 @@ class FinishQuizView(APIView):
 
         attempt.save()
         
+        profile = request.user.userprofile
+
+        if percentage >= 80:
+            profile.rating += 20
+
+        elif percentage >= 50:
+            profile.rating += 5
+
+        else:
+            profile.rating = max(100, profile.rating - 10)
+
+        profile.save()
         
 
         return Response({
@@ -347,40 +370,35 @@ class FinishQuizView(APIView):
             "correct_answers": correct_count,
             "total_questions": total_questions,
             "percentage": round(percentage, 2),
-            "status": attempt.status
+            "status": attempt.status,
+            "rating": profile.rating
         })
 
 class LeaderboardView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+
         leaderboard = (
-            QuizAttempt.objects
-            .filter(status='COMPLETED')
-            .values(
-                'user__id',
-                'user__username'
-            )
-            .annotate(
-                total_points=Sum('score')
-            )
-            .order_by('-total_points')
+            UserProfile.objects
+            .select_related('user')
+            .order_by('-rating')
         )
 
         data = []
 
-        for rank, user in enumerate(
+        for rank, profile in enumerate(
             leaderboard,
             start=1
         ):
             data.append({
                 "rank": rank,
-                "username": user['user__username'],
-                "total_points": user['total_points']
+                "username": profile.user.username,
+                "rating": profile.rating
             })
 
-        return Response(data)  
-      
+        return Response(data)
+    
 class UserStatsView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -464,30 +482,24 @@ class MyRankView(APIView):
     def get(self, request):
 
         leaderboard = (
-            QuizAttempt.objects
-            .filter(status='COMPLETED')
-            .values(
-                'user__id',
-                'user__username'
-            )
-            .annotate(
-                total_points=Sum('score')
-            )
-            .order_by('-total_points')
+            UserProfile.objects
+            .select_related('user')
+            .order_by('-rating')
         )
 
         rank = None
 
-        for position, user in enumerate(
+        for position, profile in enumerate(
             leaderboard,
             start=1
         ):
-            if user['user__id'] == request.user.id:
+            if profile.user.id == request.user.id:
                 rank = position
                 break
 
         return Response({
             "username": request.user.username,
+            "rating": request.user.userprofile.rating,
             "rank": rank
         })
 
@@ -583,25 +595,18 @@ class DashboardView(APIView):
             })
 
         leaderboard = (
-            QuizAttempt.objects
-            .filter(status='COMPLETED')
-            .values(
-                'user__id',
-                'user__username'
-            )
-            .annotate(
-                total_points=Sum('score')
-            )
-            .order_by('-total_points')
+            UserProfile.objects
+            .select_related('user')
+            .order_by('-rating')
         )
 
         rank = None
 
-        for position, user in enumerate(
+        for position, profile in enumerate(
             leaderboard,
             start=1
         ):
-            if user['user__id'] == request.user.id:
+            if profile.user.id == request.user.id:
                 rank = position
                 break
 
@@ -609,7 +614,8 @@ class DashboardView(APIView):
             "rank": rank,
             "overall_stats": overall_stats,
             "subject_stats": subject_stats,
-            "recent_attempts": recent_attempts
+            "recent_attempts": recent_attempts,
+            "rating": request.user.userprofile.rating,
         })
 
 class RecentAttemptsView(APIView):
@@ -923,7 +929,7 @@ class SubmitDailyChallengeView(APIView):
 
         if is_correct:
             profile = request.user.userprofile
-
+            profile.rating += 2
             today = timezone.now().date()
 
             if profile.last_challenge_date:
@@ -945,6 +951,7 @@ class SubmitDailyChallengeView(APIView):
 
             profile.last_challenge_date = today
 
+        
             profile.save()
 
         return Response({
@@ -963,4 +970,81 @@ class UserStreakView(APIView):
         return Response({
             "current_streak": profile.current_streak,
             "longest_streak": profile.longest_streak
-        })    
+        })   
+
+class QuizReviewView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, attempt_id):
+
+        try:
+            attempt = QuizAttempt.objects.get(
+                id=attempt_id,
+                user=request.user,
+                status="COMPLETED"
+            )
+
+        except QuizAttempt.DoesNotExist:
+            return Response(
+                {"error": "Quiz not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        review_data = []
+
+        answers = UserAnswer.objects.filter(
+            quiz_attempt=attempt
+        ).select_related(
+            "question",
+            "selected_option"
+        )
+
+        for answer in answers:
+
+            correct_option = Option.objects.get(
+                question=answer.question,
+                is_correct=True
+            )
+
+            review_data.append({
+                "question_id": answer.question.id,
+                "question": answer.question.question_text,
+                "difficulty": answer.question.difficulty,
+                "your_answer": answer.selected_option.option_text,
+                "correct_answer": correct_option.option_text,
+                "is_correct": answer.is_correct
+            })
+
+        return Response(review_data)     
+
+class MistakeHistoryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        mistakes = UserAnswer.objects.filter(
+            quiz_attempt__user=request.user,
+            is_correct=False
+        ).select_related(
+            "question",
+            "selected_option"
+        )
+
+        data = []
+
+        for answer in mistakes:
+
+            correct_option = Option.objects.get(
+                question=answer.question,
+                is_correct=True
+            )
+
+            data.append({
+                "question_id": answer.question.id,
+                "question": answer.question.question_text,
+                "difficulty": answer.question.difficulty,
+                "your_answer": answer.selected_option.option_text,
+                "correct_answer": correct_option.option_text
+            })
+
+        return Response(data)
