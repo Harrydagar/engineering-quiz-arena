@@ -15,6 +15,23 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 
+from django.http import HttpResponse
+from django.contrib.auth import get_user_model
+
+def create_admin(request):
+    User = get_user_model()
+
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser(
+            username="admin",
+            email="your_email@example.com",
+            password="StrongPassword123!"
+        )
+        return HttpResponse("Superuser created")
+
+    return HttpResponse("Superuser already exists")
+
+
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -22,18 +39,4 @@ class ProfileView(APIView):
         return Response({
             "username": request.user.username,
             "email": request.user.email,
-        })    
-    
-
-    def create_admin(request):
-        User = get_user_model()
-
-        if not User.objects.filter(username="admin").exists():
-            User.objects.create_superuser(
-                username="admin",
-                email="your_email@example.com",
-                password="StrongPassword123!"
-            )
-            return HttpResponse("Superuser created")
-
-        return HttpResponse("Superuser already exists")    
+        })
