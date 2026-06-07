@@ -162,3 +162,43 @@ class UserDailyChallenge(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.challenge.date}"
+    
+
+class Achievement(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    badge_icon = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    def __str__(self):
+        return self.name
+
+
+class UserAchievement(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+
+    achievement = models.ForeignKey(
+        Achievement,
+        on_delete=models.CASCADE
+    )
+
+    earned_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        unique_together = [
+            'user',
+            'achievement'
+        ]
+
+    def __str__(self):
+        return (
+            f"{self.user.username} - "
+            f"{self.achievement.name}"
+        )    

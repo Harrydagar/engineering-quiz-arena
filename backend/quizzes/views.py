@@ -10,10 +10,28 @@ from .models import (
     Subject, Topic, Question,
     QuizAttempt, UserAnswer,
     Option, DailyChallenge,
-    UserDailyChallenge
+    UserDailyChallenge,
+    Achievement, 
+    UserAchievement
 )
-from .serializers import SubjectSerializer, TopicSerializer, QuestionSerializer, QuizAttemptSerializer, UserAnswerSerializer, FinishQuizSerializer, DailyChallengeSerializer, DailyChallengeSubmitSerializer
+from .serializers import SubjectSerializer, TopicSerializer, QuestionSerializer, QuizAttemptSerializer, UserAnswerSerializer, FinishQuizSerializer, DailyChallengeSerializer, DailyChallengeSubmitSerializer, AchievementSerializer, UserAchievementSerializer
 
+
+
+def award_achievement(user, achievement_name):
+
+    try:
+        achievement = Achievement.objects.get(
+            name=achievement_name
+        )
+
+        UserAchievement.objects.get_or_create(
+            user=user,
+            achievement=achievement
+        )
+
+    except Achievement.DoesNotExist:
+        pass
 
 class SubjectListView(generics.ListAPIView):
     queryset = Subject.objects.all()
@@ -305,7 +323,7 @@ class FinishQuizView(APIView):
                 {"error": "Quiz attempt not found"},
                 status=status.HTTP_404_NOT_FOUND
             )
-
+        
         if attempt.status == "COMPLETED":
             return Response(
                 {
@@ -313,6 +331,20 @@ class FinishQuizView(APIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+        answered_count = attempt.answers.count()
+
+        if answered_count < attempt.total_questions:
+            return Response(
+                {
+                    "error": (
+                        f"Answer all "
+                        f"{attempt.total_questions} questions first."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
 
         score = 0
 
@@ -362,7 +394,105 @@ class FinishQuizView(APIView):
         else:
             profile.rating = max(100, profile.rating - 10)
 
+        if profile.rating > profile.highest_rating:
+            profile.highest_rating = profile.rating
+
         profile.save()
+
+
+        completed_quizzes = QuizAttempt.objects.filter(
+            user=request.user,
+            status='COMPLETED'
+        ).count()
+
+        if completed_quizzes >= 1:
+            award_achievement(
+                request.user,
+                "First Quiz"
+            )
+
+        if completed_quizzes >= 50:
+            award_achievement(
+                request.user,
+                "Quiz Master"
+            )
+
+        if completed_quizzes >= 100:
+            award_achievement(
+                request.user,
+                "Quiz Legend"
+            )
+
+        total_answers = UserAnswer.objects.filter(
+            quiz_attempt__user=request.user
+        ).count()
+
+        correct_answers_total = UserAnswer.objects.filter(
+            quiz_attempt__user=request.user,
+            is_correct=True
+        ).count()
+
+        overall_accuracy = (
+            (correct_answers_total / total_answers) * 100
+            if total_answers > 0 else 0
+        )
+
+        if overall_accuracy >= 90:
+            award_achievement(
+                request.user,
+                "Accuracy Expert"
+            )    
+
+        leaderboard = (
+            UserProfile.objects
+            .select_related('user')
+            .order_by('-rating')
+        )
+
+        for rank, user_profile in enumerate(
+            leaderboard,
+            start=1
+        ):
+            if user_profile.user == request.user:
+
+                if rank <= 10:
+                    award_achievement(
+                        request.user,
+                        "Top 10"
+                    )
+
+                break
+
+        subjects = Subject.objects.all()
+
+        for subject in subjects:
+
+            answers = UserAnswer.objects.filter(
+                quiz_attempt__user=request.user,
+                quiz_attempt__subject=subject
+            )
+
+            attempted = answers.count()
+
+            if attempted == 0:
+                continue
+
+            correct = answers.filter(
+                is_correct=True
+            ).count()
+
+            accuracy = (
+                correct / attempted
+            ) * 100
+
+            if accuracy >= 90:
+                award_achievement(
+                    request.user,
+                    "Subject Master"
+                )
+                break
+        
+        
         
 
         return Response({
@@ -394,7 +524,8 @@ class LeaderboardView(APIView):
             data.append({
                 "rank": rank,
                 "username": profile.user.username,
-                "rating": profile.rating
+                "rating": profile.rating,
+                "highest_rating": profile.highest_rating
             })
 
         return Response(data)
@@ -610,13 +741,29 @@ class DashboardView(APIView):
                 rank = position
                 break
 
+        user_achievements = (
+            UserAchievement.objects
+            .filter(user=request.user)
+            .select_related("achievement")
+            .order_by("-earned_at")
+        )
+
+        achievement_count = user_achievements.count()
+
+        recent_achievements = [
+            achievement.achievement.name
+            for achievement in user_achievements[:3]
+        ]
+
         return Response({
             "rank": rank,
             "overall_stats": overall_stats,
             "subject_stats": subject_stats,
             "recent_attempts": recent_attempts,
             "rating": request.user.userprofile.rating,
-        })
+            "achievements": achievement_count,
+            "recent_achievements": recent_achievements,
+        })  
 
 class RecentAttemptsView(APIView):
     permission_classes = [IsAuthenticated]
@@ -954,6 +1101,20 @@ class SubmitDailyChallengeView(APIView):
         
             profile.save()
 
+            if profile.current_streak >= 7:
+                award_achievement(
+                    request.user,
+                    "Streak 7"
+                )
+
+            if profile.current_streak >= 30:
+                award_achievement(
+                    request.user,
+                    "Streak 30"
+                )
+
+
+
         return Response({
             "correct": is_correct,
             "points_earned": (
@@ -1153,3 +1314,35 @@ class PerformanceSummaryView(APIView):
             ),
             "highest_score": highest_score
         })
+    
+class AchievementListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        achievements = Achievement.objects.all()
+
+        serializer = AchievementSerializer(
+            achievements,
+            many=True
+        )
+
+        return Response(serializer.data)
+
+
+class MyAchievementsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        achievements = (
+            UserAchievement.objects
+            .filter(user=request.user)
+            .select_related('achievement')
+        )
+
+        serializer = UserAchievementSerializer(
+            achievements,
+            many=True
+        )
+
+        return Response(serializer.data)

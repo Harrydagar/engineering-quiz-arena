@@ -12,7 +12,7 @@ class UserProfile(models.Model):
 
     total_quizzes = models.IntegerField(default=0)
     total_correct = models.IntegerField(default=0)
-
+    highest_rating = models.IntegerField(default=1000)
     last_challenge_date = models.DateField(
         null=True,
         blank=True

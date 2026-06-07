@@ -7,7 +7,9 @@ from .models import (
     QuizAttempt,
     UserAnswer,
     DailyChallenge,
-    UserDailyChallenge
+    UserDailyChallenge,
+    Achievement,
+    UserAchievement
 )
 
 admin.site.register(Subject)
@@ -18,3 +20,5 @@ admin.site.register(QuizAttempt)
 admin.site.register(UserAnswer)
 admin.site.register(DailyChallenge)
 admin.site.register(UserDailyChallenge)
+admin.site.register(Achievement)
+admin.site.register(UserAchievement)

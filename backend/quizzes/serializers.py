@@ -6,7 +6,9 @@ from .models import (
     Option,
     QuizAttempt,
     DailyChallenge,
-    UserDailyChallenge
+    UserDailyChallenge,
+    Achievement,
+    UserAchievement
 )
 
 class SubjectSerializer(serializers.ModelSerializer):
@@ -84,4 +86,27 @@ class DailyChallengeSerializer(serializers.ModelSerializer):
         ]
 class DailyChallengeSubmitSerializer(serializers.Serializer):
     challenge_id = serializers.IntegerField()
-    selected_option_id = serializers.IntegerField()        
+    selected_option_id = serializers.IntegerField()  
+
+
+
+class AchievementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Achievement
+        fields = [
+            'id',
+            'name',
+            'description',
+            'badge_icon'
+        ]
+
+
+class UserAchievementSerializer(serializers.ModelSerializer):
+    achievement = AchievementSerializer()
+
+    class Meta:
+        model = UserAchievement
+        fields = [
+            'achievement',
+            'earned_at'
+        ]          
