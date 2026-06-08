@@ -3,9 +3,19 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from django.db.models import Count, Sum, Q
 from django.utils import timezone
 import random
 from accounts.models import UserProfile
+
+from .services.analytics_service import (
+    get_overall_stats,
+    get_subject_performance,
+    get_recent_attempts,
+    get_user_rank,
+    get_difficulty_stats,
+    get_achievement_summary
+)
 from .models import (
     Subject, Topic, Question,
     QuizAttempt, UserAnswer,
@@ -16,22 +26,19 @@ from .models import (
 )
 from .serializers import SubjectSerializer, TopicSerializer, QuestionSerializer, QuizAttemptSerializer, UserAnswerSerializer, FinishQuizSerializer, DailyChallengeSerializer, DailyChallengeSubmitSerializer, AchievementSerializer, UserAchievementSerializer
 
+from .services.achievements_service import (
+    check_quiz_achievements,
+    check_rating_achievements,
+    check_streak_achievements,
+    check_daily_challenge_achievements,
+    check_score_achievements,
+    check_accuracy_achievements
+)
 
+from .services.quiz_service import (
+    calculate_score
+)
 
-def award_achievement(user, achievement_name):
-
-    try:
-        achievement = Achievement.objects.get(
-            name=achievement_name
-        )
-
-        UserAchievement.objects.get_or_create(
-            user=user,
-            achievement=achievement
-        )
-
-    except Achievement.DoesNotExist:
-        pass
 
 class SubjectListView(generics.ListAPIView):
     queryset = Subject.objects.all()
@@ -348,41 +355,17 @@ class FinishQuizView(APIView):
 
         score = 0
 
-        
-
-        correct_answers = attempt.answers.filter(
-            is_correct=True
+        score, correct_count, percentage = (
+            calculate_score(attempt)
         )
 
-        for answer in correct_answers:
-            difficulty = answer.question.difficulty
-
-            if difficulty == "easy":
-                score += 5
-
-            elif difficulty == "medium":
-                score += 10
-
-            elif difficulty == "hard":
-                score += 15
-
-        correct_count = correct_answers.count()
-
-        total_questions = attempt.total_questions
-
-        percentage = (
-            (correct_count / total_questions) * 100
-            if total_questions > 0
-            else 0
-       )
-
         attempt.score = score
-        attempt.percentage = round(percentage, 2)
+        attempt.percentage = percentage
         attempt.status = "COMPLETED"
         attempt.completed_at = timezone.now()
 
         attempt.save()
-        
+
         profile = request.user.userprofile
 
         if percentage >= 80:
@@ -392,108 +375,35 @@ class FinishQuizView(APIView):
             profile.rating += 5
 
         else:
-            profile.rating = max(100, profile.rating - 10)
+            profile.rating = max(
+            100,
+            profile.rating - 10
+            )
 
-        if profile.rating > profile.highest_rating:
-            profile.highest_rating = profile.rating
+        profile.highest_rating = max(
+            profile.highest_rating,
+            profile.rating
+        )
 
         profile.save()
 
-
-        completed_quizzes = QuizAttempt.objects.filter(
-            user=request.user,
-            status='COMPLETED'
-        ).count()
-
-        if completed_quizzes >= 1:
-            award_achievement(
-                request.user,
-                "First Quiz"
-            )
-
-        if completed_quizzes >= 50:
-            award_achievement(
-                request.user,
-                "Quiz Master"
-            )
-
-        if completed_quizzes >= 100:
-            award_achievement(
-                request.user,
-                "Quiz Legend"
-            )
-
-        total_answers = UserAnswer.objects.filter(
-            quiz_attempt__user=request.user
-        ).count()
-
-        correct_answers_total = UserAnswer.objects.filter(
-            quiz_attempt__user=request.user,
-            is_correct=True
-        ).count()
-
-        overall_accuracy = (
-            (correct_answers_total / total_answers) * 100
-            if total_answers > 0 else 0
+        check_quiz_achievements(
+            request.user
         )
 
-        if overall_accuracy >= 90:
-            award_achievement(
-                request.user,
-                "Accuracy Expert"
-            )    
-
-        leaderboard = (
-            UserProfile.objects
-            .select_related('user')
-            .order_by('-rating')
+        check_score_achievements(
+            request.user
         )
 
-        for rank, user_profile in enumerate(
-            leaderboard,
-            start=1
-        ):
-            if user_profile.user == request.user:
+        check_accuracy_achievements(
+            request.user
+        )
 
-                if rank <= 10:
-                    award_achievement(
-                        request.user,
-                        "Top 10"
-                    )
+        check_rating_achievements(
+            request.user
+        )
 
-                break
-
-        subjects = Subject.objects.all()
-
-        for subject in subjects:
-
-            answers = UserAnswer.objects.filter(
-                quiz_attempt__user=request.user,
-                quiz_attempt__subject=subject
-            )
-
-            attempted = answers.count()
-
-            if attempted == 0:
-                continue
-
-            correct = answers.filter(
-                is_correct=True
-            ).count()
-
-            accuracy = (
-                correct / attempted
-            ) * 100
-
-            if accuracy >= 90:
-                award_achievement(
-                    request.user,
-                    "Subject Master"
-                )
-                break
-        
-        
-        
+        total_questions = attempt.total_questions
 
         return Response({
             "score": score,
@@ -501,7 +411,6 @@ class FinishQuizView(APIView):
             "total_questions": total_questions,
             "percentage": round(percentage, 2),
             "status": attempt.status,
-            "rating": profile.rating
         })
 
 class LeaderboardView(APIView):
@@ -534,226 +443,62 @@ class UserStatsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        completed_attempts = QuizAttempt.objects.filter(
-            user=request.user,
-            status='COMPLETED'
+        return Response(
+            get_overall_stats(
+                request.user
+            )
         )
-
-        total_quizzes = completed_attempts.count()
-
-        total_points = sum(
-            attempt.score for attempt in completed_attempts
-        )
-
-        total_answers = UserAnswer.objects.filter(
-            quiz_attempt__user=request.user
-        ).count()
-
-        correct_answers = UserAnswer.objects.filter(
-            quiz_attempt__user=request.user,
-            is_correct=True
-        ).count()
-
-        wrong_answers = total_answers - correct_answers
-
-        accuracy = (
-            (correct_answers / total_answers) * 100
-            if total_answers > 0
-            else 0
-        )
-
-        return Response({
-            "total_quizzes": total_quizzes,
-            "questions_attempted": total_answers,
-            "correct_answers": correct_answers,
-            "wrong_answers": wrong_answers,
-            "accuracy": round(accuracy, 2),
-            "total_points": total_points
-        })
     
 class SubjectPerformanceView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        subjects = Subject.objects.all()
-
-        data = []
-
-        for subject in subjects:
-            answers = UserAnswer.objects.filter(
-                quiz_attempt__user=request.user,
-                quiz_attempt__subject=subject
+        return Response(
+            get_subject_performance(
+                request.user
             )
-
-            attempted = answers.count()
-
-            correct = answers.filter(
-                is_correct=True
-            ).count()
-
-            accuracy = (
-                (correct / attempted) * 100
-                if attempted > 0
-                else 0
-            )
-
-            data.append({
-                "subject": subject.name,
-                "attempted": attempted,
-                "correct": correct,
-                "accuracy": round(accuracy, 2)
-            })
-
-        return Response(data)
+        )
 
 
 class MyRankView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-
-        leaderboard = (
-            UserProfile.objects
-            .select_related('user')
-            .order_by('-rating')
+        rank = get_user_rank(
+            request.user
         )
-
-        rank = None
-
-        for position, profile in enumerate(
-            leaderboard,
-            start=1
-        ):
-            if profile.user.id == request.user.id:
-                rank = position
-                break
 
         return Response({
             "username": request.user.username,
             "rating": request.user.userprofile.rating,
             "rank": rank
         })
+    
 
 class DashboardView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
 
-        completed_attempts = QuizAttempt.objects.filter(
-            user=request.user,
-            status='COMPLETED'
+        overall_stats = get_overall_stats(
+            request.user
         )
 
-        total_quizzes = completed_attempts.count()
-
-        total_points = sum(
-            attempt.score for attempt in completed_attempts
+        subject_stats = get_subject_performance(
+            request.user
         )
 
-        total_answers = UserAnswer.objects.filter(
-            quiz_attempt__user=request.user
-        ).count()
-
-        correct_answers = UserAnswer.objects.filter(
-            quiz_attempt__user=request.user,
-            is_correct=True
-        ).count()
-
-        wrong_answers = total_answers - correct_answers
-
-        accuracy = (
-            (correct_answers / total_answers) * 100
-            if total_answers > 0
-            else 0
+        recent_attempts = get_recent_attempts(
+            request.user
         )
 
-        overall_stats = {
-            "total_quizzes": total_quizzes,
-            "questions_attempted": total_answers,
-            "correct_answers": correct_answers,
-            "wrong_answers": wrong_answers,
-            "accuracy": round(accuracy, 2),
-            "total_points": total_points
-        }
-
-        subject_stats = []
-
-        for subject in Subject.objects.all():
-
-            answers = UserAnswer.objects.filter(
-                quiz_attempt__user=request.user,
-                quiz_attempt__subject=subject
-            )
-
-            attempted = answers.count()
-
-            correct = answers.filter(
-                is_correct=True
-            ).count()
-
-            subject_accuracy = (
-                (correct / attempted) * 100
-                if attempted > 0
-                else 0
-            )
-
-            subject_stats.append({
-                "subject": subject.name,
-                "attempted": attempted,
-                "correct": correct,
-                "accuracy": round(subject_accuracy, 2)
-            })
-
-        recent_attempts = []
-
-        attempts = (
-            QuizAttempt.objects
-            .filter(
-                user=request.user,
-                status='COMPLETED'
-            )
-            .order_by('-completed_at')[:10]
+        rank = get_user_rank(
+            request.user
         )
 
-        for attempt in attempts:
-            recent_attempts.append({
-                "quiz_id": attempt.id,
-                "subject": attempt.subject.name,
-                "score": attempt.score,
-                "total_questions": attempt.total_questions,
-                "percentage": attempt.percentage,
-                "completed_at": attempt.completed_at
-            })
-
-        leaderboard = (
-            UserProfile.objects
-            .select_related('user')
-            .order_by('-rating')
+        achievement_data = get_achievement_summary(
+           request.user
         )
-
-        rank = None
-
-        for position, profile in enumerate(
-            leaderboard,
-            start=1
-        ):
-            if profile.user.id == request.user.id:
-                rank = position
-                break
-
-        user_achievements = (
-            UserAchievement.objects
-            .filter(user=request.user)
-            .select_related("achievement")
-            .order_by("-earned_at")
-        )
-
-        achievement_count = user_achievements.count()
-
-        recent_achievements = [
-            achievement.achievement.name
-            for achievement in user_achievements[:3]
-        ]
 
         return Response({
             "rank": rank,
@@ -761,67 +506,69 @@ class DashboardView(APIView):
             "subject_stats": subject_stats,
             "recent_attempts": recent_attempts,
             "rating": request.user.userprofile.rating,
-            "achievements": achievement_count,
-            "recent_achievements": recent_achievements,
-        })  
+            **achievement_data
+        })
 
 class RecentAttemptsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        attempts = (
-            QuizAttempt.objects
-            .filter(
-                user=request.user,
-                status='COMPLETED'
+        return Response(
+            get_recent_attempts(
+                request.user
             )
-            .order_by('-completed_at')[:10]
         )
 
-        data = []
-
-        for attempt in attempts:
-            data.append({
-                "quiz_id": attempt.id,
-                "subject": attempt.subject.name,
-                "score": attempt.score,
-                "total_questions": attempt.total_questions,
-                "percentage": attempt.percentage,
-                "completed_at": attempt.completed_at
-            })
-
-        return Response(data)     
     
 class DifficultyStatsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
 
-        data = {}
-
-        for difficulty in ['easy', 'medium', 'hard']:
-
-            answers = UserAnswer.objects.filter(
-                quiz_attempt__user=request.user,
-                question__difficulty=difficulty
+        stats = (
+            UserAnswer.objects
+            .filter(
+                quiz_attempt__user=request.user
             )
-
-            attempted = answers.count()
-
-            correct = answers.filter(
-                is_correct=True
-            ).count()
-
-            accuracy = (
-                (correct / attempted) * 100
-                if attempted > 0
-                else 0
+            .values("question__difficulty")
+            .annotate(
+                attempted=Count("id"),
+                correct=Count(
+                    "id",
+                    filter=Q(is_correct=True)
+                )
             )
+        )
 
-            data[difficulty] = {
+        data = {
+            "easy": {
+                "attempted": 0,
+                "correct": 0,
+                "accuracy": 0
+            },
+            "medium": {
+                "attempted": 0,
+                "correct": 0,
+                "accuracy": 0
+            },
+            "hard": {
+                "attempted": 0,
+                "correct": 0,
+                "accuracy": 0
+            }
+        }
+
+        for row in stats:
+            attempted = row["attempted"]
+            correct = row["correct"]
+
+            data[row["question__difficulty"]] = {
                 "attempted": attempted,
                 "correct": correct,
-                "accuracy": round(accuracy, 2)
+                "accuracy": round(
+                    (correct / attempted) * 100,
+                    2
+                ) if attempted else 0
             }
 
         return Response(data)
@@ -1098,22 +845,23 @@ class SubmitDailyChallengeView(APIView):
 
             profile.last_challenge_date = today
 
+            if profile.rating > profile.highest_rating:
+                profile.highest_rating = profile.rating
         
             profile.save()
 
-            if profile.current_streak >= 7:
-                award_achievement(
-                    request.user,
-                    "Streak 7"
-                )
+            check_daily_challenge_achievements(
+                request.user
+            )
 
-            if profile.current_streak >= 30:
-                award_achievement(
-                    request.user,
-                    "Streak 30"
-                )
+            check_rating_achievements(
+                request.user
+            )
 
-
+            check_streak_achievements(
+                request.user
+            )    
+            
 
         return Response({
             "correct": is_correct,
