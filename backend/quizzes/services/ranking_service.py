@@ -2,17 +2,36 @@ from accounts.models import UserProfile
 
 
 def get_user_rank(user):
+
+    return (
+        UserProfile.objects
+        .filter(
+            rating__gt=user.userprofile.rating
+        )
+        .count()
+        + 1
+    )
+
+
+def get_leaderboard():
+
     leaderboard = (
         UserProfile.objects
         .select_related("user")
         .order_by("-rating")
     )
 
-    for position, profile in enumerate(
+    data = []
+
+    for rank, profile in enumerate(
         leaderboard,
         start=1
     ):
-        if profile.user_id == user.id:
-            return position
+        data.append({
+            "rank": rank,
+            "username": profile.user.username,
+            "rating": profile.rating,
+            "highest_rating": profile.highest_rating
+        })
 
-    return None
+    return data

@@ -1,13 +1,16 @@
-from accounts.models import UserProfile
 from quizzes.models import (
     Achievement,
     UserAchievement,
     QuizAttempt,
     UserAnswer,
-    UserDailyChallenge,
-    Subject
+    UserDailyChallenge
 )
 
+from django.db.models import (
+    Count,
+    Q,
+    Sum
+)
 
 def unlock_achievement(user, achievement_name):
     try:
@@ -80,14 +83,13 @@ def check_daily_challenge_achievements(user):
 
 def check_score_achievements(user):
 
-    completed_attempts = QuizAttempt.objects.filter(
-        user=user,
-        status='COMPLETED'
-    )
-
-    total_points = sum(
-        attempt.score
-        for attempt in completed_attempts
+    total_points = (
+        QuizAttempt.objects.filter(
+            user=user,
+            status='COMPLETED'
+        ).aggregate(
+            total=Sum("score")
+        )["total"] or 0
     )
 
     if total_points >= 1000:
@@ -98,14 +100,18 @@ def check_score_achievements(user):
 
 def check_accuracy_achievements(user):
 
-    total_answers = UserAnswer.objects.filter(
+    stats = UserAnswer.objects.filter(
         quiz_attempt__user=user
-    ).count()
+    ).aggregate(
+        total=Count("id"),
+        correct=Count(
+            "id",
+            filter=Q(is_correct=True)
+        )
+    )
 
-    correct_answers = UserAnswer.objects.filter(
-        quiz_attempt__user=user,
-        is_correct=True
-    ).count()
+    total_answers = stats["total"]
+    correct_answers = stats["correct"]
 
     accuracy = (
         (correct_answers / total_answers) * 100
