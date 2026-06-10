@@ -1,44 +1,57 @@
 # Quiz Arena
 
-Quiz Arena is an adaptive quiz platform built with Django REST Framework that allows users to take quizzes, track performance, compete on leaderboards, and receive personalized difficulty recommendations based on their quiz history.
-
----
+Quiz Arena is a production-ready engineering quiz platform built with Django REST Framework and PostgreSQL. It helps students test their knowledge through adaptive quizzes, track performance analytics, compete on leaderboards, complete daily challenges, and unlock achievements.
 
 ## Features
 
 ### Authentication
 
-* User Registration
-* User Login
 * JWT Authentication
+* User Registration & Login
 * Protected API Endpoints
 
-### Quiz System
+### Quiz Engine
 
-* Start Quiz Sessions
-* Attempt Questions
-* Submit Answers
-* Automatic Score Calculation
-* Quiz Completion Tracking
+* Subject-wise Quizzes
+* Topic-based Questions
+* Multiple Difficulty Levels
+* Random Question Selection
+* Automatic Scoring System
 
-### Performance Analytics
+### Analytics
 
-* Dashboard Statistics
-* Total Quizzes Attempted
-* Average Score
-* Best Score
+* Overall Performance Statistics
+* Subject-wise Analysis
+* Difficulty-wise Performance
 * Recent Quiz Attempts
+* Personalized Insights
+* Performance Recommendations
 
-### Leaderboard System
+### Leaderboards & Ratings
 
-* Global Rankings
-* User Rank Tracking
-* Score-Based Ordering
+* Global Leaderboard
+* User Ranking System
+* Rating-based Competition
 
-### Adaptive Learning
+### Quiz History
 
-* Difficulty Recommendation Engine
-* Performance-Based Suggestions
+* Complete Attempt History
+* Quiz Review System
+* Mistake Tracking
+* Progress Analysis
+
+### Daily Challenges
+
+* Daily Question Challenges
+* Completion Tracking
+* Challenge Statistics
+
+### Achievements
+
+* Quiz Completion Achievements
+* Streak Achievements
+* Daily Challenge Achievements
+* Rating Milestone Achievements
 
 ### API Documentation
 
@@ -55,217 +68,150 @@ Quiz Arena is an adaptive quiz platform built with Django REST Framework that al
 * Django
 * Django REST Framework
 
-### Authentication
-
-* JWT (Simple JWT)
-
 ### Database
 
-* SQLite
+* PostgreSQL
 
-### API Documentation
+### Authentication
+
+* JWT (SimpleJWT)
+
+### Documentation
 
 * drf-spectacular
 * Swagger UI
 * ReDoc
 
+### Deployment
+
+* Render
+
 ---
 
-## Project Structure
+## Project Architecture
 
-```text
-QuizArena/
-│
+backend/
 ├── accounts/
-│   ├── models.py
-│   ├── serializers.py
-│   ├── views.py
-│   └── urls.py
-│
-├── quiz/
-│   ├── models.py
-│   ├── serializers.py
-│   ├── views.py
-│   └── urls.py
-│
-├── QuizArena/
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-│
-├── db.sqlite3
-├── manage.py
-├── requirements.txt
-└── README.md
-```
+├── quizzes/
+│ ├── services/
+│ │ ├── analytics_service.py
+│ │ ├── history_service.py
+│ │ ├── achievement_service.py
+│ │ ├── quiz_service.py
+│ │ └── daily_challenge_service.py
+│ ├── models.py
+│ ├── serializers.py
+│ ├── views.py
+│ └── urls.py
+├── config/
+└── manage.py
 
 ---
 
-## Installation
-
-### Clone Repository
-
-```bash
-git clone <repository-url>
-cd QuizArena
-```
-
-### Create Virtual Environment
-
-```bash
-python -m venv venv
-```
-
-### Activate Virtual Environment
-
-#### Windows
-
-```bash
-venv\Scripts\activate
-```
-
-#### Linux / Mac
-
-```bash
-source venv/bin/activate
-```
-
-### Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### Apply Migrations
-
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
-
-### Run Development Server
-
-```bash
-python manage.py runserver
-```
-
----
-
-## API Documentation
-
-After starting the server:
-
-### Swagger UI
-
-```text
-http://127.0.0.1:8000/swagger/
-```
-
-### ReDoc
-
-```text
-http://127.0.0.1:8000/redoc/
-```
-
----
-
-## Main API Endpoints
+## Available APIs
 
 ### Authentication
 
-| Method | Endpoint         | Description   |
-| ------ | ---------------- | ------------- |
-| POST   | `/api/register/` | Register User |
-| POST   | `/api/tokens/`    | User Login    |
+* Register User
+* Login User
+* Refresh Token
 
-### Quiz
+### Quiz APIs
 
-| Method | Endpoint                   | Description   |
-| ------ | -------------------------- | ------------- |
-| POST   | `/api/quizzes/start/`         | Start Quiz    |
-| POST   | `/api/quizzes/submit-answer/` | Submit Answer |
-| GET    | `/api/quizzes/results/<id>/`  | View Results  |
+* Subjects
+* Topics
+* Start Quiz
+* Submit Quiz
+* Quiz Results
 
-### Analytics
+### Analytics APIs
 
-| Method | Endpoint               | Description               |
-| ------ | ---------------------- | ------------------------- |
-| GET    | `/api/quizzes/dashboard/`      | User Dashboard            |
-| GET    | `/api/quizzes/leaderboard/`    | Global Leaderboard        |
-| GET    | `/api/quizzes/my-rank/`        | User Rank                 |
-| GET    | `/api/quizzes/recommendation/` | Difficulty Recommendation |
+* Overall Statistics
+* Subject Performance
+* Difficulty Statistics
+* User Rank
+* Insights
 
----
+### History APIs
 
-## Example Workflow
+* Quiz History
+* Quiz Review
+* Mistake History
+* Progress Analysis
 
-1. Register a new account.
-2. Login and obtain JWT token.
-3. Start a quiz session.
-4. Submit answers.
-5. Complete the quiz.
-6. View quiz results.
-7. Check leaderboard ranking.
-8. View dashboard statistics.
-9. Receive difficulty recommendations.
+### Daily Challenge APIs
 
----
+* Get Daily Challenge
+* Submit Daily Challenge
 
-## Security
+### Achievement APIs
 
-Current implementation includes:
+* Achievement List
+* Achievement Summary
 
-* JWT Authentication
-* Protected API Access
-* User-Based Data Access
+### Leaderboard APIs
 
-Planned improvements:
-
-* Environment Variables for Secrets
-* Rate Limiting
-* HTTPS Enforcement
-* Production Security Settings
-* Permission Auditing
-* Server-Side Validation Enhancements
+* Global Leaderboard
 
 ---
 
-## Future Enhancements
+## Testing
 
-* ELO Rating System
-* Daily Challenges
-* Subject-Wise Quizzes
-* Adaptive Difficulty Progression
-* Leaderboard Rewards
-* Advanced Analytics
-* PostgreSQL Support
-* Public Deployment
+Current Status:
+
+* 30 Automated Tests Passing
+* Service Layer Tested
+* API Endpoints Tested
+* Analytics Tested
+* Quiz Engine Tested
 
 ---
 
-## Development Status
+## Deployment
 
-### Current Status
+Backend is deployed and running in production using Render with PostgreSQL.
 
-MVP Complete
+---
 
-### Implemented
+## Current Status
 
-* Authentication System
+### Completed
+
+* Authentication
 * Quiz Engine
-* Dashboard Analytics
-* Leaderboards
-* Difficulty Recommendations
+* Analytics
+* Quiz History
+* Daily Challenges
+* Achievements
+* Leaderboard
+* Rating System
 * API Documentation
+* PostgreSQL Deployment
+* Automated Testing
 
-### Upcoming
+### In Progress
 
-* Deployment
+* React Frontend
+
+### Planned
+
+* Achievement Badges UI
+* Advanced ELO Rating
 * Security Hardening
-* Performance Optimization
+* Admin Analytics Dashboard
 
 ---
 
-## Author
+## Future Frontend Stack
 
-Developed as a learning project using Django REST Framework.
+* React
+* TypeScript
+* Vite
+* Tailwind CSS
+* shadcn/ui
+* TanStack Query
+* Recharts
+
+---
+
+Built as an engineering-focused competitive learning platform for students.
