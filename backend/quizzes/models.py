@@ -165,6 +165,7 @@ class UserDailyChallenge(models.Model):
     
 
 class Achievement(models.Model):
+    
     name = models.CharField(max_length=100)
     description = models.TextField()
     badge_icon = models.CharField(
@@ -190,6 +191,7 @@ class UserAchievement(models.Model):
     earned_at = models.DateTimeField(
         auto_now_add=True
     )
+
 
     class Meta:
         unique_together = [

@@ -92,10 +92,6 @@ def calculate_score(attempt):
         elif difficulty == "hard":
             score += 15
 
-    correct_count = (
-        correct_answers.count()
-    )
-
     percentage = (
         (
             correct_count /

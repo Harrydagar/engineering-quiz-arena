@@ -179,26 +179,6 @@ def get_difficulty_stats(user):
     return data
 
 
-def get_achievement_summary(user):
-
-    user_achievements = (
-        UserAchievement.objects
-        .filter(user=user)
-        .select_related("achievement")
-        .order_by("-earned_at")
-    )
-
-    return {
-        "achievements": user_achievements.count(),
-        "recent_achievements": list(
-            user_achievements.values_list(
-                "achievement__name",
-                flat=True
-            )[:3]
-        )
-    }
-
-
 def get_difficulty_recommendation(user):
 
     hard_answers = UserAnswer.objects.filter(

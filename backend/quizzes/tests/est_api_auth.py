@@ -5,7 +5,6 @@ from rest_framework import status
 class QuizAPITests(APITestCase):
 
     def test_start_quiz_requires_auth(self):
-
         response = self.client.post(
             '/api/quizzes/start/',
             {}
@@ -17,7 +16,6 @@ class QuizAPITests(APITestCase):
         )
 
     def test_dashboard_requires_auth(self):
-
         response = self.client.get(
             '/api/quizzes/dashboard/'
         )
@@ -28,7 +26,6 @@ class QuizAPITests(APITestCase):
         )
 
     def test_leaderboard_requires_auth(self):
-
         response = self.client.get(
             '/api/quizzes/leaderboard/'
         )
@@ -39,7 +36,6 @@ class QuizAPITests(APITestCase):
         )
 
     def test_history_requires_auth(self):
-
         response = self.client.get(
             '/api/quizzes/history/'
         )
@@ -50,7 +46,6 @@ class QuizAPITests(APITestCase):
         )
 
     def test_mistakes_requires_auth(self):
-
         response = self.client.get(
             '/api/quizzes/mistakes/'
         )

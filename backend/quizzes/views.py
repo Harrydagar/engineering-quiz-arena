@@ -29,7 +29,6 @@ from .services.analytics_service import (
     get_overall_stats,
     get_subject_performance,
     get_recent_attempts,
-    get_achievement_summary,
     get_difficulty_stats,
     get_difficulty_recommendation,
     get_quiz_insights,
@@ -43,6 +42,11 @@ from .models import (
     UserDailyChallenge,
     Achievement, 
     UserAchievement
+)
+
+from quizzes.services.achievement_service import (
+    get_achievement_summary,
+    get_user_achievements
 )
 
 from .serializers import SubjectSerializer, TopicSerializer, QuestionSerializer, QuizAttemptSerializer, UserAnswerSerializer, FinishQuizSerializer, DailyChallengeSerializer, DailyChallengeSubmitSerializer, AchievementSerializer, UserAchievementSerializer
@@ -589,15 +593,20 @@ class MyAchievementsView(APIView):
 
     def get(self, request):
 
-        achievements = (
-            UserAchievement.objects
-            .filter(user=request.user)
-            .select_related('achievement')
+        return Response(
+            get_user_achievements(
+            request.user
         )
+    )
 
-        serializer = UserAchievementSerializer(
-            achievements,
-            many=True
+
+class AchievementSummaryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        return Response(
+            get_achievement_summary(
+                request.user
+            )
         )
-
-        return Response(serializer.data)

@@ -13,18 +13,24 @@ from django.db.models import (
 )
 
 def unlock_achievement(user, achievement_name):
+
     try:
         achievement = Achievement.objects.get(
             name=achievement_name
         )
 
-        UserAchievement.objects.get_or_create(
-            user=user,
-            achievement=achievement
+        user_achievement, created = (
+            UserAchievement.objects.get_or_create(
+                user=user,
+                achievement=achievement
+            )
+
         )
 
+        return created
+
     except Achievement.DoesNotExist:
-        pass
+        return False
 
 
 def check_quiz_achievements(user):
@@ -124,3 +130,80 @@ def check_accuracy_achievements(user):
             user,
             "Accuracy Expert"
         )
+
+
+def check_achievements(user):
+    check_quiz_achievements(user)
+    check_rating_achievements(user)
+    check_streak_achievements(user)
+    check_daily_challenge_achievements(user)
+    check_score_achievements(user)
+    check_accuracy_achievements(user)    
+
+
+def get_achievement_summary(user):
+
+    total_available = (
+        Achievement.objects.count()
+    )
+
+    unlocked = (
+        UserAchievement.objects.filter(
+            user=user
+        )
+    )
+
+    total_unlocked = unlocked.count()
+
+    completion_percentage = (
+        (total_unlocked / total_available) * 100
+        if total_available > 0
+        else 0
+    )
+
+    recent_achievements = (
+        unlocked
+        .select_related("achievement")
+        .order_by("-earned_at")[:5]
+    )
+
+    return {
+        "total_unlocked": total_unlocked,
+        "total_available": total_available,
+        "remaining": total_available - total_unlocked,
+        "completion_percentage": round(
+            completion_percentage,
+            2
+        ),
+        "recent_achievements": [
+            {
+               "id": ua.achievement.id,
+                "name": ua.achievement.name,
+                "description": ua.achievement.description,
+                "badge_icon": ua.achievement.badge_icon,
+                "earned_at": ua.earned_at,
+            }
+            
+            for ua in recent_achievements
+        ]
+    }
+
+def get_user_achievements(user):
+
+    achievements = (
+        UserAchievement.objects
+        .filter(user=user)
+        .select_related("achievement")
+        .order_by("-earned_at")
+    )
+
+    return [
+        {
+            "id": ua.achievement.id,
+            "name": ua.achievement.name,
+            "description": ua.achievement.description,
+            "badge_icon": ua.achievement.badge_icon,
+            "earned_at": ua.earned_at,
+        }
+        for ua in achievements
+    ]
