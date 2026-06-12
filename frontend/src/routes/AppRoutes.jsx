@@ -1,9 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import TopicsPage from "../pages/TopicsPage";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
+import SubjectsPage from "../pages/SubjectsPage";
 import ProtectedRoute from "./ProtectedRoute";
+import StartQuizPage from "../pages/StartQuizPage";
+import QuizPage from "../pages/QuizPage";
+import ResultsPage from "../pages/ResultsPage";
+
 
 function AppRoutes() {
   return (
@@ -17,6 +22,47 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/subjects"
+          element={
+            <ProtectedRoute>
+              <SubjectsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/subjects/:subjectId"
+          element={
+            <ProtectedRoute>
+              <TopicsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/start-quiz"
+          element={
+            <ProtectedRoute>
+              <StartQuizPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/quiz/:attemptId"
+          element={
+            <ProtectedRoute>
+              <QuizPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/results"
+          element={
+            <ProtectedRoute>
+              <ResultsPage />
             </ProtectedRoute>
           }
         />
