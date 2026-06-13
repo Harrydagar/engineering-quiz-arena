@@ -1,4 +1,7 @@
 import { useLocation } from "react-router-dom";
+import Navbar from "../components/Navbar";
+
+
 
 function ResultsPage() {
   const { state } = useLocation();
@@ -8,37 +11,41 @@ function ResultsPage() {
   }
 
   return (
-    <div>
-      <h1>Quiz Results</h1>
+    <>
+      <Navbar />
+      <div>
+        <h1>Quiz Results</h1>
 
-      <p>
-        Score: {state.score}
-      </p>
+        <p>
+          Score: {state.score}
+        </p>
 
-      <p>
-        Correct Answers:
-        {" "}
-        {state.correct_answers}
-      </p>
+        <p>
+          Correct Answers:
+          {" "}
+          {state.correct_answers}
+        </p>
 
-      <p>
-        Total Questions:
-        {" "}
-        {state.total_questions}
-      </p>
+        <p>
+          Total Questions:
+          {" "}
+          {state.total_questions}
+        </p>
 
-      <p>
-        Percentage:
-        {" "}
-        {state.percentage}%
-      </p>
+        <p>
+          Percentage:
+          {" "}
+          {state.percentage}%
+        </p>
 
-      <p>
-        Status:
-        {" "}
-        {state.status}
-      </p>
-    </div>
+        <p>
+          Status:
+          {" "}
+          {state.status}
+        </p>
+      </div>
+    </>
+      
   );
 }
 

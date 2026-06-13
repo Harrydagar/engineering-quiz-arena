@@ -8,6 +8,10 @@ import ProtectedRoute from "./ProtectedRoute";
 import StartQuizPage from "../pages/StartQuizPage";
 import QuizPage from "../pages/QuizPage";
 import ResultsPage from "../pages/ResultsPage";
+import LeaderboardPage from "../pages/LeaderboardPage";
+import AnalyticsPage from "../pages/AnalyticsPage";
+import AchievementsPage from "../pages/AchievementsPage";
+
 
 
 function AppRoutes() {
@@ -63,6 +67,34 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <ResultsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/subjects"
+          element={<SubjectsPage />}
+        />
+        <Route
+          path="/leaderboard"
+          element={
+            <ProtectedRoute>
+              <LeaderboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute>
+              <AnalyticsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/achievements"
+          element={
+            <ProtectedRoute>
+              <AchievementsPage />
             </ProtectedRoute>
           }
         />

@@ -1,62 +1,49 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getSubjects } from "../services/quizService";
+import Navbar from "../components/Navbar";
+
 
 function SubjectsPage() {
   const [subjects, setSubjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchSubjects = async () => {
+      try {
+        const data = await getSubjects();
+        setSubjects(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     fetchSubjects();
   }, []);
 
-const fetchSubjects = async () => {
-  console.log("Fetching subjects...");
-
-  try {
-    const data = await getSubjects();
-
-    console.log("API Response:", data);
-
-    setSubjects(data);
-  } catch (error) {
-    console.error("Failed to fetch subjects", error);
-
-    if (error.response) {
-      console.log("Status:", error.response.status);
-      console.log("Data:", error.response.data);
-    }
-  } finally {
-    setLoading(false);
-  }
-};
-
-  if (loading) {
-    return <h2>Loading...</h2>;
-  }
-
   return (
-    <div>
-      <h1>Subjects</h1>
+    <>
+      <Navbar />
+      <div>
+        <h1>Subjects</h1>
 
-      {subjects.map((subject) => (
-        <div
-          key={subject.id}
-          onClick={() => navigate(`/subjects/${subject.id}`)}
-          style={{
-            border: "1px solid #ccc",
-            padding: "12px",
-            margin: "12px 0",
-            cursor: "pointer",
-          }}
-        >
-          <h3>{subject.name}</h3>
-          <p>{subject.description}</p>
-        </div>
-      ))}
-    </div>
+        {subjects.map((subject) => (
+          <div
+            key={subject.id}
+            onClick={() => navigate(`/subjects/${subject.id}`)}
+            style={{
+              border: "1px solid #ccc",
+              padding: "10px",
+              margin: "10px",
+              cursor: "pointer",
+            }}
+          >
+            <h3>{subject.name}</h3>
+          </div>
+        ))}
+      </div>
+    </>
+  
   );
 }
 

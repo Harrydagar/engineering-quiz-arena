@@ -1,5 +1,8 @@
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { startQuiz } from "../services/quizService";
+import Navbar from "../components/Navbar";
+
+
 
 function StartQuizPage() {
   const [searchParams] = useSearchParams();
@@ -22,16 +25,20 @@ function StartQuizPage() {
   };
 
   return (
-    <div>
-      <h1>Start Quiz</h1>
+    <>
+      <Navbar />
+      <div>
+        <h1>Start Quiz</h1>
 
-      <p>Subject ID: {subjectId}</p>
-      <p>Topic ID: {topicId}</p>
+        <p>Subject ID: {subjectId}</p>
+        <p>Topic ID: {topicId}</p>
 
-      <button onClick={handleStartQuiz}>
-        Start Quiz
-      </button>
-    </div>
+        <button onClick={handleStartQuiz}>
+          Start Quiz
+        </button>
+      </div>
+    </>
+      
   );
 }
 

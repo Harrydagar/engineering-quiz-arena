@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getTopics } from "../services/quizService";
-
+import Navbar from "../components/Navbar";
 
 function TopicsPage() {
   const { subjectId } = useParams();
@@ -33,28 +33,31 @@ function TopicsPage() {
   }
 
   return (
-    <div>
-      <h1>Topics</h1>
+    <>
+      <Navbar />
+      <div>
+        <h1>Topics</h1>
 
-      {topics.map((topic) => (
-        <div
-          key={topic.id}
-          onClick={() =>
-            navigate(
-              `/start-quiz?subject=${subjectId}&topic=${topic.id}`
-            )
-          }
-          style={{
-            border: "1px solid #ccc",
-            padding: "12px",
-            margin: "12px 0",
-            cursor: "pointer",
-          }}
-        >
-          <h3>{topic.name}</h3>
-        </div>
-      ))}
-    </div>
+        {topics.map((topic) => (
+          <div
+            key={topic.id}
+            onClick={() =>
+              navigate(
+                `/start-quiz?subject=${subjectId}&topic=${topic.id}`
+              )
+            }
+            style={{
+              border: "1px solid #ccc",
+              padding: "12px",
+              margin: "12px 0",
+              cursor: "pointer",
+            }}
+          >
+            <h3>{topic.name}</h3>
+          </div>
+        ))}
+      </div>
+    </>  
   );
 }
 

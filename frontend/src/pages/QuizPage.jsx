@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-
+import Navbar from "../components/Navbar";
 import {
   fetchQuestions,
   submitAnswer,
@@ -126,105 +126,109 @@ function QuizPage() {
   }
 
   return (
-    <div>
-      <h1>Quiz</h1>
+    <>
+      <Navbar />
+      <div>
+        <h1>Quiz</h1>
 
-      <p>
-        Attempt ID: {attemptId}
-      </p>
+        <p>
+          Attempt ID: {attemptId}
+        </p>
 
-      {questions.map((question) => (
-        <div
-          key={question.id}
-          style={{
-            border:
-              "1px solid #ccc",
-            padding: "16px",
-            margin: "16px 0",
-          }}
-        >
-          <h3>
-            {
-              question.question_text
-            }
-          </h3>
+        {questions.map((question) => (
+          <div
+            key={question.id}
+            style={{
+              border:
+                "1px solid #ccc",
+              padding: "16px",
+              margin: "16px 0",
+            }}
+          >
+            <h3>
+              {
+                question.question_text
+              }
+            </h3>
 
-          <p>
-            Difficulty:{" "}
-            {
-              question.difficulty
-            }
-          </p>
+            <p>
+              Difficulty:{" "}
+              {
+                question.difficulty
+              }
+            </p>
 
-          <div>
-            {question.options
-              .length > 0 ? (
-              question.options.map(
-                (option) => (
-                  <button
-                    key={
-                      option.id
-                    }
-                    disabled={answeredQuestions.includes(
-                      question.id
-                    )}
-                    onClick={() =>
-                      handleAnswer(
-                        question.id,
+            <div>
+              {question.options
+                .length > 0 ? (
+                question.options.map(
+                  (option) => (
+                    <button
+                      key={
                         option.id
-                      )
-                    }
-                    style={{
-                      display:
-                        "block",
-                      width:
-                        "100%",
-                      textAlign:
-                        "left",
-                      padding:
-                        "10px",
-                      marginBottom:
-                        "8px",
-                    }}
-                  >
-                    {
-                      option.option_text
-                    }
-                  </button>
+                      }
+                      disabled={answeredQuestions.includes(
+                        question.id
+                      )}
+                      onClick={() =>
+                        handleAnswer(
+                          question.id,
+                          option.id
+                        )
+                      }
+                      style={{
+                        display:
+                          "block",
+                        width:
+                          "100%",
+                        textAlign:
+                          "left",
+                        padding:
+                          "10px",
+                        marginBottom:
+                          "8px",
+                      }}
+                    >
+                      {
+                        option.option_text
+                      }
+                    </button>
+                  )
                 )
-              )
-            ) : (
-              <p
-                style={{
-                  color:
-                    "red",
-                  fontWeight:
-                    "bold",
-                }}
-              >
-                No options
-                available
-                for this
-                question
-              </p>
-            )}
+              ) : (
+                <p
+                  style={{
+                    color:
+                      "red",
+                    fontWeight:
+                      "bold",
+                  }}
+                >
+                  No options
+                  available
+                  for this
+                  question
+                </p>
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
 
-      <button
-        onClick={
-          handleFinishQuiz
-        }
-        style={{
-          padding:
-            "12px 24px",
-          marginTop: "20px",
-        }}
-      >
-        Finish Quiz
-      </button>
-    </div>
+        <button
+          onClick={
+            handleFinishQuiz
+          }
+          style={{
+            padding:
+              "12px 24px",
+            marginTop: "20px",
+          }}  
+        >
+          Finish Quiz
+        </button>
+      </div>
+    </>
+    
   );
 }
 
