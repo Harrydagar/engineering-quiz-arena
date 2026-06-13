@@ -6,7 +6,8 @@ import {
   getDifficultyStats,
   getDifficultyRecommendation,
 } from "../services/quizService";
-import Navbar from "../components/Navbar";
+import MainLayout from "../layouts/MainLayout";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 
 
@@ -75,12 +76,11 @@ function AnalyticsPage() {
   }, []);
 
   if (!stats) {
-    return <h2>Loading...</h2>;
+    return  <LoadingSpinner />;
   }
 
   return (
-    <>
-      <Navbar />
+    <MainLayout>
       <div>
         <h1>Analytics</h1>
 
@@ -223,7 +223,7 @@ function AnalyticsPage() {
           </div>
         )}
       </div>
-    </>
+    </MainLayout>
       
   );
 }

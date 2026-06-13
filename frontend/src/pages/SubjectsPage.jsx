@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getSubjects } from "../services/quizService";
 import Navbar from "../components/Navbar";
-
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function SubjectsPage() {
   const [subjects, setSubjects] = useState([]);

@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getTopics } from "../services/quizService";
 import Navbar from "../components/Navbar";
+import LoadingSpinner from "../components/LoadingSpinner";
+
+
 
 function TopicsPage() {
   const { subjectId } = useParams();
@@ -29,7 +32,7 @@ function TopicsPage() {
   };
 
   if (loading) {
-    return <h2>Loading...</h2>;
+    return  <LoadingSpinner />;
   }
 
   return (

@@ -6,6 +6,8 @@ import {
   submitAnswer,
   finishQuiz,
 } from "../services/quizService";
+import LoadingSpinner from "../components/LoadingSpinner";
+
 
 function QuizPage() {
   const { attemptId } = useParams();
@@ -119,9 +121,7 @@ function QuizPage() {
 
   if (loading) {
     return (
-      <h2>
-        Loading Questions...
-      </h2>
+       <LoadingSpinner />
     );
   }
 

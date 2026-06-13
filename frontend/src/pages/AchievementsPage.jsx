@@ -3,8 +3,8 @@ import {
   getMyAchievements,
   getAchievementSummary,
 } from "../services/quizService";
-import Navbar from "../components/Navbar";
-
+import MainLayout from "../layouts/MainLayout";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 
 function AchievementsPage() {
@@ -41,8 +41,7 @@ function AchievementsPage() {
   }, []);
 
   return (
-    <>
-        <Navbar />
+    <MainLayout>
         <div>
             <h1>My Achievements</h1>
 
@@ -79,7 +78,7 @@ function AchievementsPage() {
             ))
             )}
         </div>
-    </>    
+    </MainLayout>    
     
 );
 

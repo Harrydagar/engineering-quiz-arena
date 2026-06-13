@@ -14,8 +14,8 @@ import AchievementsPage from "../pages/AchievementsPage";
 import HistoryPage from "../pages/HistoryPage";
 import QuizReviewPage from "../pages/QuizReviewPage";
 import MistakeTrackerPage from "../pages/MistakeTrackerPage";
-
-
+import ProfilePage from "../pages/ProfilePage";
+import NotFoundPage from "../pages/NotFoundPage";
 
 
 function AppRoutes() {
@@ -23,6 +23,7 @@ function AppRoutes() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
         <Route
@@ -74,10 +75,7 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/subjects"
-          element={<SubjectsPage />}
-        />
+        
         <Route
           path="/leaderboard"
           element={
@@ -126,6 +124,15 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<NotFoundPage />} />
 
       </Routes>
     </BrowserRouter>

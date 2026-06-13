@@ -1,52 +1,28 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
-    <nav
-      style={{
-        padding: "15px",
-        borderBottom: "1px solid #ccc",
-        marginBottom: "20px",
-      }}
-    >
-      <h2>Quiz Arena</h2>
-
-      <div
-        style={{
-          display: "flex",
-          gap: "15px",
-          marginTop: "10px",
-          flexWrap: "wrap",
-        }}
-      >
-        <Link to="/dashboard">
-          Dashboard
-        </Link>
-
-        <Link to="/subjects">
-          Subjects
-        </Link>
-
-        <Link to="/history">
-          History
-        </Link>
-
-        <Link to="/mistakes">
-          Mistakes
-        </Link>
-
-        <Link to="/leaderboard">
-          Leaderboard
-        </Link>
-
-        <Link to="/analytics">
-          Analytics
-        </Link>
-
-        <Link to="/achievements">
-          Achievements
-        </Link>
-      </div>
+    <nav>
+      <Link to="/dashboard">Dashboard</Link> |{" "}
+      <Link to="/subjects">Subjects</Link> |{" "}
+      <Link to="/history">History</Link> |{" "}
+      <Link to="/mistakes">Mistakes</Link> |{" "}
+      <Link to="/leaderboard">Leaderboard</Link> |{" "}
+      <Link to="/analytics">Analytics</Link> |{" "}
+      <Link to="/achievements">Achievements</Link> |{" "}
+      <Link to="/profile">Profile</Link> |{" "}
+      <button onClick={handleLogout}>
+        Logout
+      </button>
     </nav>
   );
 }

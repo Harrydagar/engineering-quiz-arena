@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { getLeaderboard } from "../services/quizService";
-import Navbar from "../components/Navbar";
+import MainLayout from "../layouts/MainLayout";
+import LoadingSpinner from "../components/LoadingSpinner";
+
 
 
 function LeaderboardPage() {
@@ -20,33 +22,33 @@ function LeaderboardPage() {
   }, []);
 
   return (
-    <>
-      <Navbar />
-      <div>
-        <h1>Leaderboard</h1>
+      <MainLayout>
 
-        {players.map((player) => (
-          <div
-            key={player.username}
-            style={{
-              border: "1px solid #ccc",
-              padding: "10px",
-              margin: "10px 0",
-            }}
-          >
-            <h3>
-              #{player.rank} {player.username}
-            </h3>
+        <div>
+          <h1>Leaderboard</h1>
 
-            <p>Rating: {player.rating}</p>
-            <p>
-              Highest Rating: {player.highest_rating}
-            </p>
-          </div>
-        ))}
-      </div>
-    </>
-      
+          {players.map((player) => (
+            <div
+              key={player.username}
+              style={{
+                border: "1px solid #ccc",
+                padding: "10px",
+                margin: "10px 0",
+              }}
+            >
+              <h3>
+                #{player.rank} {player.username}
+              </h3>
+
+              <p>Rating: {player.rating}</p>
+              <p>
+                Highest Rating: {player.highest_rating}
+              </p>
+            </div>
+          ))}
+        </div>
+      </MainLayout>
+            
   );
 }
 

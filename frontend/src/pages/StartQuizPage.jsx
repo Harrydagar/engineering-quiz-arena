@@ -1,7 +1,7 @@
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { startQuiz } from "../services/quizService";
 import Navbar from "../components/Navbar";
-
+import LoadingSpinner from "../components/LoadingSpinner";
 
 
 function StartQuizPage() {

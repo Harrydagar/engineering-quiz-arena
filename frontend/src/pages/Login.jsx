@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../services/auth";
 import { saveTokens } from "../utils/auth";
 import { useAuth } from "../context/AuthContext";
+import LoadingSpinner from "../components/LoadingSpinner";
+
+
 
 function Login() {
   const navigate = useNavigate();
@@ -68,6 +70,9 @@ function Login() {
           Login
         </button>
       </form>
+      <p>
+        Don't have an account? <Link to="/register">Register</Link>
+      </p>
     </div>
   );
 }

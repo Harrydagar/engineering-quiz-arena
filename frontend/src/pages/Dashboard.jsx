@@ -2,15 +2,14 @@ import { useEffect, useState } from "react";
 import { getProfile } from "../services/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import Navbar from "../components/Navbar";
 import StatCard from "../components/StatCard";
 import {
   getDashboard,
   getPerformanceSummary,
   getUserStreak,
 } from "../services/quizService";
-
-
+import MainLayout from "../layouts/MainLayout";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 
 function Dashboard() {
@@ -25,6 +24,11 @@ function Dashboard() {
     average_accuracy: 0,
     highest_score: 0,
   });
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   const [streak, setStreak] = useState({
     current_streak: 0,
@@ -85,12 +89,15 @@ function Dashboard() {
   }, []);
 
   if (!profile || !dashboard) {
-   return <h1>Loading...</h1>;
+    return (
+      <MainLayout>
+        <LoadingSpinner />
+      </MainLayout>
+    );
   }
 
   return (
-    <>
-      <Navbar />
+    <MainLayout>
 
       <h1>Dashboard</h1>
 
@@ -132,7 +139,11 @@ function Dashboard() {
         title="Longest Streak"
         value={streak.longest_streak}
       />
-    </>
+
+      <button onClick={handleLogout}>
+        Logout
+      </button>
+    </MainLayout>
   );
 }
 
