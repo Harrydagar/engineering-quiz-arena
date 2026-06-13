@@ -16,6 +16,7 @@ function Navbar() {
           display: "flex",
           gap: "15px",
           marginTop: "10px",
+          flexWrap: "wrap",
         }}
       >
         <Link to="/dashboard">
@@ -24,6 +25,14 @@ function Navbar() {
 
         <Link to="/subjects">
           Subjects
+        </Link>
+
+        <Link to="/history">
+          History
+        </Link>
+
+        <Link to="/mistakes">
+          Mistakes
         </Link>
 
         <Link to="/leaderboard">

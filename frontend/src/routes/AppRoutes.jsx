@@ -11,6 +11,10 @@ import ResultsPage from "../pages/ResultsPage";
 import LeaderboardPage from "../pages/LeaderboardPage";
 import AnalyticsPage from "../pages/AnalyticsPage";
 import AchievementsPage from "../pages/AchievementsPage";
+import HistoryPage from "../pages/HistoryPage";
+import QuizReviewPage from "../pages/QuizReviewPage";
+import MistakeTrackerPage from "../pages/MistakeTrackerPage";
+
 
 
 
@@ -98,6 +102,31 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/history"
+          element={
+            <ProtectedRoute>
+              <HistoryPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/review/:attemptId"
+          element={
+            <ProtectedRoute>
+              <QuizReviewPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mistakes"
+          element={
+            <ProtectedRoute>
+              <MistakeTrackerPage />
+            </ProtectedRoute>
+          }
+        />
+
       </Routes>
     </BrowserRouter>
   );

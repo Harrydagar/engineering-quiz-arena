@@ -133,3 +133,19 @@ export const getAchievementSummary = async () => {
 
   return response.data;
 };
+
+export const getPerformanceSummary = async () => {
+  const response = await api.get(
+    "/api/quizzes/analytics/summary/"
+  );
+
+  return response.data;
+};
+
+export const getUserStreak = async () => {
+  const response = await api.get(
+    "/api/quizzes/challenges/streak/"
+  );
+
+  return response.data;
+};

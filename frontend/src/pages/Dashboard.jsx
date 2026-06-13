@@ -4,7 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
 import StatCard from "../components/StatCard";
-import { getDashboard } from "../services/quizService";
+import {
+  getDashboard,
+  getPerformanceSummary,
+  getUserStreak,
+} from "../services/quizService";
+
+
 
 
 function Dashboard() {
@@ -14,11 +20,16 @@ function Dashboard() {
 
   const [profile, setProfile] = useState(null);
   const [dashboard, setDashboard] = useState(null);
+  const [summary, setSummary] = useState({
+    total_quizzes: 0,
+    average_accuracy: 0,
+    highest_score: 0,
+  });
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
-  };
+  const [streak, setStreak] = useState({
+    current_streak: 0,
+    longest_streak: 0,
+  });
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -33,11 +44,39 @@ function Dashboard() {
 
     const fetchDashboard = async () => {
       try {
-        const data = await getDashboard();
-        console.log("DASHBOARD:", data);
-        setDashboard(data);
+        const [
+          dashboardResult,
+          summaryResult,
+          streakResult,
+        ] = await Promise.allSettled([
+          getDashboard(),
+          getPerformanceSummary(),
+          getUserStreak(),
+        ]);
+
+        if (dashboardResult.status === "fulfilled") {
+          setDashboard(dashboardResult.value);
+        }
+
+        if (summaryResult.status === "fulfilled") {
+          setSummary(summaryResult.value);
+        } else {
+          console.error(
+            "Summary Error:",
+            summaryResult.reason
+          );
+        }
+
+        if (streakResult.status === "fulfilled") {
+          setStreak(streakResult.value);
+        } else {
+          console.error(
+            "Streak Error:",
+            streakResult.reason
+          );
+        }
       } catch (error) {
-        console.log("DASHBOARD ERROR:", error);
+        console.error("Dashboard Error:", error);
       }
     };
 
@@ -73,6 +112,25 @@ function Dashboard() {
       <StatCard
         title="Rank"
         value={`#${dashboard.rank}`}
+      />
+      <StatCard
+        title="Average Accuracy"
+        value={`${summary.average_accuracy}%`}
+      />
+
+      <StatCard
+        title="Highest Score"
+        value={summary.highest_score}
+      />
+
+      <StatCard
+        title="Current Streak"
+        value={streak.current_streak}
+      />
+
+      <StatCard
+        title="Longest Streak"
+        value={streak.longest_streak}
       />
     </>
   );
