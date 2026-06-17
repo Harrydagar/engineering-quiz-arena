@@ -22,33 +22,60 @@ function LeaderboardPage() {
   }, []);
 
   return (
-      <MainLayout>
+    <MainLayout>
+      <h1 className="text-4xl font-bold mb-8">
+        Leaderboard
+      </h1>
 
-        <div>
-          <h1>Leaderboard</h1>
+      <div className="bg-white rounded-xl shadow overflow-hidden">
+        <table className="w-full">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="text-left p-4">
+                Rank
+              </th>
 
-          {players.map((player) => (
-            <div
-              key={player.username}
-              style={{
-                border: "1px solid #ccc",
-                padding: "10px",
-                margin: "10px 0",
-              }}
-            >
-              <h3>
-                #{player.rank} {player.username}
-              </h3>
+              <th className="text-left p-4">
+                User
+              </th>
 
-              <p>Rating: {player.rating}</p>
-              <p>
-                Highest Rating: {player.highest_rating}
-              </p>
-            </div>
-          ))}
-        </div>
-      </MainLayout>
-            
+              <th className="text-left p-4">
+                Rating
+              </th>
+
+              <th className="text-left p-4">
+                Highest Rating
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {players.map((player) => (
+              <tr
+                key={player.username}
+                className="border-t hover:bg-gray-50"
+              >
+                <td className="p-4 font-bold">
+                  #{player.rank}
+                </td>
+
+                <td className="p-4">
+                  {player.username}
+                </td>
+
+                <td className="p-4">
+                  {player.rating}
+                </td>
+
+                <td className="p-4">
+                  {player.highest_rating}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </MainLayout>
   );
 }
 
