@@ -6,10 +6,10 @@ import {
 import MainLayout from "../layouts/MainLayout";
 import LoadingSpinner from "../components/LoadingSpinner";
 
-
 function AchievementsPage() {
   const [achievements, setAchievements] = useState([]);
   const [summary, setSummary] = useState(null);
+
 
 
   useEffect(() => {
@@ -42,45 +42,79 @@ function AchievementsPage() {
 
   return (
     <MainLayout>
-        <div>
-            <h1>My Achievements</h1>
+        <h1 className="text-4xl font-bold mb-8">
+            My Achievements
+        </h1>
 
-            {summary && (
-                <div>
-                    <h2>Achievement Progress</h2>
+        {summary && (
+            <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+                <h2 className="text-2xl font-semibold mb-4">
+                    Achievement Progress
+                </h2>
 
-                    <p>Unlocked: {summary.total_unlocked}</p>
-                    <p>Available: {summary.total_available}</p>
-                    <p>Remaining: {summary.remaining}</p>
-                    <p>
-                    Completion:
-                        {summary.completion_percentage}%
-                    </p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <p className="text-gray-500">Unlocked</p>
+                        <p className="text-2xl font-bold">
+                            {summary.total_unlocked}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p className="text-gray-500">Available</p>
+                        <p className="text-2xl font-bold">
+                            {summary.total_available}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p className="text-gray-500">Remaining</p>
+                        <p className="text-2xl font-bold">
+                            {summary.remaining}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p className="text-gray-500">Completion</p>
+                        <p className="text-2xl font-bold text-green-600">
+                            {summary.completion_percentage}%
+                        </p>
+                    </div>
                 </div>
-            )}
+            </div>
+        )}
 
-            {achievements.length === 0 ? (
+        {achievements.length === 0 ? (
+            <div className="bg-white rounded-xl shadow-md p-6">
                 <p>No achievements unlocked yet.</p>
-            ) : (
-                achievements.map((achievement) => (
-                    <div key={achievement.id}>
-                    <h3>{achievement.name}</h3>
+            </div>
+        ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {achievements.map((achievement) => (
+                    <div
+                        key={achievement.id}
+                        className="bg-white rounded-xl shadow-md p-6"
+                    >
+                        <h3 className="text-xl font-bold mb-2">
+                            {achievement.name}
+                        </h3>
 
-                    <p>{achievement.description}</p>
+                        <p className="text-gray-600 mb-4">
+                            {achievement.description}
+                        </p>
 
-                    <p>
-                        Earned:
-                        {new Date(
-                        achievement.earned_at
-                        ).toLocaleDateString()}
-                    </p>
-                </div>
-            ))
-            )}
-        </div>
-    </MainLayout>    
-    
-);
+                        <p className="text-sm text-gray-500">
+                            Earned on{" "}
+                            {new Date(
+                                achievement.earned_at
+                            ).toLocaleDateString()}
+                        </p>
+                    </div>
+                ))}
+            </div>
+         )}
+    </MainLayout>
+    );
 
 }
 
