@@ -81,150 +81,129 @@ function AnalyticsPage() {
 
   return (
     <MainLayout>
-      <div>
-        <h1>Analytics</h1>
+      <h1 className="text-4xl font-bold mb-8">
+        Analytics
+      </h1>
 
-        <p>Total Quizzes: {stats.total_quizzes}</p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-white p-6 rounded-xl shadow">
+          <p className="text-gray-500">Total Quizzes</p>
+          <h2 className="text-3xl font-bold">
+            {stats.total_quizzes}
+          </h2>
+        </div>
 
-        <p>
-          Questions Attempted:
-          {stats.questions_attempted}
-        </p>
+        <div className="bg-white p-6 rounded-xl shadow">
+          <p className="text-gray-500">Accuracy</p>
+          <h2 className="text-3xl font-bold">
+            {stats.accuracy}%
+          </h2>
+        </div>
 
-        <p>
-          Correct Answers:
-          {stats.correct_answers}
-        </p>
+        <div className="bg-white p-6 rounded-xl shadow">
+          <p className="text-gray-500">Total Points</p>
+          <h2 className="text-3xl font-bold">
+            {stats.total_points}
+          </h2>
+        </div>
+      </div>
 
-        <p>
-          Wrong Answers:
-          {stats.wrong_answers}
-        </p>
+      <h2 className="text-2xl font-bold mb-4">
+        Subject Performance
+      </h2>
 
-        <p>
-          Accuracy:
-          {stats.accuracy}%
-        </p>
-
-        <p>
-          Total Points:
-          {stats.total_points}
-        </p>
-        <h2>Subject Performance</h2>
-
+      <div className="grid md:grid-cols-2 gap-4 mb-8">
         {subjects.map((subject) => (
           <div
             key={subject.subject}
-            style={{
-              border: "1px solid #ccc",
-              padding: "10px",
-              margin: "10px 0",
-            }}
+            className="bg-white p-5 rounded-xl shadow"
           >
-            <h3>{subject.subject}</h3>
+            <h3 className="font-bold text-lg">
+              {subject.subject}
+            </h3>
 
-            <p>
-              Attempted: {subject.attempted}
-            </p>
-
-            <p>
-              Correct: {subject.correct}
-            </p>
-
-            <p>
-              Accuracy: {subject.accuracy}%
-            </p>
+            <p>Attempted: {subject.attempted}</p>
+            <p>Correct: {subject.correct}</p>
+            <p>Accuracy: {subject.accuracy}%</p>
           </div>
         ))}
+      </div>
 
-        <h2>Recent Attempts</h2>
+      <h2 className="text-2xl font-bold mb-4">
+        Difficulty Performance
+      </h2>
 
+      {difficultyStats && (
+        <div className="grid md:grid-cols-3 gap-4 mb-8">
+          {["easy", "medium", "hard"].map((level) => (
+            <div
+              key={level}
+              className="bg-white p-5 rounded-xl shadow"
+            >
+              <h3 className="font-bold capitalize">
+                {level}
+              </h3>
+
+              <p>
+                Attempted:
+                {difficultyStats[level].attempted}
+              </p>
+
+              <p>
+                Correct:
+                {difficultyStats[level].correct}
+              </p>
+
+              <p>
+                Accuracy:
+                {difficultyStats[level].accuracy}%
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {recommendation && (
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
+          <h2 className="text-xl font-bold mb-2">
+            Recommended Difficulty
+          </h2>
+
+          <p className="text-lg">
+            {recommendation.recommended_level}
+          </p>
+        </div>
+      )}
+
+      <h2 className="text-2xl font-bold mb-4">
+        Recent Attempts
+      </h2>
+
+      <div className="grid md:grid-cols-2 gap-4">
         {recentAttempts.map((attempt) => (
           <div
             key={attempt.quiz_id}
-            style={{
-              border: "1px solid #ccc",
-              padding: "10px",
-              margin: "10px 0",
-            }}
+            className="bg-white p-5 rounded-xl shadow"
           >
-            <h3>{attempt.subject}</h3>
+            <h3 className="font-bold">
+              {attempt.subject}
+            </h3>
 
             <p>Score: {attempt.score}</p>
 
             <p>
-              Questions: {attempt.total_questions}
+              Accuracy:
+              {attempt.percentage}%
             </p>
 
             <p>
-              Accuracy: {attempt.percentage}%
-            </p>
-
-            <p>
-              Quiz ID: {attempt.quiz_id}
+              Questions:
+              {attempt.total_questions}
             </p>
           </div>
         ))}
-
-        <h2>Difficulty Performance</h2>
-
-        {difficultyStats && (
-          <>
-            <div>
-              <h3>Easy</h3>
-              <p>Attempted: {difficultyStats.easy.attempted}</p>
-              <p>Correct: {difficultyStats.easy.correct}</p>
-              <p>Accuracy: {difficultyStats.easy.accuracy}%</p>
-            </div>
-
-            <div>
-              <h3>Medium</h3>
-              <p>Attempted: {difficultyStats.medium.attempted}</p>
-              <p>Correct: {difficultyStats.medium.correct}</p>
-              <p>Accuracy: {difficultyStats.medium.accuracy}%</p>
-            </div>
-
-            <div>
-              <h3>Hard</h3>
-              <p>Attempted: {difficultyStats.hard.attempted}</p>
-              <p>Correct: {difficultyStats.hard.correct}</p>
-              <p>Accuracy: {difficultyStats.hard.accuracy}%</p>
-            </div>
-          </>
-        )}
-
-        <h2>Difficulty Recommendation</h2>
-
-        {recommendation && (
-          <div
-            style={{
-              border: "1px solid #ccc",
-              padding: "10px",
-              margin: "10px 0",
-            }}
-          > 
-            <h3>
-              Recommended Level:
-              {" "}
-              {recommendation.recommended_level}
-            </h3>
-
-            <p>
-              Medium Accuracy:
-              {" "}
-              {recommendation.medium_accuracy}%
-            </p>
-
-            <p>
-              Hard Accuracy:
-              {" "}
-              {recommendation.hard_accuracy}%
-            </p>  
-          </div>
-        )}
       </div>
     </MainLayout>
-      
   );
 }
 
