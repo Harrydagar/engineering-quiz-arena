@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { getProfile } from "../services/auth";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import StatCard from "../components/StatCard";
 import {
   getDashboard,
@@ -10,11 +9,12 @@ import {
 } from "../services/quizService";
 import MainLayout from "../layouts/MainLayout";
 import LoadingSpinner from "../components/LoadingSpinner";
-
+import { getTodayChallenge } from "../services/dailyChallenge";
 
 function Dashboard() {
 
-  const { logout } = useAuth();
+  const [dailyChallenge, setDailyChallenge] =
+    useState(null);
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState(null);
@@ -24,11 +24,6 @@ function Dashboard() {
     average_accuracy: 0,
     highest_score: 0,
   });
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
 
   const [streak, setStreak] = useState({
     current_streak: 0,
@@ -52,10 +47,12 @@ function Dashboard() {
           dashboardResult,
           summaryResult,
           streakResult,
+          challengeResult,
         ] = await Promise.allSettled([
           getDashboard(),
           getPerformanceSummary(),
           getUserStreak(),
+          getTodayChallenge(),
         ]);
 
         if (dashboardResult.status === "fulfilled") {
@@ -79,6 +76,17 @@ function Dashboard() {
             streakResult.reason
           );
         }
+
+        if (challengeResult.status === "fulfilled") {
+          setDailyChallenge(
+            challengeResult.value
+          );
+        } else {
+          console.error(
+            "Challenge Error:",
+            challengeResult.reason
+          );
+        }
       } catch (error) {
         console.error("Dashboard Error:", error);
       }
@@ -98,51 +106,88 @@ function Dashboard() {
 
   return (
     <MainLayout>
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold">
+          Welcome, {profile.username}
+        </h1>
 
-      <h1>Dashboard</h1>
+        <p className="text-gray-500 mt-2">
+          Ready to improve your rating today?
+        </p>
+      </div>
 
-      <StatCard
-        title="Total Quizzes"
-        value={dashboard.overall_stats.total_quizzes}
-      />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard
+          title="Total Quizzes"
+          value={dashboard.overall_stats.total_quizzes}
+        />
 
-      <StatCard
-        title="Accuracy"
-        value={`${dashboard.overall_stats.accuracy}%`}
-      />
+        <StatCard
+          title="Accuracy"
+          value={`${dashboard.overall_stats.accuracy}%`}
+        />
 
-      <StatCard
-        title="Rating"
-        value={dashboard.rating}
-      />
+        <StatCard
+          title="Rating"
+          value={dashboard.rating}
+        />
 
-      <StatCard
-        title="Rank"
-        value={`#${dashboard.rank}`}
-      />
-      <StatCard
-        title="Average Accuracy"
-        value={`${summary.average_accuracy}%`}
-      />
+        <StatCard
+          title="Rank"
+          value={`#${dashboard.rank}`}
+        />
 
-      <StatCard
-        title="Highest Score"
-        value={summary.highest_score}
-      />
+        <StatCard
+          title="Average Accuracy"
+          value={`${summary.average_accuracy}%`}
+        />
 
-      <StatCard
-        title="Current Streak"
-        value={streak.current_streak}
-      />
+        <StatCard
+          title="Highest Score"
+          value={summary.highest_score}
+        />
 
-      <StatCard
-        title="Longest Streak"
-        value={streak.longest_streak}
-      />
+        <StatCard
+          title="Current Streak"
+          value={streak.current_streak}
+        />
 
-      <button onClick={handleLogout}>
-        Logout
-      </button>
+        <StatCard
+          title="Longest Streak"
+          value={streak.longest_streak}
+        />
+      </div>
+
+      {dailyChallenge && (
+        <div className="mt-8 bg-white rounded-xl shadow-md border p-6">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">
+                Today's Challenge
+              </h2>
+
+              <p className="text-gray-600 mb-3">
+                {dailyChallenge.question}
+              </p>
+
+              <span className="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                {dailyChallenge.points} Points
+              </span>
+            </div>
+
+            <div>
+              <button
+                onClick={() =>
+                  navigate("/daily-challenge")
+                }
+                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-medium"
+              >
+                Open Challenge
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </MainLayout>
   );
 }
