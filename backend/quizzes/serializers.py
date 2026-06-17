@@ -5,7 +5,6 @@ from .models import (
     Question,
     Option,
     QuizAttempt,
-    DailyChallenge,
     UserDailyChallenge,
     Achievement,
     UserAchievement
@@ -64,30 +63,39 @@ class UserAnswerSerializer(serializers.Serializer):
 class FinishQuizSerializer(serializers.Serializer):
     attempt_id = serializers.IntegerField()
 
-class DailyChallengeSerializer(serializers.ModelSerializer):
+
+class UserDailyChallengeSerializer(serializers.ModelSerializer):
     question = serializers.CharField(
-        source='question.question_text'
+        source="question.question_text"
     )
 
-    options = OptionSerializer(
-        source='question.options',
-        many=True,
-        read_only=True
-    )
+    options = serializers.SerializerMethodField()
 
     class Meta:
-        model = DailyChallenge
+        model = UserDailyChallenge
         fields = [
-            'id',
-            'date',
-            'question',
-            'points',
-            'options'
+            "id",
+            "date",
+            "question",
+            "points",
+            "earned_points",
+            "is_completed",
+            "options",
         ]
-class DailyChallengeSubmitSerializer(serializers.Serializer):
-    challenge_id = serializers.IntegerField()
-    selected_option_id = serializers.IntegerField()  
 
+    def get_options(self, obj):
+        return [
+            {
+                "id": option.id,
+                "option_text": option.option_text
+            }
+            for option in obj.question.options.all()
+        ]
+     
+class DailyChallengeSubmitSerializer(
+    serializers.Serializer
+):
+    selected_option_id = serializers.IntegerField()
 
 
 class AchievementSerializer(serializers.ModelSerializer):

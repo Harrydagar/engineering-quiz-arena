@@ -1,5 +1,34 @@
 from django.urls import path
-from .views import DashboardView, DifficultyRecommendationView, DifficultyStatsView, LeaderboardView, QuizInsightsView, RecentAttemptsView, SubjectListView, SubjectPerformanceView, TopicListView, QuestionListView, StartQuizView, FetchQuestionsView, SubmitAnswerView, FinishQuizView, UserStatsView, MyRankView, TodayChallengeView, SubmitDailyChallengeView, UserStreakView, QuizReviewView, QuizHistoryView, MistakeHistoryView, ProgressAnalyticsView, PerformanceSummaryView, AchievementListView, MyAchievementsView, AchievementSummaryView
+from .views import (
+    DashboardView,
+    DifficultyRecommendationView,
+    DifficultyStatsView,
+    LeaderboardView,
+    QuizInsightsView,
+    RecentAttemptsView,
+    SubjectListView,
+    SubjectPerformanceView,
+    TopicListView,
+    QuestionListView,
+    StartQuizView,
+    FetchQuestionsView,
+    SubmitAnswerView,
+    FinishQuizView,
+    UserStatsView,
+    MyRankView,
+    UserStreakView,
+    QuizReviewView,
+    QuizHistoryView,
+    MistakeHistoryView,
+    ProgressAnalyticsView,
+    PerformanceSummaryView,
+    AchievementListView,
+    MyAchievementsView,
+    AchievementSummaryView,
+    TodayChallengeView,
+    SubmitDailyChallengeView
+)
+
 from .services.analytics_service import (
     get_overall_stats,
     get_subject_performance
@@ -16,15 +45,15 @@ urlpatterns = [
         name='fetch-questions'
     ),
     path(
-    'submit-answer/',
-    SubmitAnswerView.as_view(),
-    name='submit-answer'
+        'submit-answer/',
+        SubmitAnswerView.as_view(),
+        name='submit-answer'
     ),
     
     path(
-    'finish/',
-    FinishQuizView.as_view(),
-    name='finish-quiz'
+        'finish/',
+        FinishQuizView.as_view(),
+        name='finish-quiz'
     ),
 
     path(
@@ -81,18 +110,6 @@ urlpatterns = [
     ),
 
     path(
-        'challenges/today/',
-        TodayChallengeView.as_view(),
-        name='today-challenge'
-    ),  
-
-    path(
-        'challenges/submit/',
-        SubmitDailyChallengeView.as_view(),
-        name='submit-daily-challenge'
-    ),
-
-    path(
         'challenges/streak/',
         UserStreakView.as_view(),
         name='user-streak'
@@ -103,6 +120,18 @@ urlpatterns = [
         QuizReviewView.as_view(),
         name="quiz-review"
     ), 
+
+    path(
+        "challenges/today/",
+        TodayChallengeView.as_view(),
+        name="today-challenge"
+    ),
+
+    path(
+        "challenges/submit/",
+        SubmitDailyChallengeView.as_view(),
+        name="submit-daily-challenge"
+    ),
 
     path(
         "mistakes/",

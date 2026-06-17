@@ -5,12 +5,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.utils import timezone
 
-from quizzes.services.challenge_service import (
-    submit_daily_challenge
-)
-
 from quizzes.services.question_service import (
     get_quiz_questions
+)
+
+from quizzes.services.daily_challenge_service import (
+    DailyChallengeService
 )
 
 from quizzes.services.history_service import (
@@ -38,9 +38,9 @@ from .services.analytics_service import (
 from .models import (
     Subject, Topic, Question,
     QuizAttempt, UserAnswer,
-    Option, DailyChallenge,
+    Option,
     UserDailyChallenge,
-    Achievement, 
+    Achievement,
     UserAchievement
 )
 
@@ -49,7 +49,18 @@ from quizzes.services.achievement_service import (
     get_user_achievements
 )
 
-from .serializers import SubjectSerializer, TopicSerializer, QuestionSerializer, QuizAttemptSerializer, UserAnswerSerializer, FinishQuizSerializer, DailyChallengeSerializer, DailyChallengeSubmitSerializer, AchievementSerializer, UserAchievementSerializer
+from .serializers import (
+    SubjectSerializer,
+    TopicSerializer,
+    QuestionSerializer,
+    QuizAttemptSerializer,
+    UserAnswerSerializer,
+    FinishQuizSerializer,
+    AchievementSerializer,
+    UserAchievementSerializer,
+    DailyChallengeSubmitSerializer,
+    UserDailyChallengeSerializer
+)
 from quizzes.services.quiz_service import finish_quiz
 
 
@@ -411,95 +422,6 @@ class QuizInsightsView(APIView):
             )
         )
     
-
-class TodayChallengeView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        today = timezone.now().date()
-
-        try:
-            challenge = DailyChallenge.objects.get(
-                date=today
-            )
-        except DailyChallenge.DoesNotExist:
-            return Response(
-                {
-                    "message": "No challenge available today."
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        serializer = DailyChallengeSerializer(challenge)
-
-        return Response(serializer.data) 
-
-
-class SubmitDailyChallengeView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-
-        serializer = DailyChallengeSubmitSerializer(
-            data=request.data
-        )
-
-        serializer.is_valid(raise_exception=True)
-
-        challenge_id = serializer.validated_data[
-            'challenge_id'
-        ]
-
-        option_id = serializer.validated_data[
-            'selected_option_id'
-        ]
-
-        try:
-            challenge = DailyChallenge.objects.get(
-                id=challenge_id
-            )
-        except DailyChallenge.DoesNotExist:
-            return Response(
-                {
-                    "error": "Challenge not found"
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        already_attempted = UserDailyChallenge.objects.filter(
-            user=request.user,
-            challenge=challenge
-        ).exists()
-
-        if already_attempted:
-            return Response(
-                {
-                    "error": "Challenge already attempted"
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        try:
-            option = Option.objects.get(
-                id=option_id,
-                question=challenge.question
-            )
-        except Option.DoesNotExist:
-            return Response(
-                {
-                    "error": "Invalid option selected"
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        result = submit_daily_challenge(
-            request.user,
-            challenge,
-            option
-        )
-
-        return Response(result)
-
 class UserStreakView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -552,6 +474,58 @@ class QuizHistoryView(APIView):
             )
         )
 
+class TodayChallengeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        challenge = (
+            DailyChallengeService
+            .get_or_create_challenge(
+                request.user
+            )
+        )
+
+        if not challenge:
+            return Response(
+                {
+                    "message": "No challenge available."
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = UserDailyChallengeSerializer(
+            challenge
+        )
+
+        return Response(serializer.data)
+
+class SubmitDailyChallengeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+
+        serializer = (
+            DailyChallengeSubmitSerializer(
+                data=request.data
+            )
+        )
+
+        serializer.is_valid(
+            raise_exception=True
+        )
+
+        result = (
+            DailyChallengeService
+            .submit_challenge(
+                request.user,
+                serializer.validated_data[
+                    "selected_option_id"
+                ]
+            )
+        )
+
+        return Response(result)
 
 class ProgressAnalyticsView(APIView):
     permission_classes = [IsAuthenticated]
