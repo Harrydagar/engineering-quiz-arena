@@ -16,7 +16,7 @@ import QuizReviewPage from "../pages/QuizReviewPage";
 import MistakeTrackerPage from "../pages/MistakeTrackerPage";
 import ProfilePage from "../pages/ProfilePage";
 import NotFoundPage from "../pages/NotFoundPage";
-
+import DailyChallengePage from "../pages/DailyChallengePage";
 
 function AppRoutes() {
   return (
@@ -132,7 +132,15 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route 
+        path="*" 
+        element={<NotFoundPage />} 
+        />
+        
+        <Route
+          path="/daily-challenge"
+          element={<DailyChallengePage />}
+        />
 
       </Routes>
     </BrowserRouter>
