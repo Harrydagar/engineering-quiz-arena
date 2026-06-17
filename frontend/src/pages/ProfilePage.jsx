@@ -20,23 +20,80 @@ function ProfilePage() {
   }, []);
 
   if (!profile) {
-    return  <LoadingSpinner />;
+    return (
+      <MainLayout>
+        <LoadingSpinner />
+      </MainLayout>
+    );
   }
+
 
   return (
     <MainLayout>
-      <div>
-        <h1>Profile</h1>
+      <h1 className="text-4xl font-bold mb-8">
+        Profile
+      </h1>
 
-        <p><strong>Username:</strong> {profile.username}</p>
-        <p><strong>Email:</strong> {profile.email || "Not Provided"}</p>
-        <p><strong>Rating:</strong> {profile.rating}</p>
-        <p><strong>Highest Rating:</strong> {profile.highest_rating}</p>
-        <p><strong>Current Streak:</strong> {profile.current_streak}</p>
-        <p><strong>Longest Streak:</strong> {profile.longest_streak}</p>
+      <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="grid md:grid-cols-2 gap-6">
+
+          <div>
+            <p className="text-gray-500">
+              Username
+            </p>
+            <p className="text-xl font-semibold">
+              {profile.username}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-gray-500">
+              Email
+            </p>
+            <p className="text-xl font-semibold">
+              {profile.email || "Not Provided"}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-gray-500">
+              Rating
+            </p>
+            <p className="text-2xl font-bold text-blue-600">
+              {profile.rating}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-gray-500">
+              Highest Rating
+            </p>
+            <p className="text-2xl font-bold text-green-600">
+              {profile.highest_rating}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-gray-500">
+              Current Streak
+            </p>
+            <p className="text-2xl font-bold">
+              {profile.current_streak}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-gray-500">
+              Longest Streak
+            </p>
+            <p className="text-2xl font-bold">
+              {profile.longest_streak}
+            </p>
+          </div>
+
+        </div>
       </div>
     </MainLayout>
-    
   );
 }
 
