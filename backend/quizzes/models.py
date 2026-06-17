@@ -123,34 +123,32 @@ class UserAnswer(models.Model):
     def __str__(self):
         return f"{self.quiz_attempt.user.username} - Q{self.question.id}"
     
-class DailyChallenge(models.Model):
-    date = models.DateField(unique=True)
 
-    question = models.ForeignKey(
-        Question,
-        on_delete=models.CASCADE,
-        related_name='daily_challenges'
-    )
 
-    points = models.IntegerField(default=10)
-
-    def __str__(self):
-        return f"Daily Challenge - {self.date}"
+from django.db import models
+from django.conf import settings
 
 
 class UserDailyChallenge(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="daily_challenges"
     )
 
-    challenge = models.ForeignKey(
-        DailyChallenge,
-        on_delete=models.CASCADE
+    date = models.DateField()
+
+    question = models.ForeignKey(
+        Question,
+        on_delete=models.CASCADE,
+        related_name="user_daily_challenges"
     )
 
+    points = models.IntegerField(default=10)
 
     is_completed = models.BooleanField(default=False)
+
+    earned_points = models.IntegerField(default=0)
 
     completed_at = models.DateTimeField(
         null=True,
@@ -158,11 +156,16 @@ class UserDailyChallenge(models.Model):
     )
 
     class Meta:
-        unique_together = ['user', 'challenge']
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "date"],
+                name="unique_user_daily_challenge"
+            )
+        ]
+        ordering = ["-date"]
 
     def __str__(self):
-        return f"{self.user.username} - {self.challenge.date}"
-    
+        return f"{self.user.username} - {self.date}"
 
 class Achievement(models.Model):
     

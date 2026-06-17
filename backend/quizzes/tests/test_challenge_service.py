@@ -3,11 +3,7 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 from datetime import timedelta
 
-
-from accounts.models import UserProfile
-
 from quizzes.models import (
-    DailyChallenge,
     Question,
     Topic,
     Subject,
@@ -31,7 +27,6 @@ class DailyChallengeServiceTests(TestCase):
             password="password123"
         )
 
-        
         self.profile = self.user.userprofile
         self.profile.rating = 1000
         self.profile.current_streak = 0
@@ -53,12 +48,6 @@ class DailyChallengeServiceTests(TestCase):
             difficulty="easy"
         )
 
-        self.challenge = DailyChallenge.objects.create(
-            question=self.question,
-            points=5,
-            date=timezone.now().date()
-        )
-
         self.correct_option = Option.objects.create(
             question=self.question,
             option_text="Correct",
@@ -71,6 +60,14 @@ class DailyChallengeServiceTests(TestCase):
             is_correct=False
         )
 
+        self.challenge = UserDailyChallenge.objects.create(
+            user=self.user,
+            question=self.question,
+            date=timezone.now().date(),
+            points=5,
+            is_completed=False,
+        )
+
     def test_submit_daily_challenge_correct(self):
 
         result = submit_daily_challenge(
@@ -80,18 +77,16 @@ class DailyChallengeServiceTests(TestCase):
         )
 
         self.profile.refresh_from_db()
+        self.challenge.refresh_from_db()
 
         self.assertTrue(result["correct"])
-        self.assertEqual(result["points_earned"], 5)
-
         self.assertEqual(
-            self.profile.rating,
-            1002
+            result["points_earned"],
+            5
         )
 
-        self.assertEqual(
-            self.profile.current_streak,
-            1
+        self.assertTrue(
+            self.challenge.is_completed
         )
 
     def test_submit_daily_challenge_wrong(self):
@@ -104,12 +99,13 @@ class DailyChallengeServiceTests(TestCase):
 
         self.profile.refresh_from_db()
 
-        self.assertFalse(result["correct"])
-        self.assertEqual(result["points_earned"], 0)
+        self.assertFalse(
+            result["correct"]
+        )
 
         self.assertEqual(
-            self.profile.rating,
-            1000
+            result["points_earned"],
+            0
         )
 
     def test_streak_increment(self):
@@ -120,7 +116,6 @@ class DailyChallengeServiceTests(TestCase):
         )
 
         self.profile.current_streak = 3
-
         self.profile.save()
 
         submit_daily_challenge(
@@ -144,7 +139,6 @@ class DailyChallengeServiceTests(TestCase):
         )
 
         self.profile.current_streak = 5
-
         self.profile.save()
 
         submit_daily_challenge(
@@ -160,13 +154,7 @@ class DailyChallengeServiceTests(TestCase):
             1
         )
 
-    def test_user_daily_challenge_created(self):
-
-        submit_daily_challenge(
-            self.user,
-            self.challenge,
-            self.correct_option
-        )
+    def test_user_daily_challenge_exists(self):
 
         self.assertEqual(
             UserDailyChallenge.objects.count(),

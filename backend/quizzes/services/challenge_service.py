@@ -1,6 +1,5 @@
 from django.utils import timezone
 
-from quizzes.models import UserDailyChallenge
 from quizzes.services.achievement_service import (
     check_daily_challenge_achievements,
     check_rating_achievements,
@@ -11,12 +10,15 @@ from quizzes.services.achievement_service import (
 def submit_daily_challenge(user, challenge, option):
     is_correct = option.is_correct
 
-    UserDailyChallenge.objects.create(
-        user=user,
-        challenge=challenge,
-        is_completed=is_correct,
-        completed_at=timezone.now()
-    )
+    challenge.is_completed = True
+    challenge.completed_at = timezone.now()
+
+    if is_correct:
+        challenge.earned_points = challenge.points
+    else:
+        challenge.earned_points = 0
+
+    challenge.save()
 
     if is_correct:
         profile = user.userprofile
