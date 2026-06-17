@@ -1,17 +1,20 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import LoadingSpinner from "../components/LoadingSpinner";
 import { registerUser } from "../services/auth";
 
 function Register() {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const [loading, setLoading] =
+    useState(false);
+
+  const [formData, setFormData] =
+    useState({
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
 
   const handleChange = (e) => {
     setFormData({
@@ -23,10 +26,15 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
+    if (
+      formData.password !==
+      formData.confirmPassword
+    ) {
       alert("Passwords do not match");
       return;
     }
+
+    setLoading(true);
 
     try {
       await registerUser({
@@ -38,62 +46,93 @@ function Register() {
       alert("Registration Successful");
       navigate("/login");
     } catch (error) {
-        console.log(error.response);
-        console.log(error.response?.data);
+      console.log(error.response);
+      console.log(error.response?.data);
 
-        alert(JSON.stringify(error.response?.data));
-      }
+      alert(
+        JSON.stringify(
+          error.response?.data
+        )
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div>
-      <h1>Register</h1>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          onChange={handleChange}
-        />
+        <h1 className="text-3xl font-bold text-center mb-2">
+          Quiz Arena
+        </h1>
 
-        <br />
+        <p className="text-center text-gray-500 mb-8">
+          Create your account
+        </p>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-        />
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4"
+        >
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            value={formData.username}
+            onChange={handleChange}
+            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
 
-        <br />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-        />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
 
-        <br />
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
 
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          onChange={handleChange}
-        />
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+          >
+            {loading
+              ? "Creating Account..."
+              : "Register"}
+          </button>
+        </form>
 
-        <br />
+        <p className="text-center mt-6 text-gray-600">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-blue-600 font-medium"
+          >
+            Login
+          </Link>
+        </p>
 
-        <button type="submit">
-          Register
-        </button>
-      </form>
-
-      <p>
-        Already have an account? <Link to="/login">Login</Link>
-      </p>
+      </div>
     </div>
   );
 }

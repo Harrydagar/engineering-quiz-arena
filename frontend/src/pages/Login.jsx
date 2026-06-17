@@ -3,18 +3,19 @@ import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../services/auth";
 import { saveTokens } from "../utils/auth";
 import { useAuth } from "../context/AuthContext";
-import LoadingSpinner from "../components/LoadingSpinner";
-
-
 
 function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
+  const [loading, setLoading] =
+    useState(false);
+
+  const [formData, setFormData] =
+    useState({
+      username: "",
+      password: "",
+    });
 
   const handleChange = (e) => {
     setFormData({
@@ -26,8 +27,12 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
+
     try {
-      const data = await loginUser(formData);
+      const data = await loginUser(
+        formData
+      );
 
       saveTokens(data);
 
@@ -40,39 +45,67 @@ function Login() {
     } catch (error) {
       console.error(error);
       alert("Login Failed");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div>
-      <h1>Login</h1>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          onChange={handleChange}
-        />
+        <h1 className="text-3xl font-bold text-center mb-2">
+          Quiz Arena
+        </h1>
 
-        <br />
+        <p className="text-center text-gray-500 mb-8">
+          Welcome back
+        </p>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-        />
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4"
+        >
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            value={formData.username}
+            onChange={handleChange}
+            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
 
-        <br />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
 
-        <button type="submit">
-          Login
-        </button>
-      </form>
-      <p>
-        Don't have an account? <Link to="/register">Register</Link>
-      </p>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+          >
+            {loading
+              ? "Logging in..."
+              : "Login"}
+          </button>
+        </form>
+
+        <p className="text-center mt-6 text-gray-600">
+          Don't have an account?{" "}
+          <Link
+            to="/register"
+            className="text-blue-600 font-medium"
+          >
+            Register
+          </Link>
+        </p>
+
+      </div>
     </div>
   );
 }
