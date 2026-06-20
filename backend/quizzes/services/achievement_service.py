@@ -98,7 +98,7 @@ def check_score_achievements(user):
         )["total"] or 0
     )
 
-    if total_points >= 1000:
+    if total_points >= 100:
         unlock_achievement(
             user,
             "Century Scorer"
@@ -125,7 +125,11 @@ def check_accuracy_achievements(user):
         else 0
     )
 
-    if accuracy >= 90:
+    if (
+        total_answers >= 50
+        and
+        accuracy >= 90
+    ):
         unlock_achievement(
             user,
             "Accuracy Expert"

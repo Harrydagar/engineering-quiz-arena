@@ -10,7 +10,7 @@ def get_quiz_questions(user, attempt):
 
     answered_question_ids = (
         UserAnswer.objects.filter(
-            quiz_attempt__user=user
+            quiz_attempt=attempt
         ).values_list(
             "question_id",
             flat=True
@@ -104,5 +104,4 @@ def get_quiz_questions(user, attempt):
         )
 
     random.shuffle(questions)
-
     return questions

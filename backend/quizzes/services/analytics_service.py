@@ -98,6 +98,7 @@ def get_subject_performance(user):
             )
         }
         for subject in subjects
+        if subject.attempted > 0
     ]
 
 def get_recent_attempts(
@@ -245,8 +246,11 @@ def get_quiz_insights(user):
 
         attempted = answers.count()
 
+        if attempted == 0:
+            continue
+
         correct = answers.filter(
-            is_correct=True
+                is_correct=True
         ).count()
 
         accuracy = (
@@ -338,7 +342,8 @@ def get_performance_summary(user):
     summary = attempts.aggregate(
         total_quizzes=Count("id"),
         average_accuracy=Avg("percentage"),
-        highest_score=Max("score")
+        highest_score=Max("score"),
+        highest_accuracy=Max("percentage"),
     )
 
     return {
@@ -347,5 +352,7 @@ def get_performance_summary(user):
             summary["average_accuracy"] or 0,
             2
         ),
+        "highest_accuracy":
+            summary["highest_accuracy"] or 0,
         "highest_score": summary["highest_score"] or 0
     }

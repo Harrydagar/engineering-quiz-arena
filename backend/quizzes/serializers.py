@@ -10,49 +10,55 @@ from .models import (
     UserAchievement
 )
 
+
 class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
-        fields = ['id', 'name']
+        fields = ["id", "name"]
 
 
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topic
-        fields = ['id', 'name', 'subject']
+        fields = ["id", "name", "subject"]
 
 
 class OptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Option
-        fields = ['id', 'option_text']
+        fields = ["id", "option_text"]
 
 
 class QuestionSerializer(serializers.ModelSerializer):
-    options = OptionSerializer(many=True, read_only=True)
+    options = OptionSerializer(
+        many=True,
+        read_only=True
+    )
 
     class Meta:
         model = Question
         fields = [
-            'id',
-            'question_text',
-            'difficulty',
-            'options'
+            "id",
+            "question_text",
+            "difficulty",
+            "options",
         ]
+
 
 class QuizAttemptSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuizAttempt
         fields = [
-            'id',
-            'subject',
-            'score',
-            'total_questions',
-            'percentage',
-            'status',
-            'started_at',
-            'completed_at',
+            "id",
+            "subject",
+            "score",
+            "total_questions",
+            "percentage",
+            "status",
+            "started_at",
+            "completed_at",
         ]
+
 
 class UserAnswerSerializer(serializers.Serializer):
     attempt_id = serializers.IntegerField()
@@ -64,12 +70,23 @@ class FinishQuizSerializer(serializers.Serializer):
     attempt_id = serializers.IntegerField()
 
 
-class UserDailyChallengeSerializer(serializers.ModelSerializer):
+class UserDailyChallengeSerializer(
+    serializers.ModelSerializer
+):
+
     question = serializers.CharField(
         source="question.question_text"
     )
 
+    difficulty = serializers.CharField(
+        source="question.difficulty"
+    )
+
     options = serializers.SerializerMethodField()
+
+    rating_reward = (
+        serializers.SerializerMethodField()
+    )
 
     class Meta:
         model = UserDailyChallenge
@@ -77,7 +94,9 @@ class UserDailyChallengeSerializer(serializers.ModelSerializer):
             "id",
             "date",
             "question",
+            "difficulty",
             "points",
+            "rating_reward",
             "earned_points",
             "is_completed",
             "options",
@@ -87,34 +106,57 @@ class UserDailyChallengeSerializer(serializers.ModelSerializer):
         return [
             {
                 "id": option.id,
-                "option_text": option.option_text
+                "option_text": option.option_text,
             }
             for option in obj.question.options.all()
         ]
-     
+
+    def get_rating_reward(
+        self,
+        obj
+    ):
+
+        rewards = {
+            "easy": 5,
+            "medium": 10,
+            "hard": 15,
+        }
+
+        return rewards.get(
+            obj.question.difficulty,
+            5
+        )
+
+
 class DailyChallengeSubmitSerializer(
     serializers.Serializer
 ):
-    selected_option_id = serializers.IntegerField()
+    selected_option_id = (
+        serializers.IntegerField()
+    )
 
 
-class AchievementSerializer(serializers.ModelSerializer):
+class AchievementSerializer(
+    serializers.ModelSerializer
+):
     class Meta:
         model = Achievement
         fields = [
-            'id',
-            'name',
-            'description',
-            'badge_icon'
+            "id",
+            "name",
+            "description",
+            "badge_icon",
         ]
 
 
-class UserAchievementSerializer(serializers.ModelSerializer):
+class UserAchievementSerializer(
+    serializers.ModelSerializer
+):
     achievement = AchievementSerializer()
 
     class Meta:
         model = UserAchievement
         fields = [
-            'achievement',
-            'earned_at'
-        ]          
+            "achievement",
+            "earned_at",
+        ]

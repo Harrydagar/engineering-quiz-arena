@@ -84,7 +84,8 @@ def get_mistake_history(user):
             "question": answer.question.question_text,
             "difficulty": answer.question.difficulty,
             "your_answer": answer.selected_option.option_text,
-            "correct_answer": correct_option.option_text
+            "correct_answer": correct_option.option_text,
+            "explanation": answer.question.explanation,
         })
 
     return data
@@ -130,7 +131,8 @@ def get_quiz_review(user, attempt_id):
             "difficulty": answer.question.difficulty,
             "your_answer": answer.selected_option.option_text,
             "correct_answer": correct_option.option_text,
-            "is_correct": answer.is_correct
+            "is_correct": answer.is_correct,
+            "explanation": answer.question.explanation,
         })
 
     return review_data

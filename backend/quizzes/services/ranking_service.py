@@ -1,5 +1,8 @@
 from accounts.models import UserProfile
-
+from quizzes.models import (
+    UserAchievement
+)
+from django.db.models import Count
 
 def get_user_rank(user):
 
@@ -18,7 +21,12 @@ def get_leaderboard():
     leaderboard = (
         UserProfile.objects
         .select_related("user")
-        .order_by("-rating")
+        .annotate(
+            achievement_count=Count(
+                "user__userachievement"
+            )
+        )
+        .order_by("-rating")[:100]
     )
 
     data = []
@@ -27,11 +35,14 @@ def get_leaderboard():
         leaderboard,
         start=1
     ):
+        
         data.append({
             "rank": rank,
             "username": profile.user.username,
             "rating": profile.rating,
-            "highest_rating": profile.highest_rating
+            "highest_rating": profile.highest_rating,
+            "current_streak": profile.current_streak,
+            "achievement_count": profile.achievement_count,
         })
 
     return data

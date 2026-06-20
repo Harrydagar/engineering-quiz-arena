@@ -1,5 +1,6 @@
 from django.utils import timezone
 from django.db import transaction
+
 from quizzes.services.achievement_service import (
     check_quiz_achievements,
     check_score_achievements,
@@ -7,10 +8,12 @@ from quizzes.services.achievement_service import (
     check_rating_achievements,
 )
 
+# Rating System
 HIGH_SCORE_BONUS = 20
 PASS_BONUS = 5
 FAIL_PENALTY = 10
 MIN_RATING = 100
+
 
 @transaction.atomic
 def finish_quiz(attempt, user):
@@ -19,7 +22,7 @@ def finish_quiz(attempt, user):
         raise ValueError(
             "Quiz already completed"
         )
-    
+
     score, correct_count, percentage = (
         calculate_score(attempt)
     )
@@ -32,6 +35,8 @@ def finish_quiz(attempt, user):
     attempt.save()
 
     profile = user.userprofile
+
+    old_rating = profile.rating
 
     if percentage >= 80:
         profile.rating += HIGH_SCORE_BONUS
@@ -52,6 +57,10 @@ def finish_quiz(attempt, user):
 
     profile.save()
 
+    rating_change = (
+        profile.rating - old_rating
+    )
+
     check_quiz_achievements(user)
     check_score_achievements(user)
     check_accuracy_achievements(user)
@@ -63,7 +72,11 @@ def finish_quiz(attempt, user):
         "percentage": percentage,
         "total_questions": attempt.total_questions,
         "status": attempt.status,
+        "new_rating": profile.rating,
+        "rating_change": rating_change,
+        "highest_rating": profile.highest_rating,
     }
+
 
 def calculate_score(attempt):
 
@@ -75,7 +88,9 @@ def calculate_score(attempt):
         .filter(is_correct=True)
     )
 
-    correct_count = len(correct_answers)
+    correct_count = len(
+        correct_answers
+    )
 
     for answer in correct_answers:
 
@@ -94,8 +109,8 @@ def calculate_score(attempt):
 
     percentage = (
         (
-            correct_count /
-            attempt.total_questions
+            correct_count
+            / attempt.total_questions
         ) * 100
         if attempt.total_questions > 0
         else 0

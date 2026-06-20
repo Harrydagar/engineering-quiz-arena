@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from quizzes.models import Subject, Topic, Question, Option
-
+import random
 
 class Command(BaseCommand):
     help = "Seed sample questions"
@@ -48,13 +48,25 @@ class Command(BaseCommand):
                 difficulty=difficulty
             )
 
+            option_data = []
+
             for option in options:
-                Option.objects.create(
-                    question=question,
-                    option_text=option,
-                    is_correct=(option == correct)
+                option_data.append(
+                    (
+                        option,
+                        option == correct
+                    )
                 )
 
+            random.shuffle(option_data)
+
+            for option_text, is_correct in option_data:
+                Option.objects.create(
+                    question=question,
+                    option_text=option_text,
+                    is_correct=is_correct
+                )
+                
         # ALGEBRA (10)
 
         add_question(

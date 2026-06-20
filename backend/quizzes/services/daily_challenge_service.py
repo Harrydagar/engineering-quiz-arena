@@ -8,6 +8,10 @@ from quizzes.models import (
     UserDailyChallenge,
 )
 
+from quizzes.services.achievement_service import (
+    check_streak_achievements,
+    check_daily_challenge_achievements,
+)
 
 class DailyChallengeService:
 
@@ -297,6 +301,62 @@ class DailyChallengeService:
 
         challenge.completed_at = timezone.now()
         challenge.save()
+
+        profile = user.userprofile
+
+        if is_correct:
+
+            # Rating reward
+            difficulty_rating = {
+                "easy": 5,
+                "medium": 10,
+                "hard": 15,
+            }
+
+            profile.rating += difficulty_rating.get(
+                challenge.question.difficulty,
+                5
+            )
+
+            profile.highest_rating = max(
+                profile.highest_rating,
+                profile.rating
+            )
+
+            # Streak calculation
+            last_completed = (
+                UserDailyChallenge.objects
+                .filter(
+                    user=user,
+                    is_completed=True,
+                    earned_points__gt=0
+                )
+                .exclude(date=today)
+                .order_by("-date")
+                .first()
+            )
+
+            if last_completed:
+                if (
+                    today - last_completed.date
+                ).days == 1:
+                    profile.current_streak += 1
+                else:
+                    profile.current_streak = 1
+            else:
+                profile.current_streak = 1
+
+            profile.longest_streak = max(
+                profile.longest_streak,
+                profile.current_streak
+            )
+
+        
+
+        profile.save()
+        
+        check_streak_achievements(user)
+        check_daily_challenge_achievements(user)
 
         return {
             "success": True,

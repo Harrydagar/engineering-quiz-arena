@@ -46,7 +46,9 @@ from .models import (
 
 from quizzes.services.achievement_service import (
     get_achievement_summary,
-    get_user_achievements
+    get_user_achievements,
+    check_daily_challenge_achievements,
+    check_streak_achievements,
 )
 
 from .serializers import (
@@ -95,6 +97,7 @@ class StartQuizView(APIView):
         subject_id = request.data.get("subject_id")
 
         try:
+            print("SUBJECT ID:", subject_id)
             subject = Subject.objects.get(id=subject_id)
         except Subject.DoesNotExist:
             return Response(
@@ -116,6 +119,30 @@ class StartQuizView(APIView):
                 {"error": "Daily quiz limit reached (10/day)"},
                 status=status.HTTP_400_BAD_REQUEST
             )
+        
+        existing_attempt = (
+            QuizAttempt.objects.filter(
+                user=request.user,
+                subject=subject,
+                status="IN_PROGRESS"
+            ).first()
+        )
+
+        if existing_attempt:
+
+            serializer = QuizAttemptSerializer(
+                existing_attempt
+            )
+
+            return Response(
+                {
+                    "message":
+                        "Resume existing quiz",
+                    "attempt":
+                        serializer.data,
+                    "resume": True
+                }
+            )
 
         total_questions = min(
             10,
@@ -131,12 +158,17 @@ class StartQuizView(APIView):
             total_questions=total_questions
         )
 
-        serializer = QuizAttemptSerializer(attempt)
+        serializer = QuizAttemptSerializer(
+            attempt
+        )
 
         return Response(
             {
-                "message": "Quiz started successfully",
-                "attempt": serializer.data
+                "message":
+                    "Quiz started successfully",
+                "attempt":
+                    serializer.data,
+                "resume": False
             },
             status=status.HTTP_201_CREATED
         )
@@ -162,6 +194,10 @@ class FetchQuestionsView(APIView):
             attempt
         )
 
+        print(
+            "QUESTION IDS:",
+            [q.id for q in questions]
+        )
 
         serializer = QuestionSerializer(
             questions,
@@ -169,7 +205,7 @@ class FetchQuestionsView(APIView):
         )
 
         return Response(serializer.data)
-    
+
 class SubmitAnswerView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -193,7 +229,8 @@ class SubmitAnswerView(APIView):
             )
 
             question = Question.objects.get(
-                id=question_id
+                id=question_id,
+                topic__subject=attempt.subject
             )
 
             selected_option = Option.objects.get(
@@ -208,6 +245,15 @@ class SubmitAnswerView(APIView):
         ):
             return Response(
                 {"error": "Invalid data"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if attempt.status == "COMPLETED":
+            return Response(
+                {
+                    "error":
+                        "Quiz already completed"
+                },
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -291,16 +337,18 @@ class FinishQuizView(APIView):
             request.user
         )
 
-
         return Response({
             "score": result["score"],
             "correct_answers": result["correct_count"],
             "total_questions": result["total_questions"],
             "percentage": round(
                 result["percentage"],
-                2
+                2   
             ),
             "status": result["status"],
+            "new_rating": result["new_rating"],
+            "rating_change": result["rating_change"],
+            "highest_rating": result["highest_rating"],
         })
     
 class LeaderboardView(APIView):
@@ -372,12 +420,33 @@ class DashboardView(APIView):
            request.user
         )
 
+        today_challenge = (
+            UserDailyChallenge.objects
+            .filter(
+                user=request.user,
+                date=timezone.now().date()
+            )
+            .first()
+        )
+
         return Response({
             "rank": rank,
             "overall_stats": overall_stats,
             "subject_stats": subject_stats,
             "recent_attempts": recent_attempts,
-            "rating": request.user.userprofile.rating,
+            "today_challenge_completed":
+                today_challenge.is_completed
+                if today_challenge
+                else False,
+            "profile": {
+                "rating": request.user.userprofile.rating,
+                "highest_rating":
+                    request.user.userprofile.highest_rating,
+                "current_streak":
+                    request.user.userprofile.current_streak,
+                "longest_streak":
+                    request.user.userprofile.longest_streak,
+            },
             **achievement_data
         })
 
@@ -524,6 +593,16 @@ class SubmitDailyChallengeView(APIView):
                 ]
             )
         )
+
+        if result["success"]:
+
+            check_daily_challenge_achievements(
+                request.user
+            )
+
+            check_streak_achievements(
+                request.user
+            )
 
         return Response(result)
 
