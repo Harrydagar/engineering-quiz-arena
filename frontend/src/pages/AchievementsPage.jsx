@@ -79,11 +79,51 @@ function AchievementsPage() {
                         <p className="text-2xl font-bold text-green-600">
                             {summary.completion_percentage}%
                         </p>
+                        <div className="w-full bg-gray-200 rounded-full h-3 mt-4">
+                            <div
+                                className="bg-green-500 h-3 rounded-full"
+                                style={{
+                                    width: `${summary.completion_percentage}%`,
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
         )}
 
+        {summary?.recent_achievements?.length > 0 && (
+            <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+
+                <h2 className="text-2xl font-semibold mb-4">
+                    Recent Unlocks
+                </h2>
+
+                <div className="space-y-3">
+
+                    {summary.recent_achievements.map(
+                        (achievement) => (
+                            <div
+                                key={achievement.id}
+                                className="border-b pb-2"
+                            >
+                                <p className="font-medium">
+                                    {achievement.name}
+                                </p>
+
+                                <p className="text-sm text-gray-500">
+                                    {achievement.description}
+                                </p>
+                            </div>
+                        )
+                    )}
+
+                </div>
+
+            </div>
+        )}
+
+        
         {achievements.length === 0 ? (
             <div className="bg-white rounded-xl shadow-md p-6">
                 <p>No achievements unlocked yet.</p>

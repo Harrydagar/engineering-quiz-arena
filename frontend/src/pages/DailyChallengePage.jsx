@@ -50,6 +50,32 @@ function DailyChallengePage() {
     return <div>No challenge available.</div>;
   }
 
+  if (challenge.is_completed) {
+    return (
+      <div className="max-w-3xl mx-auto p-6">
+
+        <div className="bg-green-50 border rounded-xl p-8">
+
+          <h2 className="text-2xl font-bold mb-3">
+            Challenge Completed
+          </h2>
+
+          <p>
+            Come back tomorrow for a new challenge.
+          </p>
+
+          <p className="mt-3">
+            Points Earned:
+            {" "}
+            {challenge.earned_points}
+          </p>
+
+        </div>
+
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-3xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">
@@ -57,9 +83,21 @@ function DailyChallengePage() {
       </h1>
 
       <div className="border rounded-lg p-6">
-        <p className="mb-2">
-          Points: {challenge.points}
-        </p>
+        <div className="flex gap-2 mb-4 flex-wrap">
+
+          <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
+            {challenge.points} Points
+          </span>
+
+          <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+            +{challenge.rating_reward} Rating
+          </span>
+
+          <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm capitalize">
+            {challenge.difficulty}
+          </span>
+
+        </div>
 
         <h2 className="text-xl font-semibold mb-4">
           {challenge.question}

@@ -59,13 +59,16 @@ function HistoryPage() {
             <div
               key={attempt.id}
               onClick={() => navigate(`/review/${attempt.id}`)}
-              style={{
-                  border: "1px solid #ccc",
-                  padding: "15px",
-                  marginBottom: "10px",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-              }}
+              className="
+              bg-white
+              rounded-xl
+              shadow
+              p-5
+              mb-4
+              cursor-pointer
+              hover:shadow-lg
+              transition
+              "
               >
               <h3>{attempt.subject}</h3>
 

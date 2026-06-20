@@ -12,13 +12,14 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { getTodayChallenge } from "../services/dailyChallenge";
 
 function Dashboard() {
-
   const [dailyChallenge, setDailyChallenge] =
     useState(null);
+
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState(null);
   const [dashboard, setDashboard] = useState(null);
+
   const [summary, setSummary] = useState({
     total_quizzes: 0,
     average_accuracy: 0,
@@ -34,10 +35,9 @@ function Dashboard() {
     const fetchProfile = async () => {
       try {
         const data = await getProfile();
-        console.log("PROFILE:", data);
         setProfile(data);
       } catch (error) {
-        console.log("PROFILE ERROR:", error);
+        console.error(error);
       }
     };
 
@@ -56,24 +56,20 @@ function Dashboard() {
         ]);
 
         if (dashboardResult.status === "fulfilled") {
-          setDashboard(dashboardResult.value);
+          setDashboard(
+            dashboardResult.value
+          );
         }
 
         if (summaryResult.status === "fulfilled") {
-          setSummary(summaryResult.value);
-        } else {
-          console.error(
-            "Summary Error:",
-            summaryResult.reason
+          setSummary(
+            summaryResult.value
           );
         }
 
         if (streakResult.status === "fulfilled") {
-          setStreak(streakResult.value);
-        } else {
-          console.error(
-            "Streak Error:",
-            streakResult.reason
+          setStreak(
+            streakResult.value
           );
         }
 
@@ -81,14 +77,9 @@ function Dashboard() {
           setDailyChallenge(
             challengeResult.value
           );
-        } else {
-          console.error(
-            "Challenge Error:",
-            challengeResult.reason
-          );
         }
       } catch (error) {
-        console.error("Dashboard Error:", error);
+        console.error(error);
       }
     };
 
@@ -106,6 +97,7 @@ function Dashboard() {
 
   return (
     <MainLayout>
+
       <div className="mb-8">
         <h1 className="text-4xl font-bold">
           Welcome, {profile.username}
@@ -117,9 +109,21 @@ function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
         <StatCard
           title="Total Quizzes"
-          value={dashboard.overall_stats.total_quizzes}
+          value={
+            dashboard.overall_stats
+              .total_quizzes
+          }
+        />
+
+        <StatCard
+          title="Questions Solved"
+          value={
+            dashboard.overall_stats
+              .questions_attempted
+          }
         />
 
         <StatCard
@@ -128,8 +132,26 @@ function Dashboard() {
         />
 
         <StatCard
+          title="Points"
+          value={
+            dashboard.overall_stats
+              .total_points
+          }
+        />
+
+        <StatCard
           title="Rating"
-          value={dashboard.rating}
+          value={
+            dashboard.profile?.rating
+          }
+        />
+
+        <StatCard
+          title="Highest Rating"
+          value={
+            dashboard.profile
+              ?.highest_rating
+          }
         />
 
         <StatCard
@@ -156,38 +178,144 @@ function Dashboard() {
           title="Longest Streak"
           value={streak.longest_streak}
         />
+
+        <StatCard
+          title="Achievements"
+          value={
+            dashboard.total_unlocked
+          }
+        />
+
+        <StatCard
+          title="Completion"
+          value={`${dashboard.completion_percentage}%`}
+        />
+
       </div>
 
-      {dailyChallenge && (
+      {dailyChallenge ? (
         <div className="mt-8 bg-white rounded-xl shadow-md border p-6">
+
           <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+
             <div>
+
               <h2 className="text-2xl font-bold mb-2">
                 Today's Challenge
               </h2>
 
-              <p className="text-gray-600 mb-3">
-                {dailyChallenge.question}
+              <p className="text-gray-600 mb-4">
+                Complete today's challenge
+                to earn rewards and keep
+                your streak alive.
               </p>
 
-              <span className="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
-                {dailyChallenge.points} Points
-              </span>
+              <div className="flex flex-wrap gap-2">
+
+                <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
+                  {dailyChallenge.points}
+                  {" "}
+                  Points
+                </span>
+
+                <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                  +
+                  {
+                    dailyChallenge.rating_reward
+                  }
+                  {" "}
+                  Rating
+                </span>
+
+                <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm capitalize">
+                  {
+                    dailyChallenge.difficulty
+                  }
+                </span>
+
+              </div>
+
             </div>
 
-            <div>
-              <button
-                onClick={() =>
-                  navigate("/daily-challenge")
-                }
-                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-medium"
-              >
-                Open Challenge
-              </button>
-            </div>
+            <button
+              onClick={() =>
+                navigate(
+                  "/daily-challenge"
+                )
+              }
+              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-medium"
+            >
+              Open Challenge
+            </button>
+
           </div>
+
+        </div>
+      ) : (
+        <div className="mt-8 bg-white rounded-xl shadow-md border p-6">
+          <p>
+            No challenge available
+            today.
+          </p>
         </div>
       )}
+
+      {dashboard.recent_attempts?.length >
+        0 && (
+        <div className="mt-8 bg-white rounded-xl shadow-md border p-6">
+
+          <h2 className="text-2xl font-bold mb-4">
+            Recent Attempts
+          </h2>
+
+          <div className="space-y-3">
+
+            {dashboard.recent_attempts
+              .slice(0, 5)
+              .map((attempt) => (
+                <div
+                  key={attempt.quiz_id}
+                  className="bg-gray-50 border rounded-lg p-4"
+                >
+
+                  <div className="grid grid-cols-3 items-center">
+
+                    <div>
+                      <p className="font-semibold">
+                        {attempt.subject}
+                      </p>
+                    </div>
+
+                      <div className="text-center">
+                        <p className="font-semibold">
+                          {attempt.percentage}%
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Accuracy
+                        </p>
+                      </div>
+
+                      <div className="text-right">
+                        <p className="font-semibold">
+                          {attempt.score}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Score
+                        </p>
+                      </div>
+
+                    </div>
+
+                  </div>
+                ))}
+
+            </div>
+
+          </div>
+
+        
+      )}
+
     </MainLayout>
   );
 }

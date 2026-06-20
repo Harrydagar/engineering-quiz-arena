@@ -133,3 +133,10 @@ export const getUserStreak = async () => {
   );
   return response.data;
 };
+
+export const getQuizInsights = async () => {
+  const response = await api.get(
+    "/api/quizzes/analytics/insights/"
+  );
+  return response.data;
+};

@@ -46,6 +46,14 @@ function LeaderboardPage() {
               <th className="text-left p-4">
                 Highest Rating
               </th>
+
+              <th className="text-left p-4">
+                Streak
+              </th>
+
+              <th className="text-left p-4">
+                Achievements
+              </th>
             </tr>
           </thead>
 
@@ -69,6 +77,14 @@ function LeaderboardPage() {
 
                 <td className="p-4">
                   {player.highest_rating}
+                </td>
+
+                <td className="p-4">
+                  {player.current_streak}
+                </td>
+
+                <td className="p-4">
+                  {player.achievement_count}
                 </td>
               </tr>
             ))}
