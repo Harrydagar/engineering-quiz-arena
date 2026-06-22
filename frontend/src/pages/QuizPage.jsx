@@ -8,14 +8,21 @@ import {
 } from "../services/quizService";
 import LoadingSpinner from "../components/LoadingSpinner";
 
-
 function QuizPage() {
   const { attemptId } = useParams();
   const navigate = useNavigate();
 
-  const [questions, setQuestions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [answeredQuestions, setAnsweredQuestions] = useState([]);
+  const [questions, setQuestions] =
+    useState([]);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [currentQuestion, setCurrentQuestion] =
+    useState(0);
+
+  const [selectedAnswers, setSelectedAnswers] =
+    useState({});
 
   useEffect(() => {
     loadQuestions();
@@ -23,11 +30,8 @@ function QuizPage() {
 
   const loadQuestions = async () => {
     try {
-      const data = await fetchQuestions(
-        attemptId
-      );
-
-      console.log("Questions:", data);
+      const data =
+        await fetchQuestions(attemptId);
 
       setQuestions(data);
     } catch (error) {
@@ -45,190 +49,228 @@ function QuizPage() {
     optionId
   ) => {
     try {
-      const data = await submitAnswer(
+      await submitAnswer(
         attemptId,
         questionId,
         optionId
       );
 
-      setAnsweredQuestions((prev) => [
+      setSelectedAnswers((prev) => ({
         ...prev,
-        questionId,
-      ]);
-
-      console.log(
-        "Answer Response:",
-        JSON.stringify(
-          data,
-          null,
-          2
-        )
-      );
+        [questionId]: optionId,
+      }));
     } catch (error) {
-      console.log(
-        "Status:",
-        error.response?.status
-      );
-
-      console.log(
-        "Response:",
-        JSON.stringify(
-          error.response?.data,
-          null,
-          2
-        )
-      );
-
       console.error(error);
     }
   };
 
-  const handleFinishQuiz = async () => {
-    try {
-      const data = await finishQuiz(
-        attemptId
+  const handleNext = () => {
+    if (
+      currentQuestion <
+      questions.length - 1
+    ) {
+      setCurrentQuestion(
+        currentQuestion + 1
       );
+    }
+  };
 
-      console.log(
-        "Quiz Result:",
-        data
+  const handlePrevious = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(
+        currentQuestion - 1
       );
+    }
+  };
 
-      navigate(
-        "/results",
-        {
-          state: data,
-        }
-      );
-    } catch (error) {
-        console.log(
-            "Status:",
-            error.response?.status
+  const handleFinishQuiz =
+    async () => {
+      try {
+        const data =
+          await finishQuiz(
+            attemptId
+          );
+
+        navigate(
+          "/results",
+          {
+            state: data,
+          }
         );
-
-        console.log(
-            "Response:",
-            JSON.stringify(
-            error.response?.data,
-            null,
-            2
-            )
-        );
-
+      } catch (error) {
         console.error(error);
-        }
-        };
+      }
+    };
 
   if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  if (questions.length === 0) {
     return (
-       <LoadingSpinner />
+      <>
+        <Navbar />
+        <div className="max-w-3xl mx-auto p-6">
+          <p>
+            No questions available.
+          </p>
+        </div>
+      </>
     );
   }
+
+  const question =
+    questions[currentQuestion];
+
+  const progress =
+    ((currentQuestion + 1) /
+      questions.length) *
+    100;
 
   return (
     <>
       <Navbar />
-      <div>
-        <h1>Quiz</h1>
 
-        <p>
-          Attempt ID: {attemptId}
-        </p>
+      <div className="max-w-4xl mx-auto p-6">
 
-        {questions.map((question) => (
-          <div
-            key={question.id}
-            style={{
-              border:
-                "1px solid #ccc",
-              padding: "16px",
-              margin: "16px 0",
-            }}
-          >
-            <h3>
-              {
-                question.question_text
-              }
-            </h3>
+        <div className="mb-6">
 
-            <p>
-              Difficulty:{" "}
+          <div className="flex justify-between mb-2">
+
+            <span className="font-medium">
+              Question{" "}
+              {currentQuestion + 1}
+              {" / "}
+              {questions.length}
+            </span>
+
+            <span className="text-gray-500 capitalize">
               {
                 question.difficulty
               }
-            </p>
+            </span>
 
-            <div>
-              {question.options
-                .length > 0 ? (
-                question.options.map(
-                  (option) => (
-                    <button
-                      key={
-                        option.id
-                      }
-                      disabled={answeredQuestions.includes(
-                        question.id
-                      )}
-                      onClick={() =>
-                        handleAnswer(
-                          question.id,
-                          option.id
-                        )
-                      }
-                      style={{
-                        display:
-                          "block",
-                        width:
-                          "100%",
-                        textAlign:
-                          "left",
-                        padding:
-                          "10px",
-                        marginBottom:
-                          "8px",
-                      }}
-                    >
-                      {
-                        option.option_text
-                      }
-                    </button>
-                  )
-                )
-              ) : (
-                <p
-                  style={{
-                    color:
-                      "red",
-                    fontWeight:
-                      "bold",
-                  }}
-                >
-                  No options
-                  available
-                  for this
-                  question
-                </p>
-              )}
-            </div>
           </div>
-        ))}
 
-        <button
-          onClick={
-            handleFinishQuiz
-          }
-          style={{
-            padding:
-              "12px 24px",
-            marginTop: "20px",
-          }}  
-        >
-          Finish Quiz
-        </button>
+          <div className="w-full bg-gray-200 rounded-full h-3">
+
+            <div
+              className="bg-blue-600 h-3 rounded-full transition-all duration-300"
+              style={{
+                width: `${progress}%`,
+              }}
+            />
+
+          </div>
+
+        </div>
+
+        <div className="bg-white rounded-xl shadow-md border p-6">
+
+          <h2 className="text-2xl font-semibold mb-6">
+            {
+              question.question_text
+            }
+          </h2>
+
+          <div className="space-y-3">
+
+            {question.options.map(
+              (option) => (
+                <button
+                  key={option.id}
+                  onClick={() =>
+                    handleAnswer(
+                      question.id,
+                      option.id
+                    )
+                  }
+                  disabled={
+                    selectedAnswers[
+                      question.id
+                    ]
+                  }
+                  className={`
+                    w-full
+                    text-left
+                    p-4
+                    rounded-lg
+                    border
+                    transition
+                    ${
+                      selectedAnswers[
+                        question.id
+                      ] ===
+                      option.id
+                        ? "bg-blue-100 border-blue-500"
+                        : "hover:bg-gray-50"
+                    }
+                  `}
+                >
+                  {
+                    option.option_text
+                  }
+                </button>
+              )
+            )}
+
+          </div>
+
+        </div>
+
+        <div className="flex justify-between mt-6">
+
+          <button
+            onClick={
+              handlePrevious
+            }
+            disabled={
+              currentQuestion ===
+              0
+            }
+            className="
+              px-5 py-2
+              border
+              rounded-lg
+              disabled:opacity-50
+            "
+          >
+            Previous
+          </button>
+
+          {currentQuestion ===
+          questions.length - 1 ? (
+            <button
+              onClick={
+                handleFinishQuiz
+              }
+              className="
+                px-6 py-2
+                bg-green-600
+                text-white
+                rounded-lg
+              "
+            >
+              Finish Quiz
+            </button>
+          ) : (
+            <button
+              onClick={handleNext}
+              className="
+                px-6 py-2
+                bg-blue-600
+                text-white
+                rounded-lg
+              "
+            >
+              Next Question
+            </button>
+          )}
+
+        </div>
+
       </div>
     </>
-    
   );
 }
 
