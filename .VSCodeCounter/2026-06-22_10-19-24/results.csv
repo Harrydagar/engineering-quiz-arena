@@ -1,0 +1,159 @@
+"filename", "language", "JavaScript", "Markdown", "JavaScript JSX", "XML", "JSON", "PostCSS", "HTML", "Python", "pip requirements", "comment", "blank", "total"
+"c:\Users\hp\EngineeringQuizArena\README.md", "Markdown", 0, 148, 0, 0, 0, 0, 0, 0, 0, 0, 70, 218
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\admin.py", "Python", 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 2, 4
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\apps.py", "Python", 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 3, 9
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\migrations\0001_initial.py", "Python", 0, 0, 0, 0, 0, 0, 0, 22, 0, 1, 7, 30
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\migrations\0002_rename_streak_userprofile_current_streak_and_more.py", "Python", 0, 0, 0, 0, 0, 0, 0, 22, 0, 1, 6, 29
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\migrations\0003_userprofile_highest_rating.py", "Python", 0, 0, 0, 0, 0, 0, 0, 12, 0, 1, 6, 19
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\migrations\__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\models.py", "Python", 0, 0, 0, 0, 0, 0, 0, 17, 0, 0, 7, 24
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\serializers.py", "Python", 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 4, 18
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\signals.py", "Python", 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 2, 10
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\tests.py", "Python", 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 2, 4
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\urls.py", "Python", 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 4, 16
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\views.py", "Python", 0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 6, 28
+"c:\Users\hp\EngineeringQuizArena\backend\analytics\__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\backend\analytics\admin.py", "Python", 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 2, 4
+"c:\Users\hp\EngineeringQuizArena\backend\analytics\apps.py", "Python", 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 3, 6
+"c:\Users\hp\EngineeringQuizArena\backend\analytics\migrations\__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\backend\analytics\models.py", "Python", 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 2, 4
+"c:\Users\hp\EngineeringQuizArena\backend\analytics\tests.py", "Python", 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 2, 4
+"c:\Users\hp\EngineeringQuizArena\backend\analytics\views.py", "Python", 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 2, 4
+"c:\Users\hp\EngineeringQuizArena\backend\core\__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\backend\core\asgi.py", "Python", 0, 0, 0, 0, 0, 0, 0, 4, 0, 8, 5, 17
+"c:\Users\hp\EngineeringQuizArena\backend\core\settings.py", "Python", 0, 0, 0, 0, 0, 0, 0, 106, 0, 25, 34, 165
+"c:\Users\hp\EngineeringQuizArena\backend\core\settings_prod.py", "Python", 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 2, 5
+"c:\Users\hp\EngineeringQuizArena\backend\core\urls.py", "Python", 0, 0, 0, 0, 0, 0, 0, 30, 0, 16, 7, 53
+"c:\Users\hp\EngineeringQuizArena\backend\core\wsgi.py", "Python", 0, 0, 0, 0, 0, 0, 0, 4, 0, 8, 5, 17
+"c:\Users\hp\EngineeringQuizArena\backend\leaderboard\__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\backend\leaderboard\admin.py", "Python", 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 2, 4
+"c:\Users\hp\EngineeringQuizArena\backend\leaderboard\apps.py", "Python", 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 3, 6
+"c:\Users\hp\EngineeringQuizArena\backend\leaderboard\migrations\0001_initial.py", "Python", 0, 0, 0, 0, 0, 0, 0, 20, 0, 1, 7, 28
+"c:\Users\hp\EngineeringQuizArena\backend\leaderboard\migrations\__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\backend\leaderboard\models.py", "Python", 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 4, 13
+"c:\Users\hp\EngineeringQuizArena\backend\leaderboard\tests.py", "Python", 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 2, 4
+"c:\Users\hp\EngineeringQuizArena\backend\leaderboard\views.py", "Python", 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 2, 4
+"c:\Users\hp\EngineeringQuizArena\backend\manage.py", "Python", 0, 0, 0, 0, 0, 0, 0, 15, 0, 3, 5, 23
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\admin.py", "Python", 0, 0, 0, 0, 0, 0, 0, 21, 0, 0, 1, 22
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\apps.py", "Python", 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 3, 6
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\management\__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\management\commands\__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\management\commands\seed_achievements.py", "Python", 0, 0, 0, 0, 0, 0, 0, 66, 0, 0, 10, 76
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\management\commands\seed_questions.py", "Python", 0, 0, 0, 0, 0, 0, 0, 223, 0, 5, 35, 263
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0001_initial.py", "Python", 0, 0, 0, 0, 0, 0, 0, 24, 0, 1, 7, 32
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0002_topic_description_question_option.py", "Python", 0, 0, 0, 0, 0, 0, 0, 32, 0, 1, 6, 39
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0003_quizattempt_useranswer.py", "Python", 0, 0, 0, 0, 0, 0, 0, 33, 0, 1, 6, 40
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0004_remove_quizattempt_topic_quizattempt_status_and_more.py", "Python", 0, 0, 0, 0, 0, 0, 0, 29, 0, 1, 6, 36
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0005_quizattempt_percentage.py", "Python", 0, 0, 0, 0, 0, 0, 0, 12, 0, 1, 6, 19
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0006_dailychallenge_userdailychallenge.py", "Python", 0, 0, 0, 0, 0, 0, 0, 32, 0, 1, 6, 39
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0007_achievement_userachievement.py", "Python", 0, 0, 0, 0, 0, 0, 0, 31, 0, 1, 6, 38
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0008_remove_dailychallenge_question_and_more.py", "Python", 0, 0, 0, 0, 0, 0, 0, 75, 0, 1, 15, 91
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0009_alter_userdailychallenge_question.py", "Python", 0, 0, 0, 0, 0, 0, 0, 13, 0, 1, 6, 20
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\models.py", "Python", 0, 0, 0, 0, 0, 0, 0, 154, 0, 0, 55, 209
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\serializers.py", "Python", 0, 0, 0, 0, 0, 0, 0, 129, 0, 0, 33, 162
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\services\achievement_service.py", "Python", 0, 0, 0, 0, 0, 0, 0, 166, 0, 0, 47, 213
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\services\analytics_service.py", "Python", 0, 0, 0, 0, 0, 0, 0, 288, 0, 0, 70, 358
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\services\challenge_service.py", "Python", 0, 0, 0, 0, 0, 0, 0, 48, 0, 0, 19, 67
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\services\daily_challenge_service.py", "Python", 0, 0, 0, 0, 0, 0, 0, 282, 0, 18, 70, 370
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\services\history_service.py", "Python", 0, 0, 0, 0, 0, 0, 0, 108, 0, 0, 30, 138
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\services\question_service.py", "Python", 0, 0, 0, 0, 0, 0, 0, 90, 0, 0, 17, 107
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\services\quiz_service.py", "Python", 0, 0, 0, 0, 0, 0, 0, 92, 0, 1, 30, 123
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\services\ranking_service.py", "Python", 0, 0, 0, 0, 0, 0, 0, 39, 0, 0, 9, 48
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\tests\__init__.py", "Python", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\tests\est_api_auth.py", "Python", 0, 0, 0, 0, 0, 0, 0, 44, 0, 0, 12, 56
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\tests\test_achievements_service.py", "Python", 0, 0, 0, 0, 0, 0, 0, 55, 0, 0, 22, 77
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\tests\test_analytics_service.py", "Python", 0, 0, 0, 0, 0, 0, 0, 193, 0, 0, 52, 245
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\tests\test_challenge_service.py", "Python", 0, 0, 0, 0, 0, 0, 0, 124, 0, 0, 38, 162
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\tests\test_history_service.py", "Python", 0, 0, 0, 0, 0, 0, 0, 135, 0, 0, 38, 173
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\tests\test_quiz_service.py", "Python", 0, 0, 0, 0, 0, 0, 0, 199, 0, 0, 57, 256
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\tests\test_ranking_service.py", "Python", 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 28, 108
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\urls.py", "Python", 0, 0, 0, 0, 0, 0, 0, 154, 0, 0, 24, 178
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\views.py", "Python", 0, 0, 0, 0, 0, 0, 0, 524, 0, 1, 140, 665
+"c:\Users\hp\EngineeringQuizArena\backend\requirements.txt", "pip requirements", 0, 0, 0, 0, 0, 0, 0, 0, 39, 0, 0, 39
+"c:\Users\hp\EngineeringQuizArena\deployment_notes.md", "Markdown", 0, 61, 0, 0, 0, 0, 0, 0, 0, 0, 35, 96
+"c:\Users\hp\EngineeringQuizArena\docs\API_Documentation.md", "Markdown", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\docs\Day10_Report.md", "Markdown", 0, 188, 0, 0, 0, 0, 0, 0, 0, 0, 102, 290
+"c:\Users\hp\EngineeringQuizArena\docs\Day11_Report.md", "Markdown", 0, 220, 0, 0, 0, 0, 0, 0, 0, 0, 127, 347
+"c:\Users\hp\EngineeringQuizArena\docs\Day12_Report.md", "Markdown", 0, 177, 0, 0, 0, 0, 0, 0, 0, 0, 94, 271
+"c:\Users\hp\EngineeringQuizArena\docs\Day13_Report.md", "Markdown", 0, 121, 0, 0, 0, 0, 0, 0, 0, 0, 55, 176
+"c:\Users\hp\EngineeringQuizArena\docs\Day14_Report.md", "Markdown", 0, 129, 0, 0, 0, 0, 0, 0, 0, 0, 62, 191
+"c:\Users\hp\EngineeringQuizArena\docs\Day15_Report.md", "Markdown", 0, 141, 0, 0, 0, 0, 0, 0, 0, 0, 76, 217
+"c:\Users\hp\EngineeringQuizArena\docs\Day16_Report.md", "Markdown", 0, 186, 0, 0, 0, 0, 0, 0, 0, 0, 86, 272
+"c:\Users\hp\EngineeringQuizArena\docs\Day17_Report.md", "Markdown", 0, 111, 0, 0, 0, 0, 0, 0, 0, 0, 59, 170
+"c:\Users\hp\EngineeringQuizArena\docs\Day18_Report.md", "Markdown", 0, 115, 0, 0, 0, 0, 0, 0, 0, 0, 48, 163
+"c:\Users\hp\EngineeringQuizArena\docs\Day19_Report.md", "Markdown", 0, 182, 0, 0, 0, 0, 0, 0, 0, 0, 106, 288
+"c:\Users\hp\EngineeringQuizArena\docs\Day1_Report.md", "Markdown", 0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 61, 151
+"c:\Users\hp\EngineeringQuizArena\docs\Day20_Report.md", "Markdown", 0, 73, 0, 0, 0, 0, 0, 0, 0, 0, 35, 108
+"c:\Users\hp\EngineeringQuizArena\docs\Day21_Report.md", "Markdown", 0, 201, 0, 0, 0, 0, 0, 0, 0, 0, 140, 341
+"c:\Users\hp\EngineeringQuizArena\docs\Day22_Report.md", "Markdown", 0, 161, 0, 0, 0, 0, 0, 0, 0, 0, 85, 246
+"c:\Users\hp\EngineeringQuizArena\docs\Day23_Report.md", "Markdown", 0, 293, 0, 0, 0, 0, 0, 0, 0, 0, 141, 434
+"c:\Users\hp\EngineeringQuizArena\docs\Day24_Report.md", "Markdown", 0, 202, 0, 0, 0, 0, 0, 0, 0, 0, 101, 303
+"c:\Users\hp\EngineeringQuizArena\docs\Day25_Report.md", "Markdown", 0, 159, 0, 0, 0, 0, 0, 0, 0, 0, 95, 254
+"c:\Users\hp\EngineeringQuizArena\docs\Day26_Report.md", "Markdown", 0, 150, 0, 0, 0, 0, 0, 0, 0, 0, 71, 221
+"c:\Users\hp\EngineeringQuizArena\docs\Day27_Report.md", "Markdown", 0, 219, 0, 0, 0, 0, 0, 0, 0, 0, 132, 351
+"c:\Users\hp\EngineeringQuizArena\docs\Day28_Report.md", "Markdown", 0, 197, 0, 0, 0, 0, 0, 0, 0, 0, 117, 314
+"c:\Users\hp\EngineeringQuizArena\docs\Day29_Report.md", "Markdown", 0, 211, 0, 0, 0, 0, 0, 0, 0, 0, 105, 316
+"c:\Users\hp\EngineeringQuizArena\docs\Day2_Report.md", "Markdown", 0, 156, 0, 0, 0, 0, 0, 0, 0, 0, 110, 266
+"c:\Users\hp\EngineeringQuizArena\docs\Day30_Report.md", "Markdown", 0, 179, 0, 0, 0, 0, 0, 0, 0, 0, 89, 268
+"c:\Users\hp\EngineeringQuizArena\docs\Day31_Report.md", "Markdown", 0, 115, 0, 0, 0, 0, 0, 0, 0, 0, 52, 167
+"c:\Users\hp\EngineeringQuizArena\docs\Day32_Report.md", "Markdown", 0, 224, 0, 0, 0, 0, 0, 0, 0, 0, 127, 351
+"c:\Users\hp\EngineeringQuizArena\docs\Day3_Report.md", "Markdown", 0, 179, 0, 0, 0, 0, 0, 0, 0, 0, 108, 287
+"c:\Users\hp\EngineeringQuizArena\docs\Day4_Report.md", "Markdown", 0, 111, 0, 0, 0, 0, 0, 0, 0, 0, 65, 176
+"c:\Users\hp\EngineeringQuizArena\docs\Day5_Report.md", "Markdown", 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, 97, 297
+"c:\Users\hp\EngineeringQuizArena\docs\Day6_Report.md", "Markdown", 0, 219, 0, 0, 0, 0, 0, 0, 0, 0, 115, 334
+"c:\Users\hp\EngineeringQuizArena\docs\Day7_Report.md", "Markdown", 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 40, 103
+"c:\Users\hp\EngineeringQuizArena\docs\Day8_Report.md", "Markdown", 0, 133, 0, 0, 0, 0, 0, 0, 0, 0, 64, 197
+"c:\Users\hp\EngineeringQuizArena\docs\Day9_Report.md", "Markdown", 0, 39, 0, 0, 0, 0, 0, 0, 0, 0, 11, 50
+"c:\Users\hp\EngineeringQuizArena\frontend\README.md", "Markdown", 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 8, 17
+"c:\Users\hp\EngineeringQuizArena\frontend\eslint.config.js", "JavaScript", 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 22
+"c:\Users\hp\EngineeringQuizArena\frontend\index.html", "HTML", 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 1, 14
+"c:\Users\hp\EngineeringQuizArena\frontend\package-lock.json", "JSON", 0, 0, 0, 0, 3132, 0, 0, 0, 0, 0, 1, 3133
+"c:\Users\hp\EngineeringQuizArena\frontend\package.json", "JSON", 0, 0, 0, 0, 33, 0, 0, 0, 0, 0, 1, 34
+"c:\Users\hp\EngineeringQuizArena\frontend\public\favicon.svg", "XML", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
+"c:\Users\hp\EngineeringQuizArena\frontend\public\icons.svg", "XML", 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 1, 25
+"c:\Users\hp\EngineeringQuizArena\frontend\src\App.jsx", "JavaScript JSX", 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 2, 7
+"c:\Users\hp\EngineeringQuizArena\frontend\src\api\axios.js", "JavaScript", 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 17
+"c:\Users\hp\EngineeringQuizArena\frontend\src\components\LoadingSpinner.jsx", "JavaScript JSX", 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 4, 17
+"c:\Users\hp\EngineeringQuizArena\frontend\src\components\Navbar.jsx", "JavaScript JSX", 0, 0, 81, 0, 0, 0, 0, 0, 0, 0, 16, 97
+"c:\Users\hp\EngineeringQuizArena\frontend\src\components\PageContainer.jsx", "JavaScript JSX", 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 1, 11
+"c:\Users\hp\EngineeringQuizArena\frontend\src\components\StatCard.jsx", "JavaScript JSX", 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 2, 15
+"c:\Users\hp\EngineeringQuizArena\frontend\src\components\SubjectCard.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\frontend\src\components\TopicCard.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\frontend\src\context\AuthContext.jsx", "JavaScript JSX", 0, 0, 38, 0, 0, 0, 0, 0, 0, 0, 9, 47
+"c:\Users\hp\EngineeringQuizArena\frontend\src\index.css", "PostCSS", 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
+"c:\Users\hp\EngineeringQuizArena\frontend\src\layouts\MainLayout.jsx", "JavaScript JSX", 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 4, 19
+"c:\Users\hp\EngineeringQuizArena\frontend\src\main.jsx", "JavaScript JSX", 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 2, 14
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\AchievementsPage.jsx", "JavaScript JSX", 0, 0, 132, 0, 0, 0, 0, 0, 0, 0, 29, 161
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\AnalyticsPage.jsx", "JavaScript JSX", 0, 0, 290, 0, 0, 0, 0, 0, 0, 7, 74, 371
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\DailyChallengePage.jsx", "JavaScript JSX", 0, 0, 128, 0, 0, 0, 0, 0, 0, 0, 31, 159
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\Dashboard.jsx", "JavaScript JSX", 0, 0, 262, 0, 0, 0, 0, 0, 0, 0, 61, 323
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\HistoryPage.jsx", "JavaScript JSX", 0, 0, 86, 0, 0, 0, 0, 0, 0, 0, 13, 99
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\LeaderboardPage.jsx", "JavaScript JSX", 0, 0, 79, 0, 0, 0, 0, 0, 0, 0, 19, 98
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\Login.jsx", "JavaScript JSX", 0, 0, 94, 0, 0, 0, 0, 0, 0, 0, 19, 113
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\MistakeTrackerPage.jsx", "JavaScript JSX", 0, 0, 131, 0, 0, 0, 0, 0, 0, 0, 38, 169
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\NotFoundPage.jsx", "JavaScript JSX", 0, 0, 26, 0, 0, 0, 0, 0, 0, 0, 5, 31
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\ProfilePage.jsx", "JavaScript JSX", 0, 0, 113, 0, 0, 0, 0, 0, 0, 0, 34, 147
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\QuizPage.jsx", "JavaScript JSX", 0, 0, 209, 0, 0, 0, 0, 0, 0, 0, 26, 235
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\QuizReviewPage.jsx", "JavaScript JSX", 0, 0, 57, 0, 0, 0, 0, 0, 0, 0, 14, 71
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\Register.jsx", "JavaScript JSX", 0, 0, 119, 0, 0, 0, 0, 0, 0, 0, 21, 140
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\ResultsPage.jsx", "JavaScript JSX", 0, 0, 153, 0, 0, 0, 0, 0, 0, 3, 25, 181
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\StartQuizPage.jsx", "JavaScript JSX", 0, 0, 115, 0, 0, 0, 0, 0, 0, 0, 39, 154
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\SubjectsPage.jsx", "JavaScript JSX", 0, 0, 107, 0, 0, 0, 0, 0, 0, 0, 25, 132
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\TopicsPage.jsx", "JavaScript JSX", 0, 0, 109, 0, 0, 0, 0, 0, 0, 0, 24, 133
+"c:\Users\hp\EngineeringQuizArena\frontend\src\routes\AppRoutes.jsx", "JavaScript JSX", 0, 0, 143, 0, 0, 0, 0, 0, 0, 0, 7, 150
+"c:\Users\hp\EngineeringQuizArena\frontend\src\routes\ProtectedRoute.jsx", "JavaScript JSX", 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 4, 16
+"c:\Users\hp\EngineeringQuizArena\frontend\src\services\analytics.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\frontend\src\services\auth.js", "JavaScript", 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 28
+"c:\Users\hp\EngineeringQuizArena\frontend\src\services\dailyChallenge.js", "JavaScript", 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 22
+"c:\Users\hp\EngineeringQuizArena\frontend\src\services\historyService.js", "JavaScript", 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6
+"c:\Users\hp\EngineeringQuizArena\frontend\src\services\mistakeService.js", "JavaScript", 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6
+"c:\Users\hp\EngineeringQuizArena\frontend\src\services\quiz.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Users\hp\EngineeringQuizArena\frontend\src\services\quizService.js", "JavaScript", 124, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 142
+"c:\Users\hp\EngineeringQuizArena\frontend\src\services\reviewService.js", "JavaScript", 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9
+"c:\Users\hp\EngineeringQuizArena\frontend\src\types\quiz.js", "JavaScript", 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 26
+"c:\Users\hp\EngineeringQuizArena\frontend\src\utils\auth.js", "JavaScript", 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 13
+"c:\Users\hp\EngineeringQuizArena\frontend\vite.config.js", "JavaScript", 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10
+"Total", "-", 252, 5362, 2552, 25, 3165, 1, 13, 3839, 39, 117, 4549, 19914
