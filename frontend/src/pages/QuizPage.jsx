@@ -24,6 +24,14 @@ function QuizPage() {
   const [selectedAnswers, setSelectedAnswers] =
     useState({});
 
+  const [submittedQuestions, setSubmittedQuestions] =
+    useState([]);
+
+  const [skipsUsed, setSkipsUsed] =
+    useState(0);
+
+  const MAX_SKIPS = 5;
+
   useEffect(() => {
     loadQuestions();
   }, []);
@@ -44,34 +52,62 @@ function QuizPage() {
     }
   };
 
-  const handleAnswer = async (
+  const handleAnswer = (
     questionId,
     optionId
   ) => {
-    try {
-      await submitAnswer(
-        attemptId,
-        questionId,
-        optionId
-      );
-
-      setSelectedAnswers((prev) => ({
-        ...prev,
-        [questionId]: optionId,
-      }));
-    } catch (error) {
-      console.error(error);
-    }
+    setSelectedAnswers((prev) => ({
+      ...prev,
+      [questionId]: optionId,
+    }));
   };
 
-  const handleNext = () => {
-    if (
-      currentQuestion <
-      questions.length - 1
-    ) {
-      setCurrentQuestion(
-        currentQuestion + 1
+  const handleNext = async () => {
+    const question =
+      questions[currentQuestion];
+
+    const selectedOption =
+      selectedAnswers[
+        question.id
+      ];
+
+    if (!selectedOption) {
+      alert(
+        "Please select an answer or skip this question."
       );
+      return;
+    }
+
+    try {
+      if (
+        !submittedQuestions.includes(
+          question.id
+        )
+      ) {
+        await submitAnswer(
+          attemptId,
+          question.id,
+          selectedOption
+        );
+
+        setSubmittedQuestions(
+          (prev) => [
+            ...prev,
+            question.id,
+          ]
+        );
+      }
+
+      if (
+        currentQuestion <
+        questions.length - 1
+      ) {
+        setCurrentQuestion(
+          currentQuestion + 1
+        );
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -79,6 +115,28 @@ function QuizPage() {
     if (currentQuestion > 0) {
       setCurrentQuestion(
         currentQuestion - 1
+      );
+    }
+  };
+
+  const handleSkip = () => {
+    if (skipsUsed >= MAX_SKIPS) {
+      alert(
+        "You have used all 5 skips."
+      );
+      return;
+    }
+
+    setSkipsUsed(
+      (prev) => prev + 1
+    );
+
+    if (
+      currentQuestion <
+      questions.length - 1
+    ) {
+      setCurrentQuestion(
+        currentQuestion + 1
       );
     }
   };
@@ -110,7 +168,7 @@ function QuizPage() {
     return (
       <>
         <Navbar />
-        <div className="max-w-3xl mx-auto p-6">
+        <div className="max-w-4xl mx-auto p-6">
           <p>
             No questions available.
           </p>
@@ -144,10 +202,8 @@ function QuizPage() {
               {questions.length}
             </span>
 
-            <span className="text-gray-500 capitalize">
-              {
-                question.difficulty
-              }
+            <span className="capitalize text-gray-500">
+              {question.difficulty}
             </span>
 
           </div>
@@ -160,6 +216,28 @@ function QuizPage() {
                 width: `${progress}%`,
               }}
             />
+
+          </div>
+
+          <div className="flex justify-between mt-2 text-sm text-gray-500">
+
+            <span>
+              Skips Remaining:
+              {" "}
+              {MAX_SKIPS -
+                skipsUsed}
+              {" / "}
+              {MAX_SKIPS}
+            </span>
+
+            <span>
+              Progress:
+              {" "}
+              {Math.round(
+                progress
+              )}
+              %
+            </span>
 
           </div>
 
@@ -185,11 +263,6 @@ function QuizPage() {
                       option.id
                     )
                   }
-                  disabled={
-                    selectedAnswers[
-                      question.id
-                    ]
-                  }
                   className={`
                     w-full
                     text-left
@@ -197,6 +270,7 @@ function QuizPage() {
                     rounded-lg
                     border
                     transition
+
                     ${
                       selectedAnswers[
                         question.id
@@ -238,34 +312,57 @@ function QuizPage() {
             Previous
           </button>
 
-          {currentQuestion ===
-          questions.length - 1 ? (
+          <div className="flex gap-3">
+
             <button
-              onClick={
-                handleFinishQuiz
+              onClick={handleSkip}
+              disabled={
+                skipsUsed >=
+                MAX_SKIPS
               }
               className="
-                px-6 py-2
-                bg-green-600
+                px-5 py-2
+                bg-yellow-500
                 text-white
                 rounded-lg
+                disabled:opacity-50
               "
             >
-              Finish Quiz
+              Skip
             </button>
-          ) : (
-            <button
-              onClick={handleNext}
-              className="
-                px-6 py-2
-                bg-blue-600
-                text-white
-                rounded-lg
-              "
-            >
-              Next Question
-            </button>
-          )}
+
+            {currentQuestion ===
+            questions.length - 1 ? (
+              <button
+                onClick={
+                  handleFinishQuiz
+                }
+                className="
+                  px-6 py-2
+                  bg-green-600
+                  text-white
+                  rounded-lg
+                "
+              >
+                Finish Quiz
+              </button>
+            ) : (
+              <button
+                onClick={
+                  handleNext
+                }
+                className="
+                  px-6 py-2
+                  bg-blue-600
+                  text-white
+                  rounded-lg
+                "
+              >
+                Next Question
+              </button>
+            )}
+
+          </div>
 
         </div>
 

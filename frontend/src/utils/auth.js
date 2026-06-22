@@ -7,6 +7,10 @@ export const getToken = () => {
   return localStorage.getItem("access");
 };
 
+export const getRefreshToken = () => {
+  return localStorage.getItem("refresh");
+};
+
 export const logout = () => {
   localStorage.removeItem("access");
   localStorage.removeItem("refresh");
