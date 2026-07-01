@@ -30,6 +30,9 @@ function QuizPage() {
   const [skipsUsed, setSkipsUsed] =
     useState(0);
 
+  const [submitting, setSubmitting] =
+    useState(false);
+
   const MAX_SKIPS = 5;
 
   useEffect(() => {
@@ -50,6 +53,13 @@ function QuizPage() {
     } finally {
       setLoading(false);
     }
+
+    const data =
+      await fetchQuestions(attemptId);
+
+    console.log("API RESPONSE:", data);
+
+    setQuestions(data);
   };
 
   const handleAnswer = (
@@ -62,9 +72,19 @@ function QuizPage() {
     }));
   };
 
-  const handleNext = async () => {
-    const question =
-      questions[currentQuestion];
+  const submitCurrentQuestion =
+  async () => {
+
+      if (submitting) {
+        return false;
+      }
+
+      const question =
+        questions[currentQuestion];
+
+      if (!question) {
+        return false;
+      }
 
     const selectedOption =
       selectedAnswers[
@@ -73,12 +93,15 @@ function QuizPage() {
 
     if (!selectedOption) {
       alert(
-        "Please select an answer or skip this question."
+        "Please select an answer."
       );
-      return;
+      return false;
     }
 
+    setSubmitting(true);
+
     try {
+
       if (
         !submittedQuestions.includes(
           question.id
@@ -98,23 +121,40 @@ function QuizPage() {
         );
       }
 
-      if (
-        currentQuestion <
-        questions.length - 1
-      ) {
-        setCurrentQuestion(
-          currentQuestion + 1
-        );
-      }
+      return true;
+
     } catch (error) {
       console.error(error);
+      return false;
+    } finally {
+      setSubmitting(false);
+    }
+  };  
+
+  const handleNext = async () => {
+
+    const success =
+      await submitCurrentQuestion();
+
+    if (!success) {
+      return;
+    }
+
+    if (
+      currentQuestion <
+      questions.length - 1
+    ) {
+      setCurrentQuestion(
+        (prev) => prev + 1
+      );
     }
   };
+
 
   const handlePrevious = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(
-        currentQuestion - 1
+        (prev) => prev - 1
       );
     }
   };
@@ -136,54 +176,68 @@ function QuizPage() {
       questions.length - 1
     ) {
       setCurrentQuestion(
-        currentQuestion + 1
+        (prev) => prev + 1
       );
     }
   };
 
   const handleFinishQuiz =
-    async () => {
-      try {
-        const data =
-          await finishQuiz(
-            attemptId
-          );
+  async () => {
 
-        navigate(
-          "/results",
-          {
-            state: data,
-          }
+    const success =
+      await submitCurrentQuestion();
+
+    if (!success) {
+      return;
+    }
+
+    try {
+
+      const data =
+        await finishQuiz(
+          attemptId
         );
-      } catch (error) {
-        console.error(error);
-      }
-    };
 
-  if (loading) {
-    return <LoadingSpinner />;
-  }
+      navigate(
+        "/results",
+        {
+          state: data,
+        }
+      );
 
-  if (questions.length === 0) {
-    return (
-      <>
-        <Navbar />
-        <div className="max-w-4xl mx-auto p-6">
-          <p>
-            No questions available.
-          </p>
-        </div>
-      </>
-    );
-  }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+if (loading) {
+  return <LoadingSpinner />;
+}
 
-  const question =
-    questions[currentQuestion];
+if (
+  questions.length === 0 ||
+  !questions[currentQuestion]
+) {
+  return (
+    <>
+      <Navbar />
+      <div className="max-w-4xl mx-auto p-6">
+        <p>No questions available.</p>
+      </div>
+    </>
+  );
+}
 
-  const progress =
-    ((currentQuestion + 1) /
-      questions.length) *
-    100;
+console.log("QUESTIONS:", questions);
+console.log("CURRENT:", currentQuestion);
+
+const question =
+  questions[currentQuestion];
+
+const progress =
+  ((currentQuestion + 1) /
+    questions.length) *
+  100;
 
   return (
     <>
@@ -300,7 +354,8 @@ function QuizPage() {
             }
             disabled={
               currentQuestion ===
-              0
+                0 ||
+              submitting
             }
             className="
               px-5 py-2
@@ -318,7 +373,8 @@ function QuizPage() {
               onClick={handleSkip}
               disabled={
                 skipsUsed >=
-                MAX_SKIPS
+                  MAX_SKIPS ||
+                submitting
               }
               className="
                 px-5 py-2
@@ -337,6 +393,9 @@ function QuizPage() {
                 onClick={
                   handleFinishQuiz
                 }
+                disabled={
+                  submitting
+                }
                 className="
                   px-6 py-2
                   bg-green-600
@@ -350,6 +409,9 @@ function QuizPage() {
               <button
                 onClick={
                   handleNext
+                }
+                disabled={
+                  submitting
                 }
                 className="
                   px-6 py-2
