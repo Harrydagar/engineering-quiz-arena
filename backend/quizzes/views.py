@@ -65,6 +65,12 @@ from .serializers import (
 )
 from quizzes.services.quiz_service import finish_quiz
 
+from .throttles import (
+    QuizStartThrottle,
+    SubmitAnswerThrottle,
+    FinishQuizThrottle,
+    DailyChallengeThrottle,
+)
 
 class SubjectListView(generics.ListAPIView):
     queryset = Subject.objects.all()
@@ -92,18 +98,17 @@ class QuestionListView(generics.ListAPIView):
 
 class StartQuizView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_classes = [QuizStartThrottle]
 
     def post(self, request):
         subject_id = request.data.get("subject_id")
 
-        try:
-            print("SUBJECT ID:", subject_id)
-            subject = Subject.objects.get(id=subject_id)
-        except Subject.DoesNotExist:
-            return Response(
-                {"error": "Subject not found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
+        from django.shortcuts import get_object_or_404
+
+        subject = get_object_or_404(
+            Subject,
+            id=subject_id
+        )
 
         # Daily limit check
         today = timezone.now().date()
@@ -111,38 +116,24 @@ class StartQuizView(APIView):
         attempts_today = QuizAttempt.objects.filter(
             user=request.user,
             started_at__date=today,
-            status='COMPLETED'
+            status="COMPLETED"
         ).count()
 
         if attempts_today >= 10:
             return Response(
-                {"error": "Daily quiz limit reached (10/day)"},
+                {
+                    "error":
+                        "Daily quiz limit reached (10/day)"
+                },
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
-        existing_attempt = (
-            QuizAttempt.objects.filter(
-                user=request.user,
-                subject=subject,
-                status="IN_PROGRESS"
-            ).first()
-        )
 
-        if existing_attempt:
-
-            serializer = QuizAttemptSerializer(
-                existing_attempt
-            )
-
-            return Response(
-                {
-                    "message":
-                        "Resume existing quiz",
-                    "attempt":
-                        serializer.data,
-                    "resume": True
-                }
-            )
+        # Remove unfinished quizzes for this subject
+        QuizAttempt.objects.filter(
+            user=request.user,
+            subject=subject,
+            status="IN_PROGRESS"
+        ).delete()
 
         total_questions = min(
             10,
@@ -154,7 +145,7 @@ class StartQuizView(APIView):
         attempt = QuizAttempt.objects.create(
             user=request.user,
             subject=subject,
-            status='IN_PROGRESS',
+            status="IN_PROGRESS",
             total_questions=total_questions
         )
 
@@ -194,11 +185,6 @@ class FetchQuestionsView(APIView):
             attempt
         )
 
-        print(
-            "QUESTION IDS:",
-            [q.id for q in questions]
-        )
-
         serializer = QuestionSerializer(
             questions,
             many=True
@@ -208,6 +194,7 @@ class FetchQuestionsView(APIView):
 
 class SubmitAnswerView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_classes = [SubmitAnswerThrottle]
 
     def post(self, request):
         serializer = UserAnswerSerializer(data=request.data)
@@ -287,6 +274,7 @@ class SubmitAnswerView(APIView):
     
 class FinishQuizView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_classes = [FinishQuizThrottle]
 
     def post(self, request):
         serializer = FinishQuizSerializer(data=request.data)
@@ -571,6 +559,7 @@ class TodayChallengeView(APIView):
 
 class SubmitDailyChallengeView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_classes = [DailyChallengeThrottle]
 
     def post(self, request):
 
