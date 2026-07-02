@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
+
 import { registerUser } from "../services/auth";
 
 function Register() {
   const navigate = useNavigate();
 
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [formData, setFormData] =
-    useState({
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const handleChange = (e) => {
     setFormData({
@@ -26,11 +26,8 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      formData.password !==
-      formData.confirmPassword
-    ) {
-      alert("Passwords do not match");
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match.");
       return;
     }
 
@@ -43,17 +40,26 @@ function Register() {
         password: formData.password,
       });
 
-      alert("Registration Successful");
-      navigate("/login");
-    } catch (error) {
-      console.log(error.response);
-      console.log(error.response?.data);
-
-      alert(
-        JSON.stringify(
-          error.response?.data
-        )
+      toast.success(
+        "Registration successful! Please verify your email."
       );
+
+      navigate("/login");
+
+    } catch (error) {
+      console.error(error);
+
+      const data = error.response?.data;
+
+      const message =
+        data?.username?.[0] ||
+        data?.email?.[0] ||
+        data?.password?.[0] ||
+        data?.detail ||
+        "Registration failed.";
+
+      toast.error(message);
+
     } finally {
       setLoading(false);
     }
@@ -61,6 +67,7 @@ function Register() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
 
         <h1 className="text-3xl font-bold text-center mb-2">
@@ -75,10 +82,12 @@ function Register() {
           onSubmit={handleSubmit}
           className="space-y-4"
         >
+
           <input
             type="text"
             name="username"
             placeholder="Username"
+            required
             value={formData.username}
             onChange={handleChange}
             className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -88,6 +97,7 @@ function Register() {
             type="email"
             name="email"
             placeholder="Email"
+            required
             value={formData.email}
             onChange={handleChange}
             className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -97,6 +107,7 @@ function Register() {
             type="password"
             name="password"
             placeholder="Password"
+            required
             value={formData.password}
             onChange={handleChange}
             className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -106,6 +117,7 @@ function Register() {
             type="password"
             name="confirmPassword"
             placeholder="Confirm Password"
+            required
             value={formData.confirmPassword}
             onChange={handleChange}
             className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -114,25 +126,27 @@ function Register() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+            className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading
               ? "Creating Account..."
               : "Register"}
           </button>
+
         </form>
 
         <p className="text-center mt-6 text-gray-600">
           Already have an account?{" "}
           <Link
             to="/login"
-            className="text-blue-600 font-medium"
+            className="text-blue-600 font-medium hover:underline"
           >
             Login
           </Link>
         </p>
 
       </div>
+
     </div>
   );
 }

@@ -17,6 +17,13 @@ import MistakeTrackerPage from "../pages/MistakeTrackerPage";
 import ProfilePage from "../pages/ProfilePage";
 import NotFoundPage from "../pages/NotFoundPage";
 import DailyChallengePage from "../pages/DailyChallengePage";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
+import VerifyEmail from "../pages/VerifyEmail";
+import ResendVerification from "../pages/ResendVerification";
+import ChangePassword from "../pages/ChangePassword";
+
+
 
 function AppRoutes() {
   return (
@@ -132,6 +139,16 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/change-password"
+          element={
+              <ProtectedRoute>
+                <ChangePassword />
+              </ProtectedRoute>
+          }
+        />
+
         <Route 
         path="*" 
         element={<NotFoundPage />} 
@@ -140,6 +157,26 @@ function AppRoutes() {
         <Route
           path="/daily-challenge"
           element={<DailyChallengePage />}
+        />
+
+        <Route
+          path="/forgot-password"
+          element={<ForgotPassword />}
+        />
+
+        <Route
+          path="/reset-password/:uidb64/:token"
+          element={<ResetPassword />}
+        />
+
+        <Route
+          path="/verify-email/:uidb64/:token"
+          element={<VerifyEmail />}
+        />
+
+        <Route
+          path="/resend-verification"
+          element={<ResendVerification />}
         />
 
       </Routes>

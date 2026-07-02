@@ -1,20 +1,18 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
-import { loginUser } from "../services/auth";
-import { saveTokens } from "../utils/auth";
-import { useAuth } from "../context/AuthContext";
+import { resetPassword } from "../services/auth";
 
-function Login() {
+function ResetPassword() {
+  const { uidb64, token } = useParams();
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    username: "",
     password: "",
+    confirm_password: "",
   });
 
   const handleChange = (e) => {
@@ -30,26 +28,25 @@ function Login() {
     setLoading(true);
 
     try {
-      const data = await loginUser(formData);
-
-      saveTokens(data);
-
-      login(
-        data.access,
-        data.refresh
+      const data = await resetPassword(
+        uidb64,
+        token,
+        formData.password,
+        formData.confirm_password
       );
 
-      toast.success("Login successful");
+      toast.success(data.detail);
 
-      navigate("/dashboard");
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
 
-    } catch (error) {
-      console.error(error);
-
+    } catch (err) {
       const message =
-        error.response?.data?.detail?.[0] ||
-        error.response?.data?.detail ||
-        "Login failed.";
+        err.response?.data?.confirm_password?.[0] ||
+        err.response?.data?.password?.[0] ||
+        err.response?.data?.detail ||
+        "Unable to reset password.";
 
       toast.error(message);
 
@@ -64,11 +61,11 @@ function Login() {
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
 
         <h1 className="text-3xl font-bold text-center mb-2">
-          Quiz Arena
+          Reset Password
         </h1>
 
         <p className="text-center text-gray-500 mb-8">
-          Welcome back
+          Choose a new password for your account.
         </p>
 
         <form
@@ -77,51 +74,44 @@ function Login() {
         >
 
           <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={formData.username}
+            type="password"
+            name="password"
+            placeholder="New Password"
+            required
+            value={formData.password}
             onChange={handleChange}
             className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
 
           <input
             type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
+            name="confirm_password"
+            placeholder="Confirm Password"
+            required
+            value={formData.confirm_password}
             onChange={handleChange}
             className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
           />
-
-          <div className="flex justify-end">
-            <Link
-              to="/forgot-password"
-              className="text-sm text-blue-600 hover:underline"
-            >
-              Forgot Password?
-            </Link>
-          </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-blue-600 text-white rounded-lg p-3 hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading
+              ? "Updating..."
+              : "Reset Password"}
           </button>
 
         </form>
 
         <p className="text-center mt-6 text-gray-600">
-          Don't have an account?{" "}
+          Remember your password?{" "}
           <Link
-            to="/register"
+            to="/login"
             className="text-blue-600 font-medium hover:underline"
           >
-            Register
+            Back to Login
           </Link>
         </p>
 
@@ -131,4 +121,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default ResetPassword;

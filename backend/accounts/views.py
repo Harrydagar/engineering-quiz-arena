@@ -161,7 +161,6 @@ class ResetPasswordView(APIView):
             uid = force_str(
                 urlsafe_base64_decode(uidb64)
             )
-
             user = User.objects.get(pk=uid)
 
         except (

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getProfile } from "../services/auth";
 import MainLayout from "../layouts/MainLayout";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -136,6 +137,32 @@ function ProfilePage() {
           <p className="text-3xl font-bold">
             {profile.total_correct ?? 0}
           </p>
+        </div>
+
+      </div>
+
+      <div className="bg-white rounded-xl shadow-lg p-8 mt-8">
+
+        <h2 className="text-2xl font-bold mb-6">
+          Account Security
+        </h2>
+
+        <div className="flex flex-col sm:flex-row gap-4">
+
+          <Link
+            to="/change-password"
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 text-center"
+          >
+            Change Password
+          </Link>
+
+          <Link
+            to="/resend-verification"
+            className="border border-gray-300 px-6 py-3 rounded-lg hover:bg-gray-100 text-center"
+          >
+            Resend Verification Email
+          </Link>
+
         </div>
 
       </div>
