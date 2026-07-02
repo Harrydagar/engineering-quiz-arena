@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000",
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 let isRefreshing = false;
@@ -76,7 +76,7 @@ api.interceptors.response.use(
           isRefreshing = true;
 
           refreshPromise = axios.post(
-            "http://127.0.0.1:8000/api/accounts/token/refresh/",
+              `${import.meta.env.VITE_API_URL}/api/accounts/token/refresh/`,
             {
               refresh,
             }
