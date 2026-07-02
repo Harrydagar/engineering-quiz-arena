@@ -1,0 +1,254 @@
+Date : 2026-07-02 17:11:29
+Directory : c:\Users\hp\EngineeringQuizArena
+Total : 183 files,  18334 codes, 175 comments, 5837 blanks, all 24346 lines
+
+Languages
++------------------+------------+------------+------------+------------+------------+
+| language         | files      | code       | comment    | blank      | total      |
++------------------+------------+------------+------------+------------+------------+
+| Markdown         |         47 |      7,012 |          0 |      3,772 |     10,784 |
+| Python           |         77 |      4,270 |        128 |      1,179 |      5,577 |
+| JSON             |          4 |      3,244 |          0 |          4 |      3,248 |
+| JavaScript JSX   |         34 |      3,187 |         10 |        753 |      3,950 |
+| JavaScript       |         13 |        376 |          6 |         83 |        465 |
+| PostCSS          |          4 |        168 |         31 |         44 |        243 |
+| pip requirements |          1 |         39 |          0 |          0 |         39 |
+| XML              |          2 |         25 |          0 |          1 |         26 |
+| HTML             |          1 |         13 |          0 |          1 |         14 |
++------------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                     | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                        |        183 |     18,334 |        175 |      5,837 |     24,346 |
+| . (Files)                                                                                                                |          2 |        209 |          0 |        105 |        314 |
+| backend                                                                                                                  |         80 |      4,388 |        128 |      1,181 |      5,697 |
+| backend (Files)                                                                                                          |          4 |        133 |          3 |          7 |        143 |
+| backend\accounts                                                                                                         |         17 |        517 |          5 |        149 |        671 |
+| backend\accounts (Files)                                                                                                 |         13 |        461 |          2 |        129 |        592 |
+| backend\accounts\migrations                                                                                              |          4 |         56 |          3 |         20 |         79 |
+| backend\analytics                                                                                                        |          7 |          7 |          4 |         13 |         24 |
+| backend\analytics (Files)                                                                                                |          6 |          7 |          4 |         12 |         23 |
+| backend\analytics\migrations                                                                                             |          1 |          0 |          0 |          1 |          1 |
+| backend\core                                                                                                             |          6 |        198 |         77 |         76 |        351 |
+| backend\leaderboard                                                                                                      |          8 |         35 |          4 |         22 |         61 |
+| backend\leaderboard (Files)                                                                                              |          6 |         15 |          3 |         14 |         32 |
+| backend\leaderboard\migrations                                                                                           |          2 |         20 |          1 |          8 |         29 |
+| backend\quizzes                                                                                                          |         38 |      3,498 |         35 |        914 |      4,447 |
+| backend\quizzes (Files)                                                                                                  |          8 |        985 |          2 |        262 |      1,249 |
+| backend\quizzes\management                                                                                               |          4 |        289 |          5 |         47 |        341 |
+| backend\quizzes\management (Files)                                                                                       |          1 |          0 |          0 |          1 |          1 |
+| backend\quizzes\management\commands                                                                                      |          3 |        289 |          5 |         46 |        340 |
+| backend\quizzes\migrations                                                                                               |         10 |        281 |          9 |         65 |        355 |
+| backend\quizzes\services                                                                                                 |          8 |      1,113 |         19 |        292 |      1,424 |
+| backend\quizzes\tests                                                                                                    |          8 |        830 |          0 |        248 |      1,078 |
+| docs                                                                                                                     |         44 |      6,794 |          0 |      3,659 |     10,453 |
+| docs (Files)                                                                                                             |         39 |      6,135 |          0 |      3,333 |      9,468 |
+| docs\design-system                                                                                                       |          5 |        659 |          0 |        326 |        985 |
+| frontend                                                                                                                 |         57 |      6,943 |         47 |        892 |      7,882 |
+| frontend (Files)                                                                                                         |          6 |      3,216 |          0 |         14 |      3,230 |
+| frontend\public                                                                                                          |          2 |         25 |          0 |          1 |         26 |
+| frontend\src                                                                                                             |         49 |      3,702 |         47 |        877 |      4,626 |
+| frontend\src (Files)                                                                                                     |          3 |         28 |          0 |          5 |         33 |
+| frontend\src\api                                                                                                         |          1 |         83 |          6 |         27 |        116 |
+| frontend\src\components                                                                                                  |          6 |        117 |          0 |         25 |        142 |
+| frontend\src\context                                                                                                     |          1 |         38 |          0 |          9 |         47 |
+| frontend\src\layouts                                                                                                     |          1 |         15 |          0 |          4 |         19 |
+| frontend\src\pages                                                                                                       |         22 |      2,809 |         10 |        692 |      3,511 |
+| frontend\src\routes                                                                                                      |          2 |        184 |          0 |         19 |        203 |
+| frontend\src\services                                                                                                    |          8 |        230 |          0 |         44 |        274 |
+| frontend\src\styles                                                                                                      |          3 |        164 |         31 |         43 |        238 |
+| frontend\src\types                                                                                                       |          1 |         20 |          0 |          6 |         26 |
+| frontend\src\utils                                                                                                       |          1 |         14 |          0 |          3 |         17 |
++--------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| filename                                                                                                                 | language         | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| c:\Users\hp\EngineeringQuizArena\README.md                                                                               | Markdown         |        148 |          0 |         70 |        218 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\__init__.py                                                            | Python           |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\admin.py                                                               | Python           |          1 |          1 |          2 |          4 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\apps.py                                                                | Python           |          6 |          0 |          3 |          9 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\auth_serializers.py                                                    | Python           |         27 |          0 |         11 |         38 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\migrations\0001_initial.py                                             | Python           |         22 |          1 |          7 |         30 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\migrations\0002_rename_streak_userprofile_current_streak_and_more.py   | Python           |         22 |          1 |          6 |         29 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\migrations\0003_userprofile_highest_rating.py                          | Python           |         12 |          1 |          6 |         19 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\migrations\__init__.py                                                 | Python           |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\models.py                                                              | Python           |         17 |          0 |          7 |         24 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\password_serializers.py                                                | Python           |         63 |          0 |         17 |         80 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\serializers.py                                                         | Python           |         16 |          0 |          6 |         22 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\signals.py                                                             | Python           |          8 |          0 |          2 |         10 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\tests.py                                                               | Python           |          1 |          1 |          2 |          4 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\throttles.py                                                           | Python           |          7 |          0 |          6 |         13 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\urls.py                                                                | Python           |         48 |          0 |         11 |         59 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\utils.py                                                               | Python           |         45 |          0 |          9 |         54 |
+| c:\Users\hp\EngineeringQuizArena\backend\accounts\views.py                                                               | Python           |        222 |          0 |         52 |        274 |
+| c:\Users\hp\EngineeringQuizArena\backend\analytics\__init__.py                                                           | Python           |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\backend\analytics\admin.py                                                              | Python           |          1 |          1 |          2 |          4 |
+| c:\Users\hp\EngineeringQuizArena\backend\analytics\apps.py                                                               | Python           |          3 |          0 |          3 |          6 |
+| c:\Users\hp\EngineeringQuizArena\backend\analytics\migrations\__init__.py                                                | Python           |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\backend\analytics\models.py                                                             | Python           |          1 |          1 |          2 |          4 |
+| c:\Users\hp\EngineeringQuizArena\backend\analytics\tests.py                                                              | Python           |          1 |          1 |          2 |          4 |
+| c:\Users\hp\EngineeringQuizArena\backend\analytics\views.py                                                              | Python           |          1 |          1 |          2 |          4 |
+| c:\Users\hp\EngineeringQuizArena\backend\core\__init__.py                                                                | Python           |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\backend\core\asgi.py                                                                    | Python           |          4 |          8 |          5 |         17 |
+| c:\Users\hp\EngineeringQuizArena\backend\core\settings.py                                                                | Python           |        157 |         45 |         56 |        258 |
+| c:\Users\hp\EngineeringQuizArena\backend\core\settings_prod.py                                                           | Python           |          3 |          0 |          2 |          5 |
+| c:\Users\hp\EngineeringQuizArena\backend\core\urls.py                                                                    | Python           |         30 |         16 |          7 |         53 |
+| c:\Users\hp\EngineeringQuizArena\backend\core\wsgi.py                                                                    | Python           |          4 |          8 |          5 |         17 |
+| c:\Users\hp\EngineeringQuizArena\backend\leaderboard\__init__.py                                                         | Python           |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\backend\leaderboard\admin.py                                                            | Python           |          1 |          1 |          2 |          4 |
+| c:\Users\hp\EngineeringQuizArena\backend\leaderboard\apps.py                                                             | Python           |          3 |          0 |          3 |          6 |
+| c:\Users\hp\EngineeringQuizArena\backend\leaderboard\migrations\0001_initial.py                                          | Python           |         20 |          1 |          7 |         28 |
+| c:\Users\hp\EngineeringQuizArena\backend\leaderboard\migrations\__init__.py                                              | Python           |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\backend\leaderboard\models.py                                                           | Python           |          9 |          0 |          4 |         13 |
+| c:\Users\hp\EngineeringQuizArena\backend\leaderboard\tests.py                                                            | Python           |          1 |          1 |          2 |          4 |
+| c:\Users\hp\EngineeringQuizArena\backend\leaderboard\views.py                                                            | Python           |          1 |          1 |          2 |          4 |
+| c:\Users\hp\EngineeringQuizArena\backend\manage.py                                                                       | Python           |         15 |          3 |          5 |         23 |
+| c:\Users\hp\EngineeringQuizArena\backend\package-lock.json                                                               | JSON             |         74 |          0 |          1 |         75 |
+| c:\Users\hp\EngineeringQuizArena\backend\package.json                                                                    | JSON             |          5 |          0 |          1 |          6 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\__init__.py                                                             | Python           |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\admin.py                                                                | Python           |         21 |          0 |          1 |         22 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\apps.py                                                                 | Python           |          3 |          0 |          3 |          6 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\management\__init__.py                                                  | Python           |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\management\commands\__init__.py                                         | Python           |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\management\commands\seed_achievements.py                                | Python           |         66 |          0 |         10 |         76 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\management\commands\seed_questions.py                                   | Python           |        223 |          5 |         35 |        263 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0001_initial.py                                              | Python           |         24 |          1 |          7 |         32 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0002_topic_description_question_option.py                    | Python           |         32 |          1 |          6 |         39 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0003_quizattempt_useranswer.py                               | Python           |         33 |          1 |          6 |         40 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0004_remove_quizattempt_topic_quizattempt_status_and_more.py | Python           |         29 |          1 |          6 |         36 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0005_quizattempt_percentage.py                               | Python           |         12 |          1 |          6 |         19 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0006_dailychallenge_userdailychallenge.py                    | Python           |         32 |          1 |          6 |         39 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0007_achievement_userachievement.py                          | Python           |         31 |          1 |          6 |         38 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0008_remove_dailychallenge_question_and_more.py              | Python           |         75 |          1 |         15 |         91 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\0009_alter_userdailychallenge_question.py                    | Python           |         13 |          1 |          6 |         20 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\migrations\__init__.py                                                  | Python           |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\models.py                                                               | Python           |        154 |          0 |         55 |        209 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\serializers.py                                                          | Python           |        129 |          0 |         33 |        162 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\services\achievement_service.py                                         | Python           |        166 |          0 |         47 |        213 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\services\analytics_service.py                                           | Python           |        288 |          0 |         70 |        358 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\services\challenge_service.py                                           | Python           |         48 |          0 |         19 |         67 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\services\daily_challenge_service.py                                     | Python           |        282 |         18 |         70 |        370 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\services\history_service.py                                             | Python           |        108 |          0 |         30 |        138 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\services\question_service.py                                            | Python           |         90 |          0 |         17 |        107 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\services\quiz_service.py                                                | Python           |         92 |          1 |         30 |        123 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\services\ranking_service.py                                             | Python           |         39 |          0 |          9 |         48 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\tests\__init__.py                                                       | Python           |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\tests\est_api_auth.py                                                   | Python           |         44 |          0 |         12 |         56 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\tests\test_achievements_service.py                                      | Python           |         55 |          0 |         22 |         77 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\tests\test_analytics_service.py                                         | Python           |        193 |          0 |         52 |        245 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\tests\test_challenge_service.py                                         | Python           |        124 |          0 |         38 |        162 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\tests\test_history_service.py                                           | Python           |        135 |          0 |         38 |        173 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\tests\test_quiz_service.py                                              | Python           |        199 |          0 |         57 |        256 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\tests\test_ranking_service.py                                           | Python           |         80 |          0 |         28 |        108 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\throttles.py                                                            | Python           |          9 |          0 |          8 |         17 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\urls.py                                                                 | Python           |        154 |          0 |         24 |        178 |
+| c:\Users\hp\EngineeringQuizArena\backend\quizzes\views.py                                                                | Python           |        515 |          2 |        137 |        654 |
+| c:\Users\hp\EngineeringQuizArena\backend\requirements.txt                                                                | pip requirements |         39 |          0 |          0 |         39 |
+| c:\Users\hp\EngineeringQuizArena\deployment_notes.md                                                                     | Markdown         |         61 |          0 |         35 |         96 |
+| c:\Users\hp\EngineeringQuizArena\docs\API_Documentation.md                                                               | Markdown         |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day10_Report.md                                                                    | Markdown         |        188 |          0 |        102 |        290 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day11_Report.md                                                                    | Markdown         |        220 |          0 |        127 |        347 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day12_Report.md                                                                    | Markdown         |        177 |          0 |         94 |        271 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day13_Report.md                                                                    | Markdown         |        121 |          0 |         55 |        176 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day14_Report.md                                                                    | Markdown         |        129 |          0 |         62 |        191 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day15_Report.md                                                                    | Markdown         |        141 |          0 |         76 |        217 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day16_Report.md                                                                    | Markdown         |        186 |          0 |         86 |        272 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day17_Report.md                                                                    | Markdown         |        111 |          0 |         59 |        170 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day18_Report.md                                                                    | Markdown         |        115 |          0 |         48 |        163 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day19_Report.md                                                                    | Markdown         |        182 |          0 |        106 |        288 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day1_Report.md                                                                     | Markdown         |         90 |          0 |         61 |        151 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day20_Report.md                                                                    | Markdown         |         73 |          0 |         35 |        108 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day21_Report.md                                                                    | Markdown         |        201 |          0 |        140 |        341 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day22_Report.md                                                                    | Markdown         |        161 |          0 |         85 |        246 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day23_Report.md                                                                    | Markdown         |        293 |          0 |        141 |        434 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day24_Report.md                                                                    | Markdown         |        202 |          0 |        101 |        303 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day25_Report.md                                                                    | Markdown         |        159 |          0 |         95 |        254 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day26_Report.md                                                                    | Markdown         |        150 |          0 |         71 |        221 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day27_Report.md                                                                    | Markdown         |        219 |          0 |        132 |        351 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day28_Report.md                                                                    | Markdown         |        197 |          0 |        117 |        314 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day29_Report.md                                                                    | Markdown         |        211 |          0 |        105 |        316 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day2_Report.md                                                                     | Markdown         |        156 |          0 |        110 |        266 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day30_Report.md                                                                    | Markdown         |        179 |          0 |         89 |        268 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day31_Report.md                                                                    | Markdown         |        115 |          0 |         52 |        167 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day32_Report.md                                                                    | Markdown         |        224 |          0 |        127 |        351 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day33_Report.md                                                                    | Markdown         |        123 |          0 |         71 |        194 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day34_Report.md                                                                    | Markdown         |        255 |          0 |        148 |        403 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day35_Report.md                                                                    | Markdown         |        133 |          0 |         57 |        190 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day36_Report.md                                                                    | Markdown         |        126 |          0 |         60 |        186 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day37_Report.md                                                                    | Markdown         |        149 |          0 |         94 |        243 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day38_Report.md                                                                    | Markdown         |        205 |          0 |        126 |        331 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day3_Report.md                                                                     | Markdown         |        179 |          0 |        108 |        287 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day4_Report.md                                                                     | Markdown         |        111 |          0 |         65 |        176 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day5_Report.md                                                                     | Markdown         |        200 |          0 |         97 |        297 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day6_Report.md                                                                     | Markdown         |        219 |          0 |        115 |        334 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day7_Report.md                                                                     | Markdown         |         63 |          0 |         40 |        103 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day8_Report.md                                                                     | Markdown         |        133 |          0 |         64 |        197 |
+| c:\Users\hp\EngineeringQuizArena\docs\Day9_Report.md                                                                     | Markdown         |         39 |          0 |         11 |         50 |
+| c:\Users\hp\EngineeringQuizArena\docs\design-system\01-design-tokens.md                                                  | Markdown         |        133 |          0 |         63 |        196 |
+| c:\Users\hp\EngineeringQuizArena\docs\design-system\02-components.md                                                     | Markdown         |        174 |          0 |         90 |        264 |
+| c:\Users\hp\EngineeringQuizArena\docs\design-system\03-layout.md                                                         | Markdown         |        161 |          0 |         88 |        249 |
+| c:\Users\hp\EngineeringQuizArena\docs\design-system\04-patterns.md                                                       | Markdown         |        140 |          0 |         65 |        205 |
+| c:\Users\hp\EngineeringQuizArena\docs\design-system\README.md                                                            | Markdown         |         51 |          0 |         20 |         71 |
+| c:\Users\hp\EngineeringQuizArena\frontend\README.md                                                                      | Markdown         |          9 |          0 |          8 |         17 |
+| c:\Users\hp\EngineeringQuizArena\frontend\eslint.config.js                                                               | JavaScript       |         20 |          0 |          2 |         22 |
+| c:\Users\hp\EngineeringQuizArena\frontend\index.html                                                                     | HTML             |         13 |          0 |          1 |         14 |
+| c:\Users\hp\EngineeringQuizArena\frontend\package-lock.json                                                              | JSON             |      3,132 |          0 |          1 |      3,133 |
+| c:\Users\hp\EngineeringQuizArena\frontend\package.json                                                                   | JSON             |         33 |          0 |          1 |         34 |
+| c:\Users\hp\EngineeringQuizArena\frontend\public\favicon.svg                                                             | XML              |          1 |          0 |          0 |          1 |
+| c:\Users\hp\EngineeringQuizArena\frontend\public\icons.svg                                                               | XML              |         24 |          0 |          1 |         25 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\App.jsx                                                                    | JavaScript JSX   |          5 |          0 |          2 |          7 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\api\axios.js                                                               | JavaScript       |         83 |          6 |         27 |        116 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\components\LoadingSpinner.jsx                                              | JavaScript JSX   |         13 |          0 |          4 |         17 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\components\Navbar.jsx                                                      | JavaScript JSX   |         81 |          0 |         16 |         97 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\components\PageContainer.jsx                                               | JavaScript JSX   |         10 |          0 |          1 |         11 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\components\StatCard.jsx                                                    | JavaScript JSX   |         13 |          0 |          2 |         15 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\components\SubjectCard.jsx                                                 | JavaScript JSX   |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\components\TopicCard.jsx                                                   | JavaScript JSX   |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\context\AuthContext.jsx                                                    | JavaScript JSX   |         38 |          0 |          9 |         47 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\index.css                                                                  | PostCSS          |          4 |          0 |          1 |          5 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\layouts\MainLayout.jsx                                                     | JavaScript JSX   |         15 |          0 |          4 |         19 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\main.jsx                                                                   | JavaScript JSX   |         19 |          0 |          2 |         21 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\AchievementsPage.jsx                                                 | JavaScript JSX   |        132 |          0 |         29 |        161 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\AnalyticsPage.jsx                                                    | JavaScript JSX   |        290 |          7 |         74 |        371 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\ChangePassword.jsx                                                   | JavaScript JSX   |        106 |          0 |         27 |        133 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\DailyChallengePage.jsx                                               | JavaScript JSX   |        128 |          0 |         31 |        159 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\Dashboard.jsx                                                        | JavaScript JSX   |        262 |          0 |         61 |        323 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\ForgotPassword.jsx                                                   | JavaScript JSX   |         68 |          0 |         20 |         88 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\HistoryPage.jsx                                                      | JavaScript JSX   |         86 |          0 |         13 |         99 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\LeaderboardPage.jsx                                                  | JavaScript JSX   |         79 |          0 |         19 |         98 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\Login.jsx                                                            | JavaScript JSX   |        104 |          0 |         30 |        134 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\MistakeTrackerPage.jsx                                               | JavaScript JSX   |        131 |          0 |         38 |        169 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\NotFoundPage.jsx                                                     | JavaScript JSX   |         26 |          0 |          5 |         31 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\ProfilePage.jsx                                                      | JavaScript JSX   |        133 |          0 |         41 |        174 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\QuizPage.jsx                                                         | JavaScript JSX   |        357 |          0 |         79 |        436 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\QuizReviewPage.jsx                                                   | JavaScript JSX   |         57 |          0 |         14 |         71 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\Register.jsx                                                         | JavaScript JSX   |        123 |          0 |         31 |        154 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\ResendVerification.jsx                                               | JavaScript JSX   |         68 |          0 |         22 |         90 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\ResetPassword.jsx                                                    | JavaScript JSX   |         98 |          0 |         26 |        124 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\ResultsPage.jsx                                                      | JavaScript JSX   |        153 |          3 |         25 |        181 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\StartQuizPage.jsx                                                    | JavaScript JSX   |        115 |          0 |         39 |        154 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\SubjectsPage.jsx                                                     | JavaScript JSX   |        107 |          0 |         25 |        132 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\TopicsPage.jsx                                                       | JavaScript JSX   |        109 |          0 |         24 |        133 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\pages\VerifyEmail.jsx                                                      | JavaScript JSX   |         77 |          0 |         19 |         96 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\routes\AppRoutes.jsx                                                       | JavaScript JSX   |        172 |          0 |         15 |        187 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\routes\ProtectedRoute.jsx                                                  | JavaScript JSX   |         12 |          0 |          4 |         16 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\services\analytics.js                                                      | JavaScript       |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\services\auth.js                                                           | JavaScript       |         71 |          0 |         16 |         87 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\services\dailyChallenge.js                                                 | JavaScript       |         18 |          0 |          4 |         22 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\services\historyService.js                                                 | JavaScript       |          5 |          0 |          1 |          6 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\services\mistakeService.js                                                 | JavaScript       |          5 |          0 |          1 |          6 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\services\quiz.js                                                           | JavaScript       |          0 |          0 |          1 |          1 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\services\quizService.js                                                    | JavaScript       |        124 |          0 |         18 |        142 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\services\reviewService.js                                                  | JavaScript       |          7 |          0 |          2 |          9 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\styles\animations.css                                                      | PostCSS          |         32 |          0 |          7 |         39 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\styles\global.css                                                          | PostCSS          |         42 |          0 |          8 |         50 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\styles\theme.css                                                           | PostCSS          |         90 |         31 |         28 |        149 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\types\quiz.js                                                              | JavaScript       |         20 |          0 |          6 |         26 |
+| c:\Users\hp\EngineeringQuizArena\frontend\src\utils\auth.js                                                              | JavaScript       |         14 |          0 |          3 |         17 |
+| c:\Users\hp\EngineeringQuizArena\frontend\vite.config.js                                                                 | JavaScript       |          9 |          0 |          1 |         10 |
+| Total                                                                                                                    |                  |     18,334 |        175 |      5,837 |     24,346 |
++--------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+

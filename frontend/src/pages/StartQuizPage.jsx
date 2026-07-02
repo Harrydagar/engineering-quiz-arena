@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { startQuiz } from "../services/quizService";
 import Navbar from "../components/Navbar";
+import toast from "react-hot-toast";
 
 function StartQuizPage() {
   const [searchParams] =
@@ -33,9 +34,7 @@ function StartQuizPage() {
         );
       } catch (error) {
         console.error(error);
-        alert(
-          "Failed to start quiz"
-        );
+        toast.error("Failed to start quiz.");
       } finally {
         setLoading(false);
       }

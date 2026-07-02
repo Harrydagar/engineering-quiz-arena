@@ -41,11 +41,10 @@ function Register() {
       });
 
       toast.success(
-        "Registration successful! Please verify your email."
+        "Account created successfully. Please verify your email before signing in."
       );
 
       navigate("/login");
-
     } catch (error) {
       console.error(error);
 
@@ -59,30 +58,23 @@ function Register() {
         "Registration failed.";
 
       toast.error(message);
-
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-
-      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
-
-        <h1 className="text-3xl font-bold text-center mb-2">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+        <h1 className="mb-2 text-center text-3xl font-bold tracking-tight text-gray-900">
           Quiz Arena
         </h1>
 
-        <p className="text-center text-gray-500 mb-8">
-          Create your account
+        <p className="mb-8 text-center text-gray-500">
+          Create your account to start your learning journey.
         </p>
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-4"
-        >
-
+        <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
             name="username"
@@ -90,7 +82,7 @@ function Register() {
             required
             value={formData.username}
             onChange={handleChange}
-            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border border-gray-300 px-4 py-3 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <input
@@ -100,7 +92,7 @@ function Register() {
             required
             value={formData.email}
             onChange={handleChange}
-            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border border-gray-300 px-4 py-3 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <input
@@ -110,7 +102,7 @@ function Register() {
             required
             value={formData.password}
             onChange={handleChange}
-            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border border-gray-300 px-4 py-3 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <input
@@ -120,33 +112,28 @@ function Register() {
             required
             value={formData.confirmPassword}
             onChange={handleChange}
-            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border border-gray-300 px-4 py-3 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full rounded-lg bg-blue-600 py-3 font-medium text-white transition-colors duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading
-              ? "Creating Account..."
-              : "Register"}
+            {loading ? "Creating your account..." : "Register"}
           </button>
-
         </form>
 
-        <p className="text-center mt-6 text-gray-600">
+        <p className="mt-6 text-center text-sm text-gray-600">
           Already have an account?{" "}
           <Link
             to="/login"
-            className="text-blue-600 font-medium hover:underline"
+            className="font-medium text-blue-600 hover:underline"
           >
             Login
           </Link>
         </p>
-
       </div>
-
     </div>
   );
 }

@@ -4,8 +4,6 @@ import { verifyEmail } from "../services/auth";
 
 function VerifyEmail() {
   const { uidb64, token } = useParams();
-  console.log("uidb64:", uidb64);
-  console.log("token:", token);
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);

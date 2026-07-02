@@ -7,6 +7,8 @@ import {
   finishQuiz,
 } from "../services/quizService";
 import LoadingSpinner from "../components/LoadingSpinner";
+import toast from "react-hot-toast";
+
 
 function QuizPage() {
   const { attemptId } = useParams();
@@ -54,12 +56,6 @@ function QuizPage() {
       setLoading(false);
     }
 
-    const data =
-      await fetchQuestions(attemptId);
-
-    console.log("API RESPONSE:", data);
-
-    setQuestions(data);
   };
 
   const handleAnswer = (
@@ -92,7 +88,7 @@ function QuizPage() {
       ];
 
     if (!selectedOption) {
-      alert(
+      aletrt(
         "Please select an answer."
       );
       return false;
@@ -161,9 +157,7 @@ function QuizPage() {
 
   const handleSkip = () => {
     if (skipsUsed >= MAX_SKIPS) {
-      alert(
-        "You have used all 5 skips."
-      );
+      toast.error("You have used all 5 skips.");
       return;
     }
 
@@ -228,9 +222,6 @@ if (
   );
 }
 
-console.log("QUESTIONS:", questions);
-console.log("CURRENT:", currentQuestion);
-
 const question =
   questions[currentQuestion];
 
@@ -243,11 +234,11 @@ const progress =
     <>
       <Navbar />
 
-      <div className="max-w-4xl mx-auto p-6">
+      <div className="max-w-4xl mx-auto px-6 py-8">
 
         <div className="mb-6">
 
-          <div className="flex justify-between mb-2">
+          <div className="mb-3 flex items-center justify-between">
 
             <span className="font-medium">
               Question{" "}
@@ -256,16 +247,16 @@ const progress =
               {questions.length}
             </span>
 
-            <span className="capitalize text-gray-500">
+            <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium capitalize text-gray-700">
               {question.difficulty}
             </span>
 
           </div>
 
-          <div className="w-full bg-gray-200 rounded-full h-3">
+          <div className="h-3 w-full overflow-hidden rounded-full bg-gray-200">
 
             <div
-              className="bg-blue-600 h-3 rounded-full transition-all duration-300"
+              className="h-3 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 transition-all duration-300"
               style={{
                 width: `${progress}%`,
               }}
@@ -297,9 +288,11 @@ const progress =
 
         </div>
 
-        <div className="bg-white rounded-xl shadow-md border p-6">
-
-          <h2 className="text-2xl font-semibold mb-6">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+          <div className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700 mb-4">
+            Question {currentQuestion + 1}
+          </div>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 leading-relaxed mb-8">
             {
               question.question_text
             }
@@ -321,19 +314,18 @@ const progress =
                     w-full
                     text-left
                     p-4
-                    rounded-lg
+                    rounded-xl
                     border
-                    transition
+                    font-medium
+                    transition-all
+                    duration-200
 
                     ${
-                      selectedAnswers[
-                        question.id
-                      ] ===
-                      option.id
-                        ? "bg-blue-100 border-blue-500"
-                        : "hover:bg-gray-50"
+                    selectedAnswers[question.id] === option.id
+                    ? "border-blue-600 bg-blue-50 text-blue-700"
+                    : "border-gray-200 bg-white hover:border-blue-300 hover:bg-gray-50"
                     }
-                  `}
+                    `}
                 >
                   {
                     option.option_text
@@ -358,10 +350,16 @@ const progress =
               submitting
             }
             className="
-              px-5 py-2
-              border
-              rounded-lg
-              disabled:opacity-50
+            px-5
+            py-2.5
+            rounded-lg
+            border
+            border-gray-300
+            font-medium
+            transition-colors
+            hover:bg-gray-100
+            disabled:opacity-50
+            disabled:cursor-not-allowed
             "
           >
             Previous
@@ -377,11 +375,16 @@ const progress =
                 submitting
               }
               className="
-                px-5 py-2
-                bg-yellow-500
-                text-white
-                rounded-lg
-                disabled:opacity-50
+              px-5
+              py-2.5
+              rounded-lg
+              bg-amber-500
+              text-white
+              font-medium
+              transition-colors
+              hover:bg-amber-600
+              disabled:opacity-50
+              disabled:cursor-not-allowed
               "
             >
               Skip
@@ -397,10 +400,16 @@ const progress =
                   submitting
                 }
                 className="
-                  px-6 py-2
-                  bg-green-600
-                  text-white
-                  rounded-lg
+                px-6
+                py-2.5
+                rounded-lg
+                bg-blue-600
+                text-white
+                font-medium
+                transition-colors
+                hover:bg-blue-700
+                disabled:opacity-50
+                disabled:cursor-not-allowed
                 "
               >
                 Finish Quiz
@@ -414,10 +423,16 @@ const progress =
                   submitting
                 }
                 className="
-                  px-6 py-2
-                  bg-blue-600
-                  text-white
-                  rounded-lg
+                px-6
+                py-2.5
+                rounded-lg
+                bg-green-600
+                text-white
+                font-medium
+                transition-colors
+                hover:bg-green-700
+                disabled:opacity-50
+                disabled:cursor-not-allowed
                 "
               >
                 Next Question

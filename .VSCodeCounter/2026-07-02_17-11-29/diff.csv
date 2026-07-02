@@ -1,0 +1,43 @@
+"filename", "language", "PostCSS", "JavaScript", "JavaScript JSX", "Python", "Markdown", "JSON", "comment", "blank", "total"
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\auth_serializers.py", "Python", 0, 0, 0, 27, 0, 0, 0, 11, 38
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\password_serializers.py", "Python", 0, 0, 0, 63, 0, 0, 0, 17, 80
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\serializers.py", "Python", 0, 0, 0, 2, 0, 0, 0, 2, 4
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\throttles.py", "Python", 0, 0, 0, 7, 0, 0, 0, 6, 13
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\urls.py", "Python", 0, 0, 0, 36, 0, 0, 0, 7, 43
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\utils.py", "Python", 0, 0, 0, 45, 0, 0, 0, 9, 54
+"c:\Users\hp\EngineeringQuizArena\backend\accounts\views.py", "Python", 0, 0, 0, 200, 0, 0, 0, 46, 246
+"c:\Users\hp\EngineeringQuizArena\backend\core\settings.py", "Python", 0, 0, 0, 51, 0, 0, 20, 22, 93
+"c:\Users\hp\EngineeringQuizArena\backend\package-lock.json", "JSON", 0, 0, 0, 0, 0, 74, 0, 1, 75
+"c:\Users\hp\EngineeringQuizArena\backend\package.json", "JSON", 0, 0, 0, 0, 0, 5, 0, 1, 6
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\throttles.py", "Python", 0, 0, 0, 9, 0, 0, 0, 8, 17
+"c:\Users\hp\EngineeringQuizArena\backend\quizzes\views.py", "Python", 0, 0, 0, -9, 0, 0, 1, -3, -11
+"c:\Users\hp\EngineeringQuizArena\docs\Day33_Report.md", "Markdown", 0, 0, 0, 0, 123, 0, 0, 71, 194
+"c:\Users\hp\EngineeringQuizArena\docs\Day34_Report.md", "Markdown", 0, 0, 0, 0, 255, 0, 0, 148, 403
+"c:\Users\hp\EngineeringQuizArena\docs\Day35_Report.md", "Markdown", 0, 0, 0, 0, 133, 0, 0, 57, 190
+"c:\Users\hp\EngineeringQuizArena\docs\Day36_Report.md", "Markdown", 0, 0, 0, 0, 126, 0, 0, 60, 186
+"c:\Users\hp\EngineeringQuizArena\docs\Day37_Report.md", "Markdown", 0, 0, 0, 0, 149, 0, 0, 94, 243
+"c:\Users\hp\EngineeringQuizArena\docs\Day38_Report.md", "Markdown", 0, 0, 0, 0, 205, 0, 0, 126, 331
+"c:\Users\hp\EngineeringQuizArena\docs\design-system\01-design-tokens.md", "Markdown", 0, 0, 0, 0, 133, 0, 0, 63, 196
+"c:\Users\hp\EngineeringQuizArena\docs\design-system\02-components.md", "Markdown", 0, 0, 0, 0, 174, 0, 0, 90, 264
+"c:\Users\hp\EngineeringQuizArena\docs\design-system\03-layout.md", "Markdown", 0, 0, 0, 0, 161, 0, 0, 88, 249
+"c:\Users\hp\EngineeringQuizArena\docs\design-system\04-patterns.md", "Markdown", 0, 0, 0, 0, 140, 0, 0, 65, 205
+"c:\Users\hp\EngineeringQuizArena\docs\design-system\README.md", "Markdown", 0, 0, 0, 0, 51, 0, 0, 20, 71
+"c:\Users\hp\EngineeringQuizArena\frontend\src\api\axios.js", "JavaScript", 0, 71, 0, 0, 0, 0, 6, 22, 99
+"c:\Users\hp\EngineeringQuizArena\frontend\src\index.css", "PostCSS", 3, 0, 0, 0, 0, 0, 0, 1, 4
+"c:\Users\hp\EngineeringQuizArena\frontend\src\main.jsx", "JavaScript JSX", 0, 0, 7, 0, 0, 0, 0, 0, 7
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\ChangePassword.jsx", "JavaScript JSX", 0, 0, 106, 0, 0, 0, 0, 27, 133
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\ForgotPassword.jsx", "JavaScript JSX", 0, 0, 68, 0, 0, 0, 0, 20, 88
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\Login.jsx", "JavaScript JSX", 0, 0, 10, 0, 0, 0, 0, 11, 21
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\ProfilePage.jsx", "JavaScript JSX", 0, 0, 20, 0, 0, 0, 0, 7, 27
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\QuizPage.jsx", "JavaScript JSX", 0, 0, 148, 0, 0, 0, 0, 53, 201
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\Register.jsx", "JavaScript JSX", 0, 0, 4, 0, 0, 0, 0, 10, 14
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\ResendVerification.jsx", "JavaScript JSX", 0, 0, 68, 0, 0, 0, 0, 22, 90
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\ResetPassword.jsx", "JavaScript JSX", 0, 0, 98, 0, 0, 0, 0, 26, 124
+"c:\Users\hp\EngineeringQuizArena\frontend\src\pages\VerifyEmail.jsx", "JavaScript JSX", 0, 0, 77, 0, 0, 0, 0, 19, 96
+"c:\Users\hp\EngineeringQuizArena\frontend\src\routes\AppRoutes.jsx", "JavaScript JSX", 0, 0, 29, 0, 0, 0, 0, 8, 37
+"c:\Users\hp\EngineeringQuizArena\frontend\src\services\auth.js", "JavaScript", 0, 50, 0, 0, 0, 0, 0, 9, 59
+"c:\Users\hp\EngineeringQuizArena\frontend\src\styles\animations.css", "PostCSS", 32, 0, 0, 0, 0, 0, 0, 7, 39
+"c:\Users\hp\EngineeringQuizArena\frontend\src\styles\global.css", "PostCSS", 42, 0, 0, 0, 0, 0, 0, 8, 50
+"c:\Users\hp\EngineeringQuizArena\frontend\src\styles\theme.css", "PostCSS", 90, 0, 0, 0, 0, 0, 31, 28, 149
+"c:\Users\hp\EngineeringQuizArena\frontend\src\utils\auth.js", "JavaScript", 0, 3, 0, 0, 0, 0, 0, 1, 4
+"Total", "-", 167, 124, 635, 431, 1650, 79, 58, 1288, 4432
