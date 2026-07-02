@@ -28,7 +28,7 @@ ALLOWED_HOSTS = os.environ.get(
 
 FRONTEND_URL = os.environ.get(
     "FRONTEND_URL",
-    "http://localhost:5173",
+    "https://engineering-quiz-arena-1.onrender.com",
 )
 
 # ==========================
@@ -61,11 +61,10 @@ SECURE_PROXY_SSL_HEADER = (
     "HTTP_X_FORWARDED_PROTO",
     "https"
 )
-
 CSRF_TRUSTED_ORIGINS = [
     "https://engineering-quiz-arena-x16k.onrender.com",
+    "https://engineering-quiz-arena-1.onrender.com",
 ]
-
 # ==========================
 # Email Configuration
 # ==========================
@@ -120,6 +119,7 @@ INSTALLED_APPS = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "https://engineering-quiz-arena-1.onrender.com",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
