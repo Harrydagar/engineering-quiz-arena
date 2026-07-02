@@ -96,10 +96,15 @@ function Login() {
             required
           />
 
-          <div className="flex justify-end">
+          <div className="flex items-center justify-between text-sm">
+            <label className="flex items-center gap-2 text-gray-600">
+              <input type="checkbox" className="rounded" />
+              Remember me
+            </label>
+
             <Link
               to="/forgot-password"
-              className="w-full rounded-lg bg-blue-600 py-3 font-medium text-white transition-colors duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="font-medium text-blue-600 hover:underline"
             >
               Forgot Password?
             </Link>

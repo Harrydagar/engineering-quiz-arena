@@ -1,217 +1,180 @@
-# Quiz Arena
+# QuizArena
 
-Quiz Arena is a production-ready engineering quiz platform built with Django REST Framework and PostgreSQL. It helps students test their knowledge through adaptive quizzes, track performance analytics, compete on leaderboards, complete daily challenges, and unlock achievements.
+A full-stack quiz platform built for engineering students to practice subject-wise quizzes, track progress, compete on leaderboards, and analyze learning performance.
+
+---
 
 ## Features
 
 ### Authentication
+- JWT Authentication
+- User Registration
+- Login & Logout
+- Email Verification
+- Password Change
+- Token Refresh
 
-* JWT Authentication
-* User Registration & Login
-* Protected API Endpoints
-
-### Quiz Engine
-
-* Subject-wise Quizzes
-* Topic-based Questions
-* Multiple Difficulty Levels
-* Random Question Selection
-* Automatic Scoring System
+### Quiz System
+- Subject-wise quizzes
+- Topic selection
+- Multiple difficulty levels
+- Skip functionality
+- Instant scoring
+- Quiz history
+- Quiz review
 
 ### Analytics
+- Overall statistics
+- Subject-wise performance
+- Difficulty analysis
+- Performance summary
+- Learning insights
+- Recommended difficulty
 
-* Overall Performance Statistics
-* Subject-wise Analysis
-* Difficulty-wise Performance
-* Recent Quiz Attempts
-* Personalized Insights
-* Performance Recommendations
-
-### Leaderboards & Ratings
-
-* Global Leaderboard
-* User Ranking System
-* Rating-based Competition
-
-### Quiz History
-
-* Complete Attempt History
-* Quiz Review System
-* Mistake Tracking
-* Progress Analysis
-
-### Daily Challenges
-
-* Daily Question Challenges
-* Completion Tracking
-* Challenge Statistics
-
-### Achievements
-
-* Quiz Completion Achievements
-* Streak Achievements
-* Daily Challenge Achievements
-* Rating Milestone Achievements
-
-### API Documentation
-
-* Swagger UI
-* ReDoc Documentation
+### Gamification
+- Rating system
+- Leaderboard
+- Daily challenge
+- Achievement system
+- Streak tracking
 
 ---
 
 ## Tech Stack
 
 ### Backend
+- Python
+- Django
+- Django REST Framework
+- PostgreSQL
+- JWT Authentication
 
-* Python
-* Django
-* Django REST Framework
-
-### Database
-
-* PostgreSQL
-
-### Authentication
-
-* JWT (SimpleJWT)
-
-### Documentation
-
-* drf-spectacular
-* Swagger UI
-* ReDoc
-
-### Deployment
-
-* Render
+### Frontend
+- React
+- Vite
+- Tailwind CSS
+- Axios
+- React Router
 
 ---
 
-## Project Architecture
+## Project Structure
 
-backend/
-├── accounts/
-├── quizzes/
-│ ├── services/
-│ │ ├── analytics_service.py
-│ │ ├── history_service.py
-│ │ ├── achievement_service.py
-│ │ ├── quiz_service.py
-│ │ └── daily_challenge_service.py
-│ ├── models.py
-│ ├── serializers.py
-│ ├── views.py
-│ └── urls.py
-├── config/
-└── manage.py
+```
+QuizArena/
+├── backend/
+├── frontend/
+├── docs/
+└── README.md
+```
 
 ---
 
-## Available APIs
+## Installation
 
-### Authentication
+### Backend
 
-* Register User
-* Login User
-* Refresh Token
+```bash
+git clone <repository-url>
 
-### Quiz APIs
+cd backend
 
-* Subjects
-* Topics
-* Start Quiz
-* Submit Quiz
-* Quiz Results
+python -m venv .venv
 
-### Analytics APIs
+pip install -r requirements.txt
 
-* Overall Statistics
-* Subject Performance
-* Difficulty Statistics
-* User Rank
-* Insights
+python manage.py migrate
 
-### History APIs
+python manage.py runserver
+```
 
-* Quiz History
-* Quiz Review
-* Mistake History
-* Progress Analysis
+### Frontend
 
-### Daily Challenge APIs
+```bash
+cd frontend
 
-* Get Daily Challenge
-* Submit Daily Challenge
+npm install
 
-### Achievement APIs
-
-* Achievement List
-* Achievement Summary
-
-### Leaderboard APIs
-
-* Global Leaderboard
+npm run dev
+```
 
 ---
 
-## Testing
+## API Documentation
 
-Current Status:
+Swagger
 
-* 30 Automated Tests Passing
-* Service Layer Tested
-* API Endpoints Tested
-* Analytics Tested
-* Quiz Engine Tested
+```
+/swagger/
+```
 
----
+ReDoc
 
-## Deployment
-
-Backend is deployed and running in production using Render with PostgreSQL.
+```
+/redoc/
+```
 
 ---
 
-## Current Status
+## Screenshots
 
-### Completed
+### Login
 
-* Authentication
-* Quiz Engine
-* Analytics
-* Quiz History
-* Daily Challenges
-* Achievements
-* Leaderboard
-* Rating System
-* API Documentation
-* PostgreSQL Deployment
-* Automated Testing
+(Add Screenshot)
 
-### In Progress
+### Dashboard
 
-* React Frontend
+(Add Screenshot)
 
-### Planned
+### Quiz
 
-* Achievement Badges UI
-* Advanced ELO Rating
-* Security Hardening
-* Admin Analytics Dashboard
+(Add Screenshot)
+
+### Results
+
+(Add Screenshot)
+
+### Analytics
+
+(Add Screenshot)
 
 ---
 
-## Future Frontend Stack
+## Major Features
 
-* React
-* TypeScript
-* Vite
-* Tailwind CSS
-* shadcn/ui
-* TanStack Query
-* Recharts
+- Secure JWT Authentication
+- Subject & Topic Management
+- Quiz Engine
+- Daily Challenges
+- Rating System
+- Leaderboards
+- Achievements
+- Quiz Review
+- Performance Analytics
+- Responsive UI
 
 ---
 
-Built as an engineering-focused competitive learning platform for students.
+## Future Improvements
+
+- Dark Mode
+- Timed Quizzes
+- Multiplayer Battles
+- AI Question Recommendations
+- Question Bookmarking
+- Admin Dashboard
+- Mobile Application
+
+---
+
+## License
+
+This project is intended for educational and portfolio purposes.
+
+---
+
+## Author
+
+Harsh
+
+Engineering Student | Full Stack Developer
